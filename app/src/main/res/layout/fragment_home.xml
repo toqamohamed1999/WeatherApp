@@ -1,22 +1,145 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#13151E"
+    android:layout_gravity="center"
     tools:context=".HomeFragment">
 
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/home_constraintLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true">
+
     <TextView
-        android:id="@+id/text_home"
+        android:id="@+id/home_location_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/giza_egypt"
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/home_timeDate_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/_12_00_19_3_2022"
+        android:layout_marginTop="7dp"
+        android:textSize="15sp"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/home_location_textView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/home_desc_cardView"
+        android:layout_width="320dp"
+        android:layout_height="200dp"
+        app:layout_constraintTop_toBottomOf="@id/home_timeDate_textView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:cardCornerRadius="15dp"
+        android:layout_marginTop="10dp"
+        android:elevation="20dp"
+        android:background="@drawable/side_nav_bar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@drawable/side_nav_bar">
+
+            <TextView
+                android:id="@+id/home_state_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/clear_sky"
+                android:textSize="20sp"
+                android:layout_marginTop="12dp"
+                android:textColor="@color/white"
+                android:layout_gravity="center_horizontal"
+                />
+
+            <TextView
+                android:id="@+id/home_temp_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/_21_c"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:textSize="25sp"
+                android:textColor="@color/white"
+                />
+
+            <ImageView
+                android:id="@+id/home_weather_imageView"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginTop="0dp"
+                android:layout_gravity="center_horizontal"
+                app:srcCompat="@drawable/logo" />
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/home_hours_recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="10dp"
+        android:orientation="horizontal"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/home_desc_cardView"
+        tools:listitem="@layout/hour_item" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/home_days_recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/home_hours_recyclerView"
+        tools:listitem="@layout/day_item" />
+
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/home_details_cardView"
+        android:layout_width="350dp"
+        android:layout_height="200dp"
+        app:layout_constraintTop_toBottomOf="@id/home_days_recyclerView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:cardCornerRadius="15dp"
+        android:layout_marginTop="10dp"
+        android:elevation="20dp"
+        android:background="@drawable/side_nav_bar">
+
+
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

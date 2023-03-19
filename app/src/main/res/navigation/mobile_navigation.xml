@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="eg.gov.iti.jets.weatherapp.HomeFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/nav_favorites"
+        android:name="eg.gov.iti.jets.weatherapp.FavoritesFragment"
+        android:label="@string/menu_favorites"
+        tools:layout="@layout/fragment_favorites" />
+
+    <fragment
+        android:id="@+id/nav_alerts"
+        android:name="eg.gov.iti.jets.weatherapp.AlertsFragment"
+        android:label="@string/menu_alerts"
+        tools:layout="@layout/fragment_alerts" />
+
+    <fragment
+        android:id="@+id/nav_setting"
+        android:name="eg.gov.iti.jets.weatherapp.SettingFragment"
+        android:label="@string/menu_setting"
+        tools:layout="@layout/fragment_setting" />
+</navigation>

@@ -20,7 +20,6 @@ class SplashScreen : AppCompatActivity() {
         setContentView(binding.root)
 
         supportActionBar?.hide()
-        setUpLottieAnimationView()
 
         Handler(Looper.myLooper()!!).postDelayed({
             val intent = Intent(this@SplashScreen, MainActivity::class.java)
@@ -29,11 +28,4 @@ class SplashScreen : AppCompatActivity() {
         }, 2000)
     }
 
-    private fun setUpLottieAnimationView() {
-        val animator = ValueAnimator.ofFloat(0f, 1f)
-        animator.addUpdateListener { animation: ValueAnimator ->
-            binding.splashAnimationView.progress = animation.animatedValue as Float
-        }
-        animator.start()
-    }
 }

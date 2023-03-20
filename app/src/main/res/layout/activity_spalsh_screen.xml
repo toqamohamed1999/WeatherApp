@@ -11,13 +11,12 @@
 
 
     <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/splash_animation_view"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        app:lottie_rawRes="@raw/cloudy_icon"
+        android:id="@+id/splash_animationView"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_gravity="center"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
-        android:layout_marginTop="30dp"
-        />
+        app:lottie_rawRes="@raw/cloudy_icon"/>
 
 </LinearLayout>

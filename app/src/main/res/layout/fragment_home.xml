@@ -35,7 +35,7 @@
         android:id="@+id/home_timeDate_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/_12_00_19_3_2022"
+        android:text="@string/time_date"
         android:layout_marginTop="7dp"
         android:textSize="15sp"
         android:textColor="@color/white"

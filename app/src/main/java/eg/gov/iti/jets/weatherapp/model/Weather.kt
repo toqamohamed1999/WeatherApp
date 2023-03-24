@@ -17,7 +17,7 @@ data class WeatherRoot (
     val timezoneOffset: String,
     val hourly: List<Hourly>,
     val daily: List<Daily>,
-    val alerts: List<Alerts>
+  //  val alerts: List<Alerts>
 )
 
 data class Hourly(
@@ -100,7 +100,7 @@ data class Alerts(
     var start: Long,
     var end: Long,
     var description: String,
-    var tags: List<String>
+   // var tags: List<String>
 )
 
 

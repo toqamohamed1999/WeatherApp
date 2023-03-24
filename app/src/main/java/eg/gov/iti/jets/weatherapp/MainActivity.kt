@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
 
         initUI()
         setupNavigationDrawer()
-        myLocation.getLastLocation()
+       // myLocation.getLastLocation()
         Log.i(TAG, "onCreate: Main")
 
     }

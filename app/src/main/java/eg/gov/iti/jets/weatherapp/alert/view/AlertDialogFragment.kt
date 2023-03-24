@@ -10,8 +10,12 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
+import androidx.work.*
+import com.google.gson.Gson
+import eg.gov.iti.jets.weatherapp.alert.AlertWorker
 import eg.gov.iti.jets.weatherapp.databinding.AlertDialogBinding
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 //The order of execution of the above methods will be:
 // onAttach -> onCreate -> onCreateDialog -> onCreateView -> onViewCreated -> onDestroy
@@ -84,9 +88,65 @@ class AlertDialogFragment : DialogFragment() {
         }
 
         binding.okTv.setOnClickListener {
-
+            setUpAlertWorker()
+            dismiss()
         }
 
+
+    }
+
+    private fun setUpAlertWorker(){
+//        val data = Data.Builder()
+//        data.putString("","")
+//        data.build()
+
+        Log.i(TAG, "setUpAlertWorker: alerttttttttt")
+
+        var request = PeriodicWorkRequestBuilder<AlertWorker>(
+            5,TimeUnit.SECONDS,
+            2,TimeUnit.SECONDS)
+            //  .setInputData(data.build())
+            .build()
+
+        WorkManager.getInstance(requireContext())
+            .enqueue(request)
+
+        val workInfo = WorkManager.getInstance(requireContext()).getWorkInfoById(request.id).get()
+
+
+
+
+        /*
+        WorkManager.getInstance(requireContext()).getWorkInfoByIdLiveData(request.id).observe(requireActivity(),
+            Observer {
+                if(it.state == WorkInfo.State.SUCCEEDED) {
+                    val myObjectGson = it.outputData.getString("output")
+                    val myObject = Gson().fromJson(myObjectGson, MyObject::class.java)
+                    productsList = myObject.products
+                    productAdapter.submitList(productsList)
+                }
+            })
+
+         */
+
+
+/*
+        WorkManager.getInstance(requireContext()).getWorkInfoByIdLiveData(request.id).observe(requireActivity()
+        ) {
+            when (it.state) {
+                WorkInfo.State.SUCCEEDED -> {
+                    val myObjectGson = it.outputData.getString("output")
+                    val myObject = Gson().fromJson(myObjectGson, MyObject::class.java)
+                    productsList = myObject.products
+                    productAdapter.submitList(productsList)
+                }
+                else -> {
+
+                }
+            }
+        }
+
+ */
 
     }
 

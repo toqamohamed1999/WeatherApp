@@ -23,4 +23,17 @@ class MyCustomDialog {
             dialog.show()
         }
 
+    fun showAlertDialog(activity: Activity?) {
+        val dialog = Dialog(activity!!)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(false)
+        dialog.setContentView(R.layout.display_alert_dialog)
+        dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        val dialogBtn_remove = dialog.findViewById<TextView>(R.id.okTv)
+        dialogBtn_remove.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.show()
+    }
+
 }

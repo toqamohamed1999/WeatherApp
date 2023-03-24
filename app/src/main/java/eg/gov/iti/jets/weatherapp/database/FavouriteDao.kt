@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface FavouriteDao {
 
-    @Query("select * from favorite")
+    @Query("select * from favourite")
     fun getStoredAlerts(): Flow<List<Favourite>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

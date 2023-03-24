@@ -29,6 +29,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <TextView
+            android:id="@+id/hour_temp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="72.0º"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toTopOf="@+id/hour_weather_icon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/hour_name" />
+
 
         <ImageView
             android:id="@+id/hour_weather_icon"
@@ -57,18 +70,7 @@
             app:layout_goneMarginStart="10dp"
             android:text="15 km/h"/>
 
-        <TextView
-            android:id="@+id/hour_temp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:text="72.0º"
-            android:textColor="@color/black"
-            app:layout_constraintBottom_toTopOf="@+id/hour_weather_icon"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/hour_name" />
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

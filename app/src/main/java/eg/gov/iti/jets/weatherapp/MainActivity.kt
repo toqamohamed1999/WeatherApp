@@ -1,18 +1,20 @@
 package eg.gov.iti.jets.weatherapp
 
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
-import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.navigation.NavigationView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.NavController
+import com.google.android.material.navigation.NavigationView
 import eg.gov.iti.jets.weatherapp.databinding.ActivityMainBinding
+import eg.gov.iti.jets.weatherapp.location.MyLocation
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,6 +27,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var navView: NavigationView
     private lateinit var navController: NavController
 
+    private val myLocation = MyLocation(this)
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +37,9 @@ class MainActivity : AppCompatActivity() {
 
         initUI()
         setupNavigationDrawer()
+        myLocation.getLastLocation()
+        Log.i(TAG, "onCreate: Main")
+
     }
 
     private fun initUI(){
@@ -60,5 +67,18 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if(requestCode == LOCATION_PERMISSION_CODE){
+            if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                myLocation.getLastLocation()
+            }
+        }
     }
 }

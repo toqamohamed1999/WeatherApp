@@ -1,2 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+
+    <string name="app_name">الطقس</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">الرئيسية</string>
+    <string name="menu_favorites">المفضله</string>
+    <string name="menu_alerts">التنبيهات</string>
+    <string name="menu_setting">الأعدادات</string>
+
+    <string name="delete">حذف</string>
+    <string name="monday">الأثنين</string>
+    <string name="cloudy">غائم</string>
+    <string name="giza_egypt">القاهره,مصر</string>
+    <string name="time_date">12:00 19,Aug2022</string>
+    <string name="clear_sky">سماء صافيه</string>
+    <string name="_21_c">21º C</string>
+
+    <string name="english">الأنجليزية</string>
+    <string name="arabic">العربية</string>
+    <string name="language">اللغة</string>
+    <string name="map">الخريطة</string>
+    <string name="gps">موقعي الحالي</string>
+    <string name="location">الموقع</string>
+    <string name="temperature">درجة الحرارة</string>
+    <string name="celsius">سيليزيس</string>
+    <string name="fahrenheit">فهرنهايت</string>
+    <string name="kelvin">كيلفن</string>
+    <string name="meter">متر / الثانية</string>
+    <string name="mile">ميل / ساعه</string>
+    <string name="enable">تفعيل</string>
+    <string name="disable">إلغاء</string>
+    <string name="notification">إشعارات</string>
+
+    <string name="humidity">الرطوبة</string>
+    <string name="wind_speed">سرعة الرياح</string>
+    <string name="pressure">الضغط</string>
+    <string name="clouds">الغيوم</string>
+    <string name="ultra_violet"> فوق البنفسجية</string>
+    <string name="visibility">الرؤيه</string>
+
+    <string name="to">من</string>
+    <string name="from">إلي</string>
+    <string name="alert">تنبيه</string>
+    <string name="cancel">إلغاء</string>
+    <string name="ok">تأكيد</string>
+
+    <string name="end_date">نهاية التاريخ</string>
+    <string name="start_date">بداية التاريخ</string>
+    <string name="start_time">بداية الوقت</string>
+    <string name="end_time">نهاية الوقت</string>
+
+</resources>

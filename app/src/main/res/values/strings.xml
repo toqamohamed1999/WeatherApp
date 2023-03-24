@@ -42,6 +42,17 @@
     <string name="clouds">Clouds</string>
     <string name="ultra_violet">Ultra violet</string>
     <string name="visibility">Visibility</string>
+    <string name="to">To</string>
+    <string name="from">From</string>
+    <string name="alert">alert</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+    <string name="end_date">End date</string>
+    <string name="start_date">Start date</string>
+    <string name="start_time">Start Time</string>
+    <string name="end_time">End Time</string>
+
+
 
 
 </resources>

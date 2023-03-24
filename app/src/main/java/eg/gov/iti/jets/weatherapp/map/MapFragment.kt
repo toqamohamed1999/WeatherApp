@@ -2,53 +2,39 @@ package eg.gov.iti.jets.weatherapp.map
 
 import android.location.Address
 import android.location.Geocoder
-import androidx.fragment.app.Fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.SearchView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
-import androidx.navigation.Navigation
 
 
 import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.material.snackbar.Snackbar
 import eg.gov.iti.jets.weatherapp.R
-import eg.gov.iti.jets.weatherapp.alert.view.AlertDialogFragment
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
-import java.io.IOException
-import java.util.*
 
-class MapsFragment : DialogFragment() {
-    lateinit var saveBtn:Button
+class MapFragment : DialogFragment() {
+    lateinit var saveTv:TextView
     lateinit var searchBar: SearchView
     lateinit var geocoder:Geocoder
-  //  lateinit var favouriteViewModel: FavouriteViewModel
-    //lateinit var repo: Repository
+
 
     companion object {
 
         const val TAG = "MapsFragment"
 
-
-        fun newInstance(): MapsFragment {
+        fun newInstance(): MapFragment {
             val args = Bundle()
-            val fragment = MapsFragment()
+            val fragment = MapFragment()
             fragment.arguments = args
             return fragment
         }
@@ -61,8 +47,8 @@ class MapsFragment : DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        var v:View = inflater.inflate(R.layout.fragment_maps, container, false)
-        saveBtn = v.findViewById(R.id.btn_save)
+        var v:View = inflater.inflate(R.layout.fragment_map, container, false)
+        saveTv = v.findViewById(R.id.save_tv)
         searchBar = v.findViewById(R.id.search_view)
 //        favouriteViewModel = ViewModelProvider(this, FavouriteViewModelFactory(Repository(requireContext())))
 //            .get(FavouriteViewModel::class.java)
@@ -112,7 +98,7 @@ class MapsFragment : DialogFragment() {
             googleMap.addMarker(marker)
 
 
-            saveBtn.setOnClickListener {
+            saveTv.setOnClickListener {
                 lifecycleScope.launch {
                    // favouriteViewModel.insertFavourite(Favourite(latitude = lat, longitude = long, city = city))
                 }
@@ -129,7 +115,7 @@ class MapsFragment : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
+        val mapFragment = childFragmentManager.findFragmentById(R.id.map_fragment) as SupportMapFragment?
         mapFragment?.getMapAsync(callback)
     }
 

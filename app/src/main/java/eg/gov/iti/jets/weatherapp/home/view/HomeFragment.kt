@@ -177,7 +177,7 @@ class HomeFragment : Fragment(), LocationListener {
         longitude = locationData.second
         address = locationData.third
 
-        // getWeatherData()
+        //getWeatherData()
     }
 
 

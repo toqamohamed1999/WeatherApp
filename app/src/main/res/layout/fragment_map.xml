@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    android:layout_width="match_parent"
+    app:cardBackgroundColor="@color/white"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+<fragment
+    android:id="@+id/map_fragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:name="com.google.android.gms.maps.SupportMapFragment"
+    tools:context=".map.MapFragment"
+    xmlns:tools="http://schemas.android.com/tools" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="300dp"
+        app:cardBackgroundColor="@color/white"
+        android:layout_margin="10dp"
+        app:cardCornerRadius="20dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_height="wrap_content">
+
+        <SearchView
+            android:id="@+id/search_view"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:iconifiedByDefault="false"
+            android:queryHint="Search for a place">
+
+        </SearchView>
+
+    </androidx.cardview.widget.CardView>
+    <TextView
+        android:id="@+id/save_tv"
+        android:layout_width="110dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/rounded_btn_save"
+        android:gravity="center"
+        android:text="@string/save"
+        android:paddingStart="10dp"
+        android:drawableStart="@drawable/baseline_favorite_24"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_gravity="bottom|center_horizontal">
+    </TextView>
+
+</androidx.cardview.widget.CardView>
+
+

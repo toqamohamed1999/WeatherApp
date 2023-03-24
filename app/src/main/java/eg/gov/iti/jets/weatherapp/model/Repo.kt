@@ -11,6 +11,8 @@ import eg.gov.iti.jets.mymvvm.network.RemoteSourceInterface
 import eg.gov.iti.jets.weatherapp.MainActivity
 import eg.gov.iti.jets.weatherapp.MySharedPref
 import eg.gov.iti.jets.weatherapp.location.MyLocation
+import eg.gov.iti.jets.weatherapp.model.AlertModel
+import eg.gov.iti.jets.weatherapp.model.Favourite
 import eg.gov.iti.jets.weatherapp.model.WeatherRoot
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -60,5 +62,27 @@ class Repo private constructor(
         localeSource.deleteWeather(weatherRoot)
     }
 
+    override fun getStoredAlerts(): Flow<List<AlertModel>> {
+        return localeSource.getStoredAlerts()
+    }
 
+    override suspend fun insertAlert(alert: AlertModel) {
+        localeSource.insertAlert(alert)
+    }
+
+    override suspend fun deleteAlert(alert: AlertModel) {
+        localeSource.deleteAlert(alert)
+    }
+
+    override fun getStoredFavourites(): Flow<List<Favourite>> {
+        return localeSource.getStoredFavourites()
+    }
+
+    override suspend fun insertFavourite(favorite: Favourite) {
+        localeSource.insertFavourite(favorite)
+    }
+
+    override suspend fun deleteFavourite(favorite: Favourite) {
+        localeSource.deleteFavourite(favorite)
+    }
 }

@@ -12,7 +12,10 @@ interface ApiInterface {
                                   @Query("lon") lon: String?,
                                   @Query("units") units: String = "metric",
                                   @Query("lang") lang: String? = "eng",
-                                  @Query("exclude") exclude: String="current",
+                                  @Query("exclude") exclude: String="minutely",
                                   @Query("appid") appId: String=API_KEY): WeatherRoot
 
 }
+
+//Units of measurement. standard, metric and imperial units are available.
+// If you do not use the units parameter, standard units will be applied by default

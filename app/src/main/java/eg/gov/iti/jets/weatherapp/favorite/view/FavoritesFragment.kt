@@ -5,16 +5,32 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import eg.gov.iti.jets.weatherapp.R
-import eg.gov.iti.jets.weatherapp.alert.view.AlertDialogFragment
+import androidx.lifecycle.ViewModelProvider
+import eg.gov.iti.jets.mymvvm.datatbase.LocaleSource
+import eg.gov.iti.jets.mymvvm.model.Repo
+import eg.gov.iti.jets.mymvvm.network.RemoteSource
 import eg.gov.iti.jets.weatherapp.databinding.FragmentFavoritesBinding
-import eg.gov.iti.jets.weatherapp.map.MapsFragment
+import eg.gov.iti.jets.weatherapp.favorite.viewModel.FavouriteFragmentViewModel
+import eg.gov.iti.jets.weatherapp.favorite.viewModel.FavouriteViewModelFactory
+import eg.gov.iti.jets.weatherapp.map.MapFragment
 
 
 class FavoritesFragment : Fragment() {
 
     private var _binding: FragmentFavoritesBinding? = null
     private val binding get() = _binding!!
+
+
+    private val viewModel: FavouriteFragmentViewModel by lazy {
+
+        val factory = FavouriteViewModelFactory(
+            Repo.getInstance(
+                RemoteSource(), LocaleSource(requireContext())
+            )!!
+        )
+
+        ViewModelProvider(this, factory)[FavouriteFragmentViewModel::class.java]
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,8 +50,8 @@ class FavoritesFragment : Fragment() {
 
         binding.favFab.setOnClickListener {
 
-            MapsFragment.newInstance()
-                .show(requireActivity().supportFragmentManager, MapsFragment.TAG)
+            MapFragment.newInstance()
+                .show(requireActivity().supportFragmentManager, MapFragment.TAG)
 
         }
     }

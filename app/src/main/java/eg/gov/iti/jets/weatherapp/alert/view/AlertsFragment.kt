@@ -5,15 +5,34 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import eg.gov.iti.jets.mymvvm.datatbase.LocaleSource
+import eg.gov.iti.jets.mymvvm.model.Repo
+import eg.gov.iti.jets.mymvvm.network.RemoteSource
 import eg.gov.iti.jets.weatherapp.R
+import eg.gov.iti.jets.weatherapp.alert.viewModel.AlertFragmentViewModel
+import eg.gov.iti.jets.weatherapp.alert.viewModel.AlertViewModelFactory
 import eg.gov.iti.jets.weatherapp.databinding.FragmentAlertsBinding
-
+import eg.gov.iti.jets.weatherapp.home.viewModel.HomeViewModel
+import eg.gov.iti.jets.weatherapp.home.viewModel.HomeViewModelFactory
 
 
 class AlertsFragment : Fragment() {
 
     private var _binding: FragmentAlertsBinding? = null
     private val binding get() = _binding!!
+
+
+    private val viewModel: AlertFragmentViewModel by lazy {
+
+        val factory = AlertViewModelFactory(
+            Repo.getInstance(
+                RemoteSource(), LocaleSource(requireContext())
+            )!!
+        )
+
+        ViewModelProvider(this, factory)[AlertFragmentViewModel::class.java]
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

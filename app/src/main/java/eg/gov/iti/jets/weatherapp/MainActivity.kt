@@ -14,6 +14,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import eg.gov.iti.jets.weatherapp.databinding.ActivityMainBinding
+import eg.gov.iti.jets.weatherapp.home.view.LocationListener
 import eg.gov.iti.jets.weatherapp.location.MyLocation
 
 class MainActivity : AppCompatActivity() {
@@ -27,7 +28,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var navView: NavigationView
     private lateinit var navController: NavController
 
-    private val myLocation = MyLocation(this)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,9 +37,6 @@ class MainActivity : AppCompatActivity() {
 
         initUI()
         setupNavigationDrawer()
-       // myLocation.getLastLocation()
-        Log.i(TAG, "onCreate: Main")
-
     }
 
     private fun initUI(){
@@ -69,16 +66,9 @@ class MainActivity : AppCompatActivity() {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if(requestCode == LOCATION_PERMISSION_CODE){
-            if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                myLocation.getLastLocation()
-            }
-        }
-    }
+
+
+
+
+
 }

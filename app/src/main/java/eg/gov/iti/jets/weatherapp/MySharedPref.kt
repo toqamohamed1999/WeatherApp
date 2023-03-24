@@ -11,17 +11,19 @@ class MySharedPref(var context : Context) {
     private val LOCATION = "location"
     private val TEMPERATURE = "temperature"
     private val WINDSPEED = "windSpeed"
+    private val IS_FIRST = "is_First"
+    private val NOTIFICATION = "notification"
+
+
 
     private var pref : SharedPreferences = context!!.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
-    val editor = pref.edit()
+    private val editor = pref.edit()
 
-    init {
-        writeLanguage(Language.English)
-        writeLocation(Location.GPS)
-        writeTemperature(Temperature.Celsius)
-        writeWindSpeed(WindSpeed.Meter)
+
+    fun writeIsFirst(isFirst : Boolean) {
+        editor.putBoolean(IS_FIRST, isFirst)
+        editor.commit()
     }
-
 
     fun writeLanguage(language: Language) {
         editor.putString(LANGUAGE, language.name)
@@ -39,6 +41,15 @@ class MySharedPref(var context : Context) {
     fun writeLocation(location: Location) {
         editor.putString(LOCATION, location.name)
         editor.commit()
+    }
+
+    fun writeNotification(notification: Notification) {
+        editor.putString(NOTIFICATION, notification.name)
+        editor.commit()
+    }
+
+    fun readISFIRST() : Boolean {
+        return pref.getBoolean(IS_FIRST, true)!!
     }
 
     fun getSetting(): Setting {

@@ -17,7 +17,7 @@ data class WeatherRoot (
     val timezoneOffset: String,
     val hourly: List<Hourly>,
     val daily: List<Daily>,
-  //  val alerts: List<Alerts>
+    val alerts: List<Alerts>?=null
 )
 
 data class Hourly(
@@ -109,6 +109,9 @@ enum class Temperature{Celsius,Kelvin,Fahrenheit}
 enum class Location{GPS,Map}
 enum class WindSpeed{Mile,Meter}
 enum class Notification{Enable,Disable}
+
+enum class Unit{Enable,Disable}
+
 
 class Setting(val language: Language,
                    val location: Location,

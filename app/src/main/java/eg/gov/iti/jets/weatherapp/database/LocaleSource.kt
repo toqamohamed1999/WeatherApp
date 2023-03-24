@@ -13,7 +13,7 @@ class LocaleSource(context: Context) : LocaleSourceInterface {
             .getWeatherDao()
     }
 
-    override fun getStoredWeather(): Flow<List<WeatherRoot>> {
+    override fun getStoredWeather(): Flow<WeatherRoot> {
         return weatherDao.getStoredWeather()
     }
 

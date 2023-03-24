@@ -9,6 +9,11 @@ fun getTime(pattern:String,date:Long): String =
 
 fun getIcon(iconPath :String):String= "https://openweathermap.org/img/w/${iconPath}.png"
 
+fun getSplitString(str : String): String =
+    if(!str.contains(".")) str
+    else str.substring(0,str.indexOf("."))
+
+
 
 //Celsius to Kelvin: K = C + 273.15
 //Kelvin to Celcius: C = K - 273.15

@@ -77,7 +77,8 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.5.1"
     //json converter
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1"
-    //location services
+    //location services & maps
     implementation "com.google.android.gms:play-services-location:21.0.1"
+    implementation 'com.google.android.gms:play-services-maps:18.0.2'
 
 }

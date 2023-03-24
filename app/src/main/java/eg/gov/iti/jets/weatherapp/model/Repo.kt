@@ -1,25 +1,36 @@
 package eg.gov.iti.jets.mymvvm.model
 
+import android.app.Activity
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
+import eg.gov.iti.jets.foodplanner.NetworkChecker
 import eg.gov.iti.jets.mymvvm.datatbase.LocaleSource
 import eg.gov.iti.jets.mymvvm.network.RemoteSource
 import eg.gov.iti.jets.mymvvm.network.RemoteSourceInterface
+import eg.gov.iti.jets.weatherapp.MainActivity
+import eg.gov.iti.jets.weatherapp.MySharedPref
+import eg.gov.iti.jets.weatherapp.location.MyLocation
 import eg.gov.iti.jets.weatherapp.model.WeatherRoot
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
 class Repo private constructor(
     private var remoteSource: RemoteSource,
-    private var localeSource: LocaleSource) : RepoInterface {
+    private var localeSource: LocaleSource
+) : RepoInterface {
 
+    private val TAG = "Repo"
 
-    companion object{
-        private var instance : Repo? = null
+    companion object {
+        private var instance: Repo? = null
 
-        fun getInstance(remoteSource: RemoteSource, localeSource: LocaleSource) : Repo? {
-            return instance ?: synchronized(this){
-                instance = Repo(remoteSource,localeSource)
+        fun getInstance(
+            remoteSource: RemoteSource,
+            localeSource: LocaleSource
+        ): Repo? {
+            return instance ?: synchronized(this) {
+                instance = Repo(remoteSource, localeSource)
 
                 instance
             }
@@ -28,11 +39,16 @@ class Repo private constructor(
     }
 
 
-    override suspend fun getCurrentWeather() : Flow<WeatherRoot> {
-        return flowOf(remoteSource.getCurrentWeather("31.6421192", "31.0657133", "metric", "eng"))
+    override suspend fun getCurrentWeather(
+        lat: String,
+        lon: String,
+        unit: String,
+        lang: String
+    ): Flow<WeatherRoot> {
+        return flowOf(remoteSource.getCurrentWeather(lat, lon, unit, lang))
     }
 
-    override fun getStoredWeather(): Flow<List<WeatherRoot>> {
+    override fun getStoredWeather(): Flow<WeatherRoot> {
         return localeSource.getStoredWeather()
     }
 
@@ -40,7 +56,9 @@ class Repo private constructor(
         localeSource.insertWeather(weatherRoot)
     }
 
-    override suspend fun deleteWeather(weatherRoot: WeatherRoot){
+    override suspend fun deleteWeather(weatherRoot: WeatherRoot) {
         localeSource.deleteWeather(weatherRoot)
     }
+
+
 }

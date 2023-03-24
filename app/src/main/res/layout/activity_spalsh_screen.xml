@@ -17,6 +17,6 @@
         android:layout_gravity="center"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
-        app:lottie_rawRes="@raw/cloudy_icon"/>
+        app:lottie_rawRes="@raw/logo_icon"/>
 
 </LinearLayout>

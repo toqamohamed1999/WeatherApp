@@ -6,7 +6,8 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    tools:ignore="MissingDefaultResource">
+    tools:ignore="MissingDefaultResource"
+    tools:context=".setting.view.InitialSettingFragment">
 
     <androidx.cardview.widget.CardView
         android:layout_width="340dp"
@@ -59,7 +60,7 @@
                 android:layout_marginStart="15dp"
                 app:layout_constraintStart_toEndOf="@id/fromTv"
                 app:layout_constraintTop_toBottomOf="@id/logo_imageView"
-                app:layout_constraintStart_toStartOf="@id/alert_radio_group">
+                app:layout_constraintStart_toStartOf="@id/languag_radio_group">
 
                 <RadioButton
                     android:id="@+id/gps_radio_button"
@@ -94,7 +95,7 @@
                 />
 
             <RadioGroup
-                android:id="@+id/alert_radio_group"
+                android:id="@+id/languag_radio_group"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -148,7 +149,7 @@
                 app:trackTint="@color/white"
                 app:layout_constraintStart_toEndOf="@id/notificationTv"
                 app:layout_constraintTop_toBottomOf="@id/toTv"
-                app:layout_constraintStart_toStartOf="@id/alert_radio_group"/>
+                app:layout_constraintStart_toStartOf="@id/languag_radio_group"/>
 
             <TextView
                 android:id="@+id/okTv"

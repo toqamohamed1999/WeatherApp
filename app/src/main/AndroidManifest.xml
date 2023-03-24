@@ -18,6 +18,10 @@
         android:theme="@style/Theme.WeatherApp"
         tools:targetApi="31">
 
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAI33cAhSYPAd_Z-DHoRtO8a4x4lIFMPeU" />
+
         <activity
             android:name=".SplashScreen"
             android:exported="true">

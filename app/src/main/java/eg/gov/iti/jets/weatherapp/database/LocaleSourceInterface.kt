@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface LocaleSourceInterface {
 
-    fun getStoredWeather() : Flow<List<WeatherRoot>>
+    fun getStoredWeather() : Flow<WeatherRoot>
 
     suspend fun insertWeather(weatherRoot: WeatherRoot)
 

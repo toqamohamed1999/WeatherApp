@@ -87,12 +87,12 @@ class DataConverter {
     }
 
     @TypeConverter
-    fun fromAlertsList(alertsList: List<Alerts>): String? {
+    fun fromAlertsList(alertsList: List<Alerts>?): String? {
         if (alertsList == null) {
             return null
         }
         val gson = Gson()
-        val type: Type = object : TypeToken<List<Alerts>>() {}.type
+        val type: Type = object : TypeToken<List<Alerts>?>() {}.type
         return gson.toJson(alertsList, type)
     }
 

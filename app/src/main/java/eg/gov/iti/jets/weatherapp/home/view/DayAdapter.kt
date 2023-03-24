@@ -11,6 +11,7 @@ import eg.gov.iti.jets.weatherapp.R
 import eg.gov.iti.jets.weatherapp.databinding.DayItemBinding
 import eg.gov.iti.jets.weatherapp.model.Daily
 import eg.gov.iti.jets.weatherapp.utils.getIcon
+import eg.gov.iti.jets.weatherapp.utils.getSplitString
 import eg.gov.iti.jets.weatherapp.utils.getTime
 
 
@@ -35,8 +36,8 @@ class DayAdapter() : ListAdapter<Daily, DayAdapter.DayViewHolder>(DayDiffUtil())
                 .into(holder.dayItemBinding.dayWeatherIcon)
             holder.dayItemBinding.dayName.text = getTime("E, MMM dd",day.dt)
             holder.dayItemBinding.dayState.text = day.weather[0].description
-            holder.dayItemBinding.dayMaxTemp.text = day.temp.max
-            holder.dayItemBinding.dayMinTemp.text = day.temp.min
+            holder.dayItemBinding.dayMaxTemp.text = getSplitString(day.temp.max)
+            holder.dayItemBinding.dayMinTemp.text = getSplitString(day.temp.min+"º C")
 
 //            holder.dayItemBinding.cardView.setOnClickListener(View.OnClickListener {
 //            })

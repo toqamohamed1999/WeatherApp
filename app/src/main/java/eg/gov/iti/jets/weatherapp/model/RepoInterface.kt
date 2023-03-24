@@ -6,9 +6,14 @@ import kotlinx.coroutines.flow.Flow
 
 interface RepoInterface {
 
-    suspend fun getCurrentWeather() : Flow<WeatherRoot>
+    suspend fun getCurrentWeather(
+        lat: String,
+        lon: String,
+        unit: String,
+        lang: String
+    ): Flow<WeatherRoot>
 
-    fun getStoredWeather (): Flow<List<WeatherRoot>>
+    fun getStoredWeather(): Flow<WeatherRoot>
 
     suspend fun insertWeather(weatherRoot: WeatherRoot)
 

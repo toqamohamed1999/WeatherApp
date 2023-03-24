@@ -45,8 +45,8 @@
     <string name="ultra_violet"> فوق البنفسجية</string>
     <string name="visibility">الرؤيه</string>
 
-    <string name="to">من</string>
-    <string name="from">إلي</string>
+    <string name="to">إلي</string>
+    <string name="from">من</string>
     <string name="alert">تنبيه</string>
     <string name="cancel">إلغاء</string>
     <string name="ok">تأكيد</string>
@@ -55,5 +55,10 @@
     <string name="start_date">بداية التاريخ</string>
     <string name="start_time">بداية الوقت</string>
     <string name="end_time">نهاية الوقت</string>
+
+    <string name="save">حفظ</string>
+
+    <string name="dismiss">إخفاء</string>
+
 
 </resources>

@@ -6,6 +6,8 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.Address
+import android.location.Geocoder
 import android.location.LocationManager
 import android.os.Looper
 import android.provider.Settings
@@ -14,16 +16,19 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.*
 import eg.gov.iti.jets.weatherapp.LOCATION_PERMISSION_CODE
+import java.util.*
 
-class MyLocation(private val activity: Activity) {
+class MyLocation(private val activity: Activity,private val locationListener: eg.gov.iti.jets.weatherapp.home.view.LocationListener) {
 
     private val TAG = "MyLocation"
 
     private lateinit var fusedLocationProviderClient : FusedLocationProviderClient
     private lateinit var latitude : String
     private lateinit var longitude : String
+    private lateinit var address : String
 
-     private fun checkPermission():Boolean{
+
+    private fun checkPermission():Boolean{
         return ActivityCompat.checkSelfPermission(
             activity,
             Manifest.permission.ACCESS_FINE_LOCATION
@@ -58,6 +63,7 @@ class MyLocation(private val activity: Activity) {
         val locationRequest = LocationRequest()
         locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         locationRequest.interval = 0
+        locationRequest.numUpdates = 3
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(activity)
 
@@ -75,12 +81,16 @@ class MyLocation(private val activity: Activity) {
             val lastLocation = locationResult.lastLocation
             latitude = lastLocation?.latitude.toString()
             longitude = lastLocation?.longitude.toString()
-            Log.i(TAG, "onLocationResult: $latitude  $longitude")
+
+            getAddress()
+
+            Log.i(TAG, "onLocationResult: ttt$latitude  $longitude $address")
+            locationListener.setLocation(Triple(latitude,longitude,address))
         }
     }
 
     @SuppressLint("MissingPermission")
-    fun getLastLocation() {
+    fun getLastLocation(){
         if(checkPermission()){
             if(isLocationEnabled()){
 
@@ -93,6 +103,24 @@ class MyLocation(private val activity: Activity) {
         }else{
             requestPermission()
         }
+
     }
 
+    private fun getAddress(){
+        val geocoder = Geocoder(activity, Locale.getDefault())
+
+        val addresses: List<Address>? = geocoder.getFromLocation(
+            latitude.toDouble(),
+            longitude.toDouble(),
+            1
+        )
+        address = addresses!![0].getAddressLine(0)
+
+//        val city: String = addresses!![0].locality
+//        val state: String = addresses!![0].adminArea
+//        val country: String = addresses!![0].countryName
+//        val postalCode: String = addresses!![0].postalCode
+//        val knownName: String = addresses!![0].featureName
+
+    }
 }

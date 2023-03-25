@@ -13,10 +13,7 @@ import eg.gov.iti.jets.weatherapp.databinding.FavItemBinding
 import eg.gov.iti.jets.weatherapp.home.view.DayAdapter
 import eg.gov.iti.jets.weatherapp.model.Daily
 import eg.gov.iti.jets.weatherapp.model.Favourite
-import eg.gov.iti.jets.weatherapp.utils.FavDiffUtil
-import eg.gov.iti.jets.weatherapp.utils.getIcon
-import eg.gov.iti.jets.weatherapp.utils.getSplitString
-import eg.gov.iti.jets.weatherapp.utils.getTime
+import eg.gov.iti.jets.weatherapp.utils.*
 
 class FavAdapter(var deleteFavListener: DeleteFavListener) : ListAdapter<Favourite, FavAdapter.FavViewHolder>(FavDiffUtil()) {
 
@@ -34,6 +31,11 @@ class FavAdapter(var deleteFavListener: DeleteFavListener) : ListAdapter<Favouri
         val favItem = getItem(position)
 
         holder.favItemBinding.favItemLocationTextView.text = favItem.address
+
+        Picasso.get().load(getFlagIcon(favItem.countryCode!!))
+            .placeholder(R.drawable.ic_launcher_foreground)
+            .resize(200, 200)
+            .into(holder.favItemBinding.favItemFlagImageView)
 
       //  holder.favItemBinding.favItemLatTextView.text = "${favItem.latitude.toString()} , ${favItem.longitude}"
 

@@ -1,8 +1,8 @@
 package eg.gov.iti.jets.weatherapp.map.view
 
+
 import android.location.Address
 import android.location.Geocoder
-
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,8 +13,6 @@ import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-
-
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -37,7 +35,9 @@ class MapsFragment : DialogFragment() {
     private var myAddress: String = ""
     private var lat: Double = 0.0
     private var lon: Double = 0.0
-    private lateinit var favourite: Favourite
+    private lateinit var countryCode : String
+
+    private var favourite: Favourite? = null
 
     private val geocoder by lazy {
         Geocoder(requireContext(), Locale.getDefault())
@@ -84,7 +84,7 @@ class MapsFragment : DialogFragment() {
 
         binding.saveTv.setOnClickListener {
             if (favourite != null) {
-                insertFav(favourite)
+                insertFav(favourite!!)
                 dismiss()
             } else {
                 Toast.makeText(requireContext(), "Select city from map", Toast.LENGTH_LONG).show()
@@ -120,7 +120,8 @@ class MapsFragment : DialogFragment() {
             }
             googleMap.addMarker(marker)
 
-            favourite = Favourite(latitude = lat, longitude = lon, address = myAddress)
+            Log.i(TAG, "handleOnMapClickListener: $countryCode")
+            favourite = Favourite(latitude = lat, longitude = lon, address = myAddress, countryCode = countryCode)
         }
     }
 
@@ -136,6 +137,7 @@ class MapsFragment : DialogFragment() {
                     googleMap.addMarker(MarkerOptions().position(latLng).title(location))
                     googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10F))
                 }
+                favourite = Favourite(latitude = lat, longitude = lon, address = myAddress, countryCode = countryCode)
                 return false
             }
 
@@ -153,6 +155,8 @@ class MapsFragment : DialogFragment() {
 
             myAddress = address.getAddressLine(0)
 
+            countryCode = address.countryCode
+
             LatLng(address.latitude, address.longitude)
 
         } else {
@@ -163,6 +167,7 @@ class MapsFragment : DialogFragment() {
     private fun getAddress() {
         val addressList = geocoder.getFromLocation(lat, lon, 1)!!
         myAddress = addressList[0].getAddressLine(0)
+        countryCode = addressList[0].countryCode
     }
 
     private fun insertFav(favourite: Favourite) {
@@ -171,6 +176,5 @@ class MapsFragment : DialogFragment() {
         }
         Toast.makeText(requireContext(), "Inserted to favourites", Toast.LENGTH_LONG).show()
     }
-
 
 }

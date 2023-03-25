@@ -10,5 +10,6 @@ data class Favourite(
     val id: Int? = null,
     var latitude: Double? = null,
     var longitude: Double? = null,
-    var address: String? = null
+    var address: String? = null,
+    var countryCode: String? = null
 ) {}

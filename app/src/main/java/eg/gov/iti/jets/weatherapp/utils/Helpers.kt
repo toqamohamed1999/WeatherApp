@@ -9,6 +9,8 @@ fun getTime(pattern:String,date:Long): String =
 
 fun getIcon(iconPath :String):String= "https://openweathermap.org/img/w/${iconPath}.png"
 
+fun getFlagIcon(countryCode :String):String= "https://flagsapi.com/${countryCode}/flat/64.png"
+
 fun getSplitString(str : String): String =
     if(!str.contains(".")) str
     else str.substring(0,str.indexOf("."))

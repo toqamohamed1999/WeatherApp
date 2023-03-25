@@ -19,11 +19,13 @@ class FavouriteFragmentViewModel (private val repoInterface: RepoInterface) : Vi
     private val TAG = "AlertFragmentViewModel"
 
     private var favMutableStateFlow = MutableStateFlow<RoomState>(RoomState.Loading)
-    val weatherStateFlow = favMutableStateFlow.asStateFlow()
+    val favStateFlow = favMutableStateFlow.asStateFlow()
 
+    init {
+        getStoredFavourites()
+    }
 
-
-    fun getStoredFavourites(){
+    private fun getStoredFavourites(){
 
         viewModelScope.launch(Dispatchers.IO) {
             repoInterface.getStoredFavourites()
@@ -35,12 +37,6 @@ class FavouriteFragmentViewModel (private val repoInterface: RepoInterface) : Vi
         }
     }
 
-
-    fun insertFavourite(favourite: Favourite){
-        viewModelScope.launch(Dispatchers.IO) {
-            repoInterface.insertFavourite(favourite)
-        }
-    }
 
     fun deleteFavourite(favourite: Favourite){
         viewModelScope.launch(Dispatchers.IO) {

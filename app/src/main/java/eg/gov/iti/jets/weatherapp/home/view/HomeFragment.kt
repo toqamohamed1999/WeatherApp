@@ -41,7 +41,6 @@ class HomeFragment : Fragment(), LocationListener {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
-
     private lateinit var dayAdapter: DayAdapter
     private lateinit var hourAdapter: HourAdapter
 
@@ -73,9 +72,8 @@ class HomeFragment : Fragment(), LocationListener {
     ): View {
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        val root: View = binding.root
         binding.homeConstraintLayout.visibility = View.GONE
-        return root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -116,7 +114,6 @@ class HomeFragment : Fragment(), LocationListener {
     }
 
     private fun getWeatherData() {
-        Log.i(TAG, "getWeatherData: ttt")
         viewModel.getCurrentWeather(latitude, longitude, unit, lang)
 
         lifecycleScope.launch {

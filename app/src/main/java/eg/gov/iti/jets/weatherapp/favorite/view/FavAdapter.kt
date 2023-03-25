@@ -37,9 +37,6 @@ class FavAdapter(var deleteFavListener: DeleteFavListener) : ListAdapter<Favouri
             .resize(200, 200)
             .into(holder.favItemBinding.favItemFlagImageView)
 
-      //  holder.favItemBinding.favItemLatTextView.text = "${favItem.latitude.toString()} , ${favItem.longitude}"
-
-
         holder.favItemBinding.favItemDeleteButton.setOnClickListener{
                 deleteFavListener.deleteFav(favItem)
             }

@@ -24,11 +24,4 @@ class AlertWorker (val context: Context, workerParams: WorkerParameters) :
         }
     }
 
-    private fun setUpAlertDialog(context: Context){
-        Log.i(TAG, "setUpAlertDialog: alertttt fun")
-        val alert = MyCustomDialog()
-        alert.showAlertDialog(context)
-    }
-
-
 }

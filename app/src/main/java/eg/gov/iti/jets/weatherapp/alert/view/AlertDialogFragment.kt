@@ -1,9 +1,12 @@
 package eg.gov.iti.jets.weatherapp.alert.view
 
-import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -12,12 +15,12 @@ import android.view.WindowManager
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import androidx.work.*
-import com.google.gson.Gson
+import eg.gov.iti.jets.weatherapp.alert.AlertService
 import eg.gov.iti.jets.weatherapp.alert.AlertWorker
 import eg.gov.iti.jets.weatherapp.databinding.AlertDialogBinding
-import eg.gov.iti.jets.weatherapp.utils.MyCustomDialog
 import java.util.*
 import java.util.concurrent.TimeUnit
+
 
 //The order of execution of the above methods will be:
 // onAttach -> onCreate -> onCreateDialog -> onCreateView -> onViewCreated -> onDestroy
@@ -27,6 +30,11 @@ class AlertDialogFragment : DialogFragment() {
     private var _binding: AlertDialogBinding? = null
     private val binding get() = _binding!!
 
+    private var mDay: Int? = null
+    private var mMinute: Int? = null
+    private var mYear: Int? = null
+    private var mMonth: Int? = null
+    private var mHour: Int? = null
 
     companion object {
 
@@ -53,15 +61,12 @@ class AlertDialogFragment : DialogFragment() {
     override fun onStart() {
         super.onStart()
         dialog?.window?.setLayout(
-            WindowManager.LayoutParams.MATCH_PARENT,
-            WindowManager.LayoutParams.WRAP_CONTENT
+            WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT
         )
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = AlertDialogBinding.inflate(inflater, container, false)
         return binding.root
@@ -90,33 +95,41 @@ class AlertDialogFragment : DialogFragment() {
         }
 
         binding.okTv.setOnClickListener {
-            setUpAlertWorker()
-            dismiss()
+//            setUpAlertWorker()
 //            val alert = MyCustomDialog()
 //            alert.showAlertDialog(requireContext() as Activity)
-        }
 
+//            checkOverlayPermission();
+//            startService();
+            setUpAlertWorker()
+            dismiss()
+        }
 
     }
 
-    private fun setUpAlertWorker(){
+    private fun setUpAlertWorker() {
 //        val data = Data.Builder()
 //        data.putString("","")
 //        data.build()
 
         Log.i(TAG, "setUpAlertWorker: alerttttttttt")
 
-        var request = PeriodicWorkRequestBuilder<AlertWorker>(
-            5,TimeUnit.SECONDS)
+        var workRequest = PeriodicWorkRequestBuilder<AlertWorker>(
+            5, TimeUnit.SECONDS
+        )
             //  .setInputData(data.build())
             .build()
 
-        WorkManager.getInstance(requireContext())
-            .enqueue(request)
+        WorkManager.getInstance(requireContext()).enqueueUniquePeriodicWork(
+            "$id",
+            ExistingPeriodicWorkPolicy.REPLACE,
+            workRequest
+        )
 
-        val workInfo = WorkManager.getInstance(requireContext()).getWorkInfoById(request.id).get()
+//        WorkManager.getInstance(requireContext())
+//            .enqueue(request)
 
-
+        val workInfo = WorkManager.getInstance(requireContext()).getWorkInfoById(workRequest.id).get()
 
 
         /*
@@ -153,13 +166,6 @@ class AlertDialogFragment : DialogFragment() {
 
     }
 
-
-    private var mDay: Int? = null
-    private var mMinute: Int? = null
-    private var mYear: Int? = null
-    private var mMonth: Int? = null
-    private var mHour: Int? = null
-
     private fun showDateDialog(dateTextView: TextView) {
 
         val c: Calendar = Calendar.getInstance()
@@ -171,8 +177,7 @@ class AlertDialogFragment : DialogFragment() {
         val datePickerDialog = DatePickerDialog(
             requireActivity(),
             DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
-                dateTextView.text =
-                    (dayOfMonth.toString() + "-" + (monthOfYear + 1) + "-" + year)
+                dateTextView.text = (dayOfMonth.toString() + "-" + (monthOfYear + 1) + "-" + year)
             },
             mYear!!,
             mMonth!!,
@@ -188,15 +193,54 @@ class AlertDialogFragment : DialogFragment() {
         mMinute = c2.get(Calendar.MINUTE)
 
         val timePickerDialog = TimePickerDialog(
-            requireActivity(),
-            { _, hourOfDay, minute ->
+            requireActivity(), { _, hourOfDay, minute ->
                 timeTextView.text = "$hourOfDay:$minute"
-            },
-            mHour!!,
-            mMinute!!,
-            false
+            }, mHour!!, mMinute!!, false
         )
         timePickerDialog.show()
+    }
+
+
+    private fun startService() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+            if (Settings.canDrawOverlays(requireContext())) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    requireContext().startForegroundService(
+                        Intent(
+                            requireContext(), AlertService::class.java
+                        )
+                    )
+                } else {
+                    requireContext().startService(
+                        Intent(
+                            requireContext(), AlertService::class.java
+                        )
+                    )
+                }
+            }
+        } else {
+            requireContext().startService(Intent(requireContext(), AlertService::class.java))
+        }
+    }
+
+    private fun checkOverlayPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!Settings.canDrawOverlays(requireContext())) {
+                // send user to the device settings
+                val myIntent = Intent(
+                    Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    Uri.parse("package:" + requireContext().packageName)
+                )
+                startActivity(myIntent)
+            }
+        }
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        startService()
     }
 
 }

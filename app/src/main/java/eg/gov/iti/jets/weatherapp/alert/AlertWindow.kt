@@ -5,12 +5,17 @@ import android.content.Context.WINDOW_SERVICE
 import android.content.DialogInterface
 import android.graphics.PixelFormat
 import android.os.Build
+import android.print.PrintAttributes.Margins
 import android.util.Log
 import android.view.*
+import android.widget.TextView
 import eg.gov.iti.jets.weatherapp.R
+import eg.gov.iti.jets.weatherapp.databinding.DisplayAlertDialogBinding
 
 
 class AlertWindow(val context: Context) {
+
+    private val TAG = "AlertWindow"
 
     // declaring required variables
     private val mView: View
@@ -38,17 +43,15 @@ class AlertWindow(val context: Context) {
         // set onClickListener on the remove button, which removes
         // the view from the window
 
-//        mView.findViewById(R.id.alertItem_dismiss_textView).setOnClickListener(object :
-//            DialogInterface.OnClickListener {
-//
-//            override fun onClick(dialog: DialogInterface?, which: Int) {
-//                close()
-//            }
-//        })
+        mView.findViewById<TextView>(R.id.alertItem_dismiss_textView).setOnClickListener {
+            close()
+        }
 
         // Define the position of the
         // window within the screen
-        mParams!!.gravity = Gravity.CENTER
+        mParams!!.width = WindowManager.LayoutParams.WRAP_CONTENT
+        mParams!!.gravity = Gravity.TOP
+        mParams!!.y = 15
         mWindowManager = context.getSystemService(WINDOW_SERVICE) as WindowManager
     }
 
@@ -62,23 +65,23 @@ class AlertWindow(val context: Context) {
                 }
             }
         } catch (e: Exception) {
-            Log.d("Error1", e.toString())
+            Log.d(TAG, e.toString())
         }
     }
 
-    fun close() {
+    private fun close() {
         try {
             // remove the view from the window
             (context.getSystemService(WINDOW_SERVICE) as WindowManager).removeView(mView)
             // invalidate the view
             mView.invalidate()
             // remove all views
-            (mView.getParent() as ViewGroup).removeAllViews()
+            (mView.parent as ViewGroup).removeAllViews()
 
             // the above steps are necessary when you are adding and removing
             // the view simultaneously, it might give some exceptions
         } catch (e: Exception) {
-            Log.i("Error2", e.toString())
+            Log.i(TAG, e.toString())
         }
     }
 }

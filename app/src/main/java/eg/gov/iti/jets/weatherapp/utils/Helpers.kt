@@ -96,11 +96,6 @@ fun getWindSpeed(windSpeed : String,mySharedPref: MySharedPref) : String {
 }
  fun showSnackBar(activity: Activity,msg :String,icon : Int) {
 
-//        Snackbar.make(
-//            requireActivity().findViewById(android.R.id.content),
-//            "No network connection!!", 3000)
-//            .show();
-
     val snackBar: Snackbar = Snackbar.make(
         activity.findViewById(android.R.id.content), msg, 4000
     )

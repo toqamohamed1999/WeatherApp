@@ -1,7 +1,6 @@
 package eg.gov.iti.jets.weatherapp
 
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
@@ -59,10 +58,7 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        //menuInflater.inflate(R.menu.main, menu)
-        return true
-    }
+
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
@@ -71,23 +67,20 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun setupLang(){
-        val setting = mySharedPref.getSetting()
-        if (setting.language == Language.Arabic)
-            setLan("ar")
+        if (mySharedPref.getSetting().language == Language.Arabic)
+            setLanguage("ar")
     }
 
 
-    private fun setLan(language: String) {
-        val metric = resources.displayMetrics
+    private fun setLanguage(language: String) {
         val configuration = resources.configuration
         configuration.locale = Locale(language)
         Locale.setDefault(Locale(language))
         configuration.setLayoutDirection(Locale(language))
-        // update configuration
-        resources.updateConfiguration(configuration, metric)
-        // notify configuration
+        // update configuration change
+        resources.updateConfiguration(configuration, resources.displayMetrics)
+        // notify configuration change
         onConfigurationChanged(configuration)
-       // requireActivity().recreate()
     }
 
 

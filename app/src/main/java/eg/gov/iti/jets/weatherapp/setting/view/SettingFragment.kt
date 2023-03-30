@@ -1,7 +1,9 @@
 package eg.gov.iti.jets.weatherapp.setting.view
 
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +13,7 @@ import eg.gov.iti.jets.weatherapp.MySharedPref
 import eg.gov.iti.jets.weatherapp.R
 import eg.gov.iti.jets.weatherapp.databinding.FragmentSettingBinding
 import eg.gov.iti.jets.weatherapp.model.*
+import java.util.*
 
 
 class SettingFragment : Fragment() {
@@ -23,11 +26,11 @@ class SettingFragment : Fragment() {
     private val mySharedPref by lazy {
         MySharedPref.getMyPref(requireContext())
     }
-    private lateinit var location : Location
-    private lateinit var language : Language
-    private lateinit var notification : Notification
-    private lateinit var windSpeed : WindSpeed
-    private lateinit var temperature : Temperature
+    private lateinit var location: Location
+    private lateinit var language: Language
+    private lateinit var notification: Notification
+    private lateinit var windSpeed: WindSpeed
+    private lateinit var temperature: Temperature
 
 
     override fun onCreateView(
@@ -44,12 +47,7 @@ class SettingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         init()
-
-        binding.saveTv.setOnClickListener {
-          //  applyLanguageChanges()
-        }
     }
-
 
 
     private fun init() {
@@ -62,7 +60,7 @@ class SettingFragment : Fragment() {
         handleWindSpeedSelected()
     }
 
-    private fun getMyPref(){
+    private fun getMyPref() {
         location = mySharedPref.getSetting().location
         language = mySharedPref.getSetting().language
         notification = mySharedPref.getSetting().notification
@@ -70,23 +68,6 @@ class SettingFragment : Fragment() {
         temperature = mySharedPref.getSetting().temperature
     }
 
-
-    private fun handleLanguageSelected() {
-        _binding?.languageRadioGroup?.setOnCheckedChangeListener { _, optionId ->
-            run {
-                when (optionId) {
-                    R.id.english_radio_button -> {
-                        language = Language.English
-                    }
-                    R.id.arabic_radio_button -> {
-                        language = Language.Arabic
-                    }
-                }
-                mySharedPref.writeLanguage(language)
-            }
-        }
-
-    }
 
     private fun handleLocationSelected() {
         _binding?.locationRadioGroup?.setOnCheckedChangeListener { _, optionId ->
@@ -154,94 +135,101 @@ class SettingFragment : Fragment() {
             }
         }
     }
-/*
-    private fun updatePref() {
-        mySharedPref.writeLanguage(language)
-        mySharedPref.writeLocation(location)
-        mySharedPref.writeTemperature(temperature)
-        mySharedPref.writeWindSpeed(windSpeed)
-        mySharedPref.writeNotification(notification)
-    }
 
+
+    private fun handleLanguageSelected() {
+        _binding?.languageRadioGroup?.setOnCheckedChangeListener { _, optionId ->
+            run {
+                when (optionId) {
+                    R.id.english_radio_button -> {
+                        language = Language.English
+                    }
+                    R.id.arabic_radio_button -> {
+                        language = Language.Arabic
+                    }
+                }
+                mySharedPref.writeLanguage(language)
+                applyLanguageChanges()
+            }
+        }
+
+    }
 
 
     private fun applyLanguageChanges() {
         if (language == Language.English)
             setLanguage("eng")
-        else
+         else
             setLanguage("ar")
     }
 
 
 
-    private fun setLanguage(lang: String?) {
-        val myLocale = Locale(lang)
-        val res = resources
-        val dm: DisplayMetrics = res.displayMetrics
-        val conf: Configuration = res.configuration
-        conf.locale = myLocale
-        res.updateConfiguration(conf, dm)
-
-        refresh()
-
-        //  onConfigurationChanged(conf)
-    }
-*/
-
-/*
-    private fun setLan(language: String) {
-        val metric = resources.displayMetrics
+    private fun setLanguage(language: String) {
         val configuration = resources.configuration
         configuration.locale = Locale(language)
         Locale.setDefault(Locale(language))
         configuration.setLayoutDirection(Locale(language))
-        // update configuration
-        resources.updateConfiguration(configuration, metric)
-        // notify configuration
+        // update configuration change
+        resources.updateConfiguration(configuration, resources.displayMetrics)
+        // notify configuration change
         onConfigurationChanged(configuration)
-       // requireActivity().recreate()
-    }
-
-*/
-
- /*   private fun refresh() {
-        val refresh = Intent(requireActivity(), MainActivity::class.java)
-        requireActivity().finish()
-        startActivity(refresh)
-    }
-
-*/
-
-    private fun setSetting() {
-        val setting = mySharedPref.getSetting()
-        if (setting.language == Language.English)
-            binding.englishRadioButton.isChecked = true
-        else binding.arabicRadioButton.isChecked = true
-
-        if (setting.notification == Notification.Enable)
-            binding.enableRadioButton.isChecked = true
-        else binding.disableRadioButton.isChecked = true
-
-        if (setting.windSpeed == WindSpeed.Meter)
-            binding.meterRadioButton.isChecked = true
-        else binding.mileRadioButton.isChecked = true
-
-        if (setting.location == Location.GPS)
-            binding.gpsRadioButton.isChecked = true
-        else binding.mapRadioButton.isChecked = true
-
-        when (setting.temperature) {
-            Temperature.Celsius -> binding.celsiusRadioButton.isChecked = true
-            Temperature.Kelvin -> binding.kelvinRadioButton.isChecked = true
-            else -> binding.fahrenheitRadioButton.isChecked = true
-        }
+        requireActivity().recreate()
     }
 
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+private fun setSetting() {
+    val setting = mySharedPref.getSetting()
+    if (setting.language == Language.English)
+        binding.englishRadioButton.isChecked = true
+    else binding.arabicRadioButton.isChecked = true
+
+    if (setting.notification == Notification.Enable)
+        binding.enableRadioButton.isChecked = true
+    else binding.disableRadioButton.isChecked = true
+
+    if (setting.windSpeed == WindSpeed.Meter)
+        binding.meterRadioButton.isChecked = true
+    else binding.mileRadioButton.isChecked = true
+
+    if (setting.location == Location.GPS)
+        binding.gpsRadioButton.isChecked = true
+    else binding.mapRadioButton.isChecked = true
+
+    when (setting.temperature) {
+        Temperature.Celsius -> binding.celsiusRadioButton.isChecked = true
+        Temperature.Kelvin -> binding.kelvinRadioButton.isChecked = true
+        else -> binding.fahrenheitRadioButton.isChecked = true
     }
+}
+
+
+override fun onDestroyView() {
+    super.onDestroyView()
+    _binding = null
+}
 
 
 }
+
+/*
+        private fun setLanguage(lang: String?) {
+            val myLocale = Locale(lang)
+            val res = resources
+            val dm: DisplayMetrics = res.displayMetrics
+            val conf: Configuration = res.configuration
+            conf.locale = myLocale
+            res.updateConfiguration(conf, dm)
+
+            // refresh()
+
+            onConfigurationChanged(conf)
+        }
+
+
+        private fun refresh() {
+            val refresh = Intent(requireActivity(), MainActivity::class.java)
+            requireActivity().finish()
+            startActivity(refresh)
+        }
+*/

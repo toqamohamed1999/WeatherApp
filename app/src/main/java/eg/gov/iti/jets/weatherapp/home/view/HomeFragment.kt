@@ -1,20 +1,19 @@
 package eg.gov.iti.jets.weatherapp.home.view
 
-import android.R
-import android.R.layout
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
-import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
+import eg.gov.iti.jets.foodplanner.NetworkChecker
 import eg.gov.iti.jets.mymvvm.Utilites.ApiState
 import eg.gov.iti.jets.mymvvm.datatbase.LocaleSource
 import eg.gov.iti.jets.mymvvm.model.Repo
@@ -25,16 +24,14 @@ import eg.gov.iti.jets.weatherapp.databinding.FragmentHomeBinding
 import eg.gov.iti.jets.weatherapp.home.viewModel.HomeViewModel
 import eg.gov.iti.jets.weatherapp.home.viewModel.HomeViewModelFactory
 import eg.gov.iti.jets.weatherapp.location.MyLocation
-import eg.gov.iti.jets.weatherapp.model.WeatherRoot
+import eg.gov.iti.jets.weatherapp.model.*
 import eg.gov.iti.jets.weatherapp.setting.view.InitialSettingFragment
-import eg.gov.iti.jets.weatherapp.utils.getIcon
-import eg.gov.iti.jets.weatherapp.utils.getSplitString
-import eg.gov.iti.jets.weatherapp.utils.getTime
+import eg.gov.iti.jets.weatherapp.utils.*
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 
-class HomeFragment : Fragment(), LocationListener {
+class HomeFragment : Fragment(), LocationListener, MapListener {
 
     private val TAG = "HomeFragment"
 
@@ -47,9 +44,12 @@ class HomeFragment : Fragment(), LocationListener {
     private lateinit var latitude: String
     private lateinit var longitude: String
     private lateinit var address: String
-
+    private lateinit var lang: String
     private var unit: String = "metric"
-    private var lang: String = "eng"
+
+    private val mySharedPref by lazy {
+        MySharedPref.getMyPref(requireContext())
+    }
 
     private val myLocation by lazy {
         activity?.let { MyLocation(it, this) }
@@ -79,14 +79,24 @@ class HomeFragment : Fragment(), LocationListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        if (mySharedPref.readISFIRST()) {
+            showInitialSetting()
+        } else {
+            init()
+        }
+
+    }
+
+    private fun init() {
         setUpDayRecyclerView()
         setUpHourRecyclerView()
-        showInitialSetting()
-        myLocation?.getLastLocation()
+        getSharedInfo()
+        handleLocationActions()
+        observeWeatherData()
     }
 
     private fun setUpDayRecyclerView() {
-        dayAdapter = DayAdapter()
+        dayAdapter = DayAdapter(mySharedPref)
 
         _binding?.homeDaysRecyclerView?.apply {
             layoutManager = LinearLayoutManager(requireContext())
@@ -95,7 +105,7 @@ class HomeFragment : Fragment(), LocationListener {
     }
 
     private fun setUpHourRecyclerView() {
-        hourAdapter = HourAdapter()
+        hourAdapter = HourAdapter(mySharedPref)
         val linearLayoutManager = LinearLayoutManager(requireContext())
         linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
 
@@ -107,19 +117,17 @@ class HomeFragment : Fragment(), LocationListener {
 
 
     private fun showInitialSetting() {
-        if (MySharedPref(requireContext()).readISFIRST()) {
-            InitialSettingFragment.newInstance()
-                .show(requireActivity().supportFragmentManager, InitialSettingFragment.TAG)
-        }
+        InitialSettingFragment.newInstance(this)
+            .show(requireActivity().supportFragmentManager, InitialSettingFragment.TAG)
     }
 
-    private fun getWeatherData() {
-        viewModel.getCurrentWeather(latitude, longitude, unit, lang)
+
+    private fun observeWeatherData() {
 
         lifecycleScope.launch {
             viewModel.weatherStateFlow.collectLatest {
                 when (it) {
-                    is ApiState.Loading -> {
+                    is ApiState.Loading, RoomState.Loading -> {
                         binding.progressbar.visibility = View.VISIBLE
                         binding.homeConstraintLayout.visibility = View.GONE
                     }
@@ -128,53 +136,67 @@ class HomeFragment : Fragment(), LocationListener {
                         binding.homeConstraintLayout.visibility = View.VISIBLE
 
                         updateUI(it.weatherRoot)
-                        viewModel.insertWeather(it.weatherRoot)
 
+                    }
+                    is RoomState.SuccessWeather -> {
+                        binding.progressbar.visibility = View.GONE
+                        binding.homeConstraintLayout.visibility = View.VISIBLE
+
+                        updateUI(it.weatherRoot)
                     }
                     else -> {
                         binding.progressbar.visibility = View.GONE
-
-//                        Snackbar.make(
-//                            binding.root,
-//                            "Connection is not available",
-//                            Snackbar.LENGTH_LONG
-//                        )
-//                            .setAction("Action", null)
-//                            .show()
+                        Log.i(TAG, "getWeatherDataFromApi: $it")
                     }
-
                 }
             }
         }
     }
 
 
-    private fun updateUI(weatherRoot: WeatherRoot) {
-        dayAdapter.submitList(weatherRoot.daily)
-        hourAdapter.submitList(weatherRoot.hourly)
-
-        Picasso.get().load(getIcon(weatherRoot.hourly[0].weather[0].icon))
-            .placeholder(eg.gov.iti.jets.weatherapp.R.drawable.ic_launcher_background)
-            .resize(200, 200)
-            .into(binding.homeWeatherImageView)
-
-        _binding?.homeStateTextView?.text = weatherRoot.hourly[0].weather[0].description
-        _binding?.homeLocationTextView?.text = weatherRoot.timezone
-        _binding?.homeTimeDateTextView?.text =
-            getTime("hh:mm a   E, MMM dd, yyyy", weatherRoot.hourly[0].dt)
-        _binding?.homeTempTextView?.text = getSplitString(weatherRoot.daily[0].temp.max)
-        _binding?.homeTempTextView?.text = getSplitString(weatherRoot.daily[0].temp.min) + "º C"
-        _binding?.additional?.humidityValueTextview?.text = weatherRoot.hourly[0].humidity + " %"
-        _binding?.additional?.pressureValueTextview?.text = weatherRoot.hourly[0].pressure + " hpa"
-        _binding?.additional?.windValueTextView?.text = weatherRoot.hourly[0].windSpeed + " m/s"
+    private fun handleLocationActions() {
+        if (mySharedPref.getSetting().location == Location.GPS) {
+            myLocation?.getLastLocation()
+        }else if(mySharedPref.readLat() != "N/F" && mySharedPref.readLon() != "N/F"){
+            latitude = mySharedPref.readLat()
+            longitude = mySharedPref.readLon()
+            getWeather()
+        }
     }
 
-    override fun setLocation(locationData: Triple<String, String, String>) {
+    override fun setLocation(locationData: Pair<String, String>) {
         latitude = locationData.first
         longitude = locationData.second
-        address = locationData.third
 
-        //getWeatherData()
+        getWeather()
+    }
+
+    private fun getWeather() {
+        if (NetworkChecker.isNetworkAvailable(requireContext())) {
+            viewModel.getCurrentWeather(latitude, longitude, unit, lang)
+        } else {
+            showSnackBar()
+            viewModel.getStoredWeather()
+        }
+    }
+
+
+    private fun showSnackBar() {
+
+//        Snackbar.make(
+//            requireActivity().findViewById(android.R.id.content),
+//            "No network connection!!", 3000)
+//            .show();
+
+        val snackBar: Snackbar = Snackbar.make(requireActivity().findViewById(android.R.id.content)
+            ,"No network Connection!", 4000)
+        val snackBarLayout = snackBar.view
+        val textView =
+            snackBarLayout.findViewById<View>(com.google.android.material.R.id.snackbar_text) as TextView
+        textView.setCompoundDrawablesWithIntrinsicBounds(eg.gov.iti.jets.weatherapp.R.drawable.baseline_wifi_off_24, 0, 0, 0)
+        textView.compoundDrawablePadding =
+            resources.getDimensionPixelOffset(eg.gov.iti.jets.weatherapp.R.dimen.snackBar_margin)
+        snackBar.show()
     }
 
 
@@ -191,9 +213,72 @@ class HomeFragment : Fragment(), LocationListener {
         }
     }
 
+    private fun updateUI(weatherRoot: WeatherRoot) {
+        dayAdapter.submitList(weatherRoot.daily)
+        hourAdapter.submitList(weatherRoot.hourly)
+
+        Picasso.get().load(getIcon(weatherRoot.hourly[0].weather[0].icon))
+            .placeholder(eg.gov.iti.jets.weatherapp.R.drawable.ic_launcher_background)
+            .resize(200, 200)
+            .into(binding.homeWeatherImageView)
+
+        _binding?.homeStateTextView?.text = weatherRoot.hourly[0].weather[0].description
+        _binding?.homeLocationTextView?.text = weatherRoot.timezone
+        _binding?.homeTimeDateTextView?.text =
+            getTime("hh:mm a   E, MMM dd, yyyy", weatherRoot.hourly[0].dt)
+        _binding?.homeTempTextView?.text =
+            getSplitString(getTemp(weatherRoot.daily[0].temp.max, mySharedPref))
+        _binding?.homeTempTextView?.append(
+            " / " + getSplitString(
+                getTemp(
+                    weatherRoot.daily[0].temp.min,
+                    mySharedPref
+                )
+            )+ Temp_Unit
+        )
+        _binding?.additional?.humidityValueTextview?.text = weatherRoot.hourly[0].humidity + " %"
+        _binding?.additional?.pressureValueTextview?.text = weatherRoot.hourly[0].pressure + " hpa"
+        _binding?.additional?.windValueTextView?.text =
+            getWindSpeed(weatherRoot.hourly[0].windSpeed, mySharedPref)+ WindSpeed_Unit
+    }
+
+    private fun getSharedInfo() {
+        val setting = mySharedPref.getSetting()
+        lang = when (setting.language) {
+            Language.English -> "eng"
+            Language.Arabic -> "ar"
+        }
+//        units = when (setting.temperature) {
+//            Temperature.Kelvin -> "default"
+//            Temperature.Celsius -> "metric"
+//            Temperature.Fahrenheit -> "imperial"
+//        }
+//
+//        units = when (setting.windSpeed) {
+//            WindSpeed.Meter -> "metric"
+//            WindSpeed.Mile -> "imperial"
+//        }
+    }
+
+
+
+
+    override fun mapLocationSelected() {
+        latitude = mySharedPref.readLat()
+        longitude = mySharedPref.readLon()
+
+        getWeather()
+    }
+
+    override fun confirmInitialSetting() {
+        init()
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
+
 }

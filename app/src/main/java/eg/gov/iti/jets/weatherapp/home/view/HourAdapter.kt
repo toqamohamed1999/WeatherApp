@@ -7,13 +7,13 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import eg.gov.iti.jets.mymvvm.HourDiffUtil
+import eg.gov.iti.jets.weatherapp.MySharedPref
 import eg.gov.iti.jets.weatherapp.R
 import eg.gov.iti.jets.weatherapp.databinding.HourItemBinding
 import eg.gov.iti.jets.weatherapp.model.Hourly
-import eg.gov.iti.jets.weatherapp.utils.getIcon
-import eg.gov.iti.jets.weatherapp.utils.getTime
+import eg.gov.iti.jets.weatherapp.utils.*
 
-class HourAdapter () : ListAdapter<Hourly, HourAdapter.HourViewHolder>(HourDiffUtil()) {
+class HourAdapter (private val mySharedPref: MySharedPref) : ListAdapter<Hourly, HourAdapter.HourViewHolder>(HourDiffUtil()) {
 
     private lateinit var hourItemBinding: HourItemBinding
 
@@ -33,8 +33,8 @@ class HourAdapter () : ListAdapter<Hourly, HourAdapter.HourViewHolder>(HourDiffU
             .resize(200, 200)
             .into(holder.hourItemBinding.hourWeatherIcon)
         holder.hourItemBinding.hourName.text = getTime("hh:mm a",hour.dt)
-        holder.hourItemBinding.hourTemp.text = hour.temp.toString()
-        holder.hourItemBinding.hourWindSpeed.text = hour.windSpeed.toString()
+        holder.hourItemBinding.hourTemp.text = getTemp(hour.temp,mySharedPref)+ Temp_Unit
+        holder.hourItemBinding.hourWindSpeed.text = getWindSpeed(hour.windSpeed,mySharedPref)+ WindSpeed_Unit
 
     }
 

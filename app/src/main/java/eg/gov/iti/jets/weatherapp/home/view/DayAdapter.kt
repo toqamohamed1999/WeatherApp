@@ -7,15 +7,14 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import eg.gov.iti.jets.mymvvm.DayDiffUtil
+import eg.gov.iti.jets.weatherapp.MySharedPref
 import eg.gov.iti.jets.weatherapp.R
 import eg.gov.iti.jets.weatherapp.databinding.DayItemBinding
 import eg.gov.iti.jets.weatherapp.model.Daily
-import eg.gov.iti.jets.weatherapp.utils.getIcon
-import eg.gov.iti.jets.weatherapp.utils.getSplitString
-import eg.gov.iti.jets.weatherapp.utils.getTime
+import eg.gov.iti.jets.weatherapp.utils.*
 
 
-class DayAdapter() : ListAdapter<Daily, DayAdapter.DayViewHolder>(DayDiffUtil()) {
+class DayAdapter(private val mySharedPref: MySharedPref) : ListAdapter<Daily, DayAdapter.DayViewHolder>(DayDiffUtil()) {
 
         private lateinit var dayItemBinding: DayItemBinding
 
@@ -36,11 +35,9 @@ class DayAdapter() : ListAdapter<Daily, DayAdapter.DayViewHolder>(DayDiffUtil())
                 .into(holder.dayItemBinding.dayWeatherIcon)
             holder.dayItemBinding.dayName.text = getTime("E, MMM dd",day.dt)
             holder.dayItemBinding.dayState.text = day.weather[0].description
-            holder.dayItemBinding.dayMaxTemp.text = getSplitString(day.temp.max)
-            holder.dayItemBinding.dayMinTemp.text = getSplitString(day.temp.min+"º C")
+            holder.dayItemBinding.dayMaxTemp.text = getSplitString(getTemp(day.temp.max, mySharedPref))
+            holder.dayItemBinding.dayMinTemp.text = getSplitString(getTemp(day.temp.min, mySharedPref))+ Temp_Unit
 
-//            holder.dayItemBinding.cardView.setOnClickListener(View.OnClickListener {
-//            })
         }
 
         inner class DayViewHolder(var dayItemBinding: DayItemBinding) :

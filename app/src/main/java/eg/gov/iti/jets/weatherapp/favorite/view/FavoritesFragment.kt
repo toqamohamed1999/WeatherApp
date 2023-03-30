@@ -1,7 +1,6 @@
 package eg.gov.iti.jets.weatherapp.favorite.view
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import eg.gov.iti.jets.mymvvm.Utilites.ApiState
 import eg.gov.iti.jets.mymvvm.datatbase.LocaleSource
 import eg.gov.iti.jets.mymvvm.model.Repo
 import eg.gov.iti.jets.mymvvm.network.RemoteSource
@@ -59,7 +57,7 @@ class FavoritesFragment : Fragment(),DeleteFavListener {
         getStoredFavList()
 
         binding.favFab.setOnClickListener {
-            MapsFragment.newInstance()
+            MapsFragment.newInstance("fav",null)
                 .show(requireActivity().supportFragmentManager, MapsFragment.TAG)
         }
     }

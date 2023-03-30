@@ -1,6 +1,5 @@
 package eg.gov.iti.jets.weatherapp
 
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -14,8 +13,8 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import eg.gov.iti.jets.weatherapp.databinding.ActivityMainBinding
-import eg.gov.iti.jets.weatherapp.home.view.LocationListener
-import eg.gov.iti.jets.weatherapp.location.MyLocation
+import eg.gov.iti.jets.weatherapp.model.Language
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,15 +27,19 @@ class MainActivity : AppCompatActivity() {
     private lateinit var navView: NavigationView
     private lateinit var navController: NavController
 
-
+    private val mySharedPref by lazy {
+        MySharedPref.getMyPref(applicationContext)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setupLang()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         initUI()
         setupNavigationDrawer()
+
     }
 
     private fun initUI(){
@@ -64,6 +67,27 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
+
+
+    private fun setupLang(){
+        val setting = mySharedPref.getSetting()
+        if (setting.language == Language.Arabic)
+            setLan("ar")
+    }
+
+
+    private fun setLan(language: String) {
+        val metric = resources.displayMetrics
+        val configuration = resources.configuration
+        configuration.locale = Locale(language)
+        Locale.setDefault(Locale(language))
+        configuration.setLayoutDirection(Locale(language))
+        // update configuration
+        resources.updateConfiguration(configuration, metric)
+        // notify configuration
+        onConfigurationChanged(configuration)
+       // requireActivity().recreate()
     }
 
 

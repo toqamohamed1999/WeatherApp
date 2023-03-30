@@ -9,7 +9,7 @@ import java.lang.reflect.Type
 
 
 @Entity(tableName = "weatherRoot", primaryKeys = ["timezone"])
-data class WeatherRoot (
+data class WeatherRoot(
     val lat: Double,
     val lon: Double,
     val timezone: String,
@@ -17,7 +17,7 @@ data class WeatherRoot (
     val timezoneOffset: String,
     val hourly: List<Hourly>,
     val daily: List<Daily>,
-    val alerts: List<Alerts>?=null
+    val alerts: List<Alerts>? = null
 )
 
 data class Hourly(
@@ -48,7 +48,8 @@ data class Weather(
     val description: String,
     val icon: String,
 )
-data class Daily (
+
+data class Daily(
     val dt: Long,
     val sunrise: String,
     val sunset: String,
@@ -100,23 +101,26 @@ data class Alerts(
     var start: Long,
     var end: Long,
     var description: String,
-   // var tags: List<String>
+    // var tags: List<String>
 )
 
 
-enum class Language{English,Arabic}
-enum class Temperature{Celsius,Kelvin,Fahrenheit}
-enum class Location{GPS,Map}
-enum class WindSpeed{Mile,Meter}
-enum class Notification{Enable,Disable}
+enum class Language { English, Arabic }
+enum class Temperature { Celsius, Kelvin, Fahrenheit }
+enum class Location { GPS, Map }
+enum class WindSpeed { Mile, Meter }
+enum class Notification { Enable, Disable }
 
-enum class Unit{Enable,Disable}
+enum class Unit { Enable, Disable }
 
 
-class Setting(val language: Language,
-                   val location: Location,
-                   val temperature: Temperature,
-                   val windSpeed: WindSpeed){}
+data class Setting(
+    val language: Language,
+    val location: Location,
+    val temperature: Temperature,
+    val windSpeed: WindSpeed,
+    val notification: Notification
+) {}
 
 
 

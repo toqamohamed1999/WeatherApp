@@ -1,16 +1,23 @@
 package eg.gov.iti.jets.weatherapp.setting.view
 
+import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.CompoundButton
 import androidx.fragment.app.DialogFragment
+import eg.gov.iti.jets.weatherapp.MainActivity
 import eg.gov.iti.jets.weatherapp.MySharedPref
 import eg.gov.iti.jets.weatherapp.R
 import eg.gov.iti.jets.weatherapp.databinding.InitialSettingDialogBinding
+import eg.gov.iti.jets.weatherapp.home.view.MapListener
+import eg.gov.iti.jets.weatherapp.map.view.MapsFragment
 import eg.gov.iti.jets.weatherapp.model.*
+import java.util.*
 
 
 class InitialSettingFragment : DialogFragment() {
@@ -19,7 +26,7 @@ class InitialSettingFragment : DialogFragment() {
     private val binding get() = _binding!!
 
     private val mySharedPref by lazy {
-        MySharedPref(requireContext())
+        MySharedPref.getMyPref(requireContext())
     }
     private var location = Location.GPS
     private var language = Language.English
@@ -30,8 +37,11 @@ class InitialSettingFragment : DialogFragment() {
 
         const val TAG = "AlertDialogFragment"
 
-        fun newInstance(): InitialSettingFragment {
+        private lateinit var mapListener : MapListener
+
+        fun newInstance(mapListener1: MapListener): InitialSettingFragment {
             val args = Bundle()
+            mapListener = mapListener1
             val fragment = InitialSettingFragment()
             fragment.arguments = args
             return fragment
@@ -59,6 +69,7 @@ class InitialSettingFragment : DialogFragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = InitialSettingDialogBinding.inflate(inflater, container, false)
+        dialog?.setCancelable(false);
         return binding.root
     }
 
@@ -73,7 +84,9 @@ class InitialSettingFragment : DialogFragment() {
 
         binding.okTv.setOnClickListener {
             updatePref()
+            handleInitialSetting()
             dismiss()
+            mapListener.confirmInitialSetting()
         }
 
 
@@ -135,6 +148,50 @@ class InitialSettingFragment : DialogFragment() {
         mySharedPref.writeTemperature(Temperature.Celsius)
         mySharedPref.writeWindSpeed(WindSpeed.Meter)
         mySharedPref.writeNotification(Notification.Enable)
+    }
+
+    private fun handleInitialSetting(){
+        if(language == Language.Arabic)
+            setLanguage("ar")
+
+        if(location == Location.Map)
+            MapsFragment.newInstance("initialSetting", mapListener)
+                .show(requireActivity().supportFragmentManager, MapsFragment.TAG)
+    }
+    private fun setLanguage(lang: String?) {
+        val myLocale = Locale(lang)
+        val res = resources
+        val dm: DisplayMetrics = res.displayMetrics
+        val conf: Configuration = res.configuration
+        conf.locale = myLocale
+        res.updateConfiguration(conf, dm)
+
+        refresh()
+
+        //  onConfigurationChanged(conf)
+    }
+
+
+/*
+    private fun setLan(language: String) {
+        val metric = resources.displayMetrics
+        val configuration = resources.configuration
+        configuration.locale = Locale(language)
+        Locale.setDefault(Locale(language))
+        configuration.setLayoutDirection(Locale(language))
+        // update configuration
+        resources.updateConfiguration(configuration, metric)
+        // notify configuration
+        onConfigurationChanged(configuration)
+       // requireActivity().recreate()
+    }
+
+*/
+
+    private fun refresh() {
+        val refresh = Intent(requireActivity(), MainActivity::class.java)
+        requireActivity().finish()
+        startActivity(refresh)
     }
 }
 

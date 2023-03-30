@@ -4,9 +4,12 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.room.Room
 import eg.gov.iti.jets.mymvvm.Utilites.ApiState
+import eg.gov.iti.jets.mymvvm.Utilites.WeatherState
 import eg.gov.iti.jets.mymvvm.model.RepoInterface
 import eg.gov.iti.jets.weatherapp.model.WeatherRoot
+import eg.gov.iti.jets.weatherapp.utils.RoomState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,9 +20,8 @@ class HomeViewModel(private val repoInterface: RepoInterface) : ViewModel() {
 
     private val TAG = "HomeViewModel"
 
-    private var weatherMutableStateFlow = MutableStateFlow<ApiState>(ApiState.Loading)
+    private var weatherMutableStateFlow = MutableStateFlow<WeatherState>(ApiState.Loading)
     val weatherStateFlow = weatherMutableStateFlow.asStateFlow()
-
 
 
     fun getCurrentWeather(lat : String,lon:String,unit : String ,lang:String){
@@ -30,23 +32,24 @@ class HomeViewModel(private val repoInterface: RepoInterface) : ViewModel() {
                     weatherMutableStateFlow.value = ApiState.Failure(it)
                 }.collect{
                     weatherMutableStateFlow.value = ApiState.Success(it)
+                    insertWeather(it)
                 }
         }
     }
 
-//    private fun getStoredWeather(){
-//
-//        viewModelScope.launch(Dispatchers.IO) {
-//            repoInterface.getStoredWeather()
-//                .catch {
-//                    weatherMutableStateFlow.value = Room.Failure(it)
-//                }.collect{
-//                    weatherMutableStateFlow.value = ApiState.Success(it)
-//                }
-//        }
-//    }
+     fun getStoredWeather(){
 
-    fun insertWeather(weatherRoot: WeatherRoot){
+        viewModelScope.launch(Dispatchers.IO) {
+            repoInterface.getStoredWeather()
+                .catch {
+                    weatherMutableStateFlow.value = RoomState.Failure(it)
+                }.collect{
+                    weatherMutableStateFlow.value = RoomState.SuccessWeather(it)
+                }
+        }
+    }
+
+    private fun insertWeather(weatherRoot: WeatherRoot){
         viewModelScope.launch(Dispatchers.IO) {
             repoInterface.insertWeather(weatherRoot)
         }

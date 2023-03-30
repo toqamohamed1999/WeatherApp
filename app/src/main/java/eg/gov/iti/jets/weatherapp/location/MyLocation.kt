@@ -17,6 +17,7 @@ import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.*
 import eg.gov.iti.jets.weatherapp.LOCATION_PERMISSION_CODE
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 class MyLocation(private val activity: Activity,private val locationListener: eg.gov.iti.jets.weatherapp.home.view.LocationListener) {
 
@@ -63,7 +64,7 @@ class MyLocation(private val activity: Activity,private val locationListener: eg
         val locationRequest = LocationRequest()
         locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         locationRequest.interval = 0
-        locationRequest.numUpdates = 3
+        locationRequest.numUpdates = 1
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(activity)
 
@@ -82,10 +83,9 @@ class MyLocation(private val activity: Activity,private val locationListener: eg
             latitude = lastLocation?.latitude.toString()
             longitude = lastLocation?.longitude.toString()
 
-            getAddress()
 
-            Log.i(TAG, "onLocationResult: ttt$latitude  $longitude $address")
-            locationListener.setLocation(Triple(latitude,longitude,address))
+            Log.i(TAG, "onLocationResult: ttt$latitude  $longitude")
+            locationListener.setLocation(Pair(latitude,longitude))
         }
     }
 
@@ -106,21 +106,21 @@ class MyLocation(private val activity: Activity,private val locationListener: eg
 
     }
 
-    private fun getAddress(){
-        val geocoder = Geocoder(activity, Locale.getDefault())
-
-        val addresses: List<Address>? = geocoder.getFromLocation(
-            latitude.toDouble(),
-            longitude.toDouble(),
-            1
-        )
-        address = addresses!![0].getAddressLine(0)
-
-//        val city: String = addresses!![0].locality
-//        val state: String = addresses!![0].adminArea
-//        val country: String = addresses!![0].countryName
-//        val postalCode: String = addresses!![0].postalCode
-//        val knownName: String = addresses!![0].featureName
-
-    }
+//    private fun getAddress(){
+//        val geocoder = Geocoder(activity, Locale.getDefault())
+//
+//        val addresses: List<Address>? = geocoder.getFromLocation(
+//            latitude.toDouble(),
+//            longitude.toDouble(),
+//            1
+//        )
+//        address = addresses!![0].getAddressLine(0)
+//
+////        val city: String = addresses!![0].locality
+////        val state: String = addresses!![0].adminArea
+////        val country: String = addresses!![0].countryName
+////        val postalCode: String = addresses!![0].postalCode
+////        val knownName: String = addresses!![0].featureName
+//
+//    }
 }

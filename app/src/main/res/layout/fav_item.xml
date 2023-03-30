@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
@@ -16,26 +15,26 @@
         android:id="@+id/constraint_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingVertical="10dp"
-        android:paddingHorizontal="20dp">
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="10dp">
 
         <TextView
             android:id="@+id/favItem_location_textView"
-            android:layout_width="250dp"
+            android:layout_width="230dp"
             android:layout_height="match_parent"
-            android:maxLines="3"
-            app:layout_constraintEnd_toStartOf="@id/favItem_delete_button"
-            android:text="@string/location"
-            android:inputType="textMultiLine"
-            android:paddingEnd="10dp"
+            android:paddingEnd="30dp"
             android:paddingStart="30dp"
-            android:gravity="center_vertical"
-            android:textStyle="bold"
+            android:inputType="textMultiLine"
+            android:maxLines="3"
+            android:text="@string/location"
+            android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/favItem_delete_button"
             app:layout_constraintStart_toEndOf="@id/favItem_flag_imageView"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/favItem_flag_imageView"

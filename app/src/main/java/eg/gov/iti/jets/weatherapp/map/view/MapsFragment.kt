@@ -22,8 +22,10 @@ import com.google.android.gms.maps.model.MarkerOptions
 import eg.gov.iti.jets.mymvvm.datatbase.LocaleSource
 import eg.gov.iti.jets.mymvvm.model.Repo
 import eg.gov.iti.jets.mymvvm.network.RemoteSource
+import eg.gov.iti.jets.weatherapp.MySharedPref
 import eg.gov.iti.jets.weatherapp.R
 import eg.gov.iti.jets.weatherapp.databinding.FragmentMapsBinding
+import eg.gov.iti.jets.weatherapp.home.view.MapListener
 import eg.gov.iti.jets.weatherapp.map.viewModel.MapFragmentViewModel
 import eg.gov.iti.jets.weatherapp.map.viewModel.MapViewModelFactory
 import eg.gov.iti.jets.weatherapp.model.Favourite
@@ -35,12 +37,16 @@ class MapsFragment : DialogFragment() {
     private var myAddress: String = ""
     private var lat: Double = 0.0
     private var lon: Double = 0.0
-    private lateinit var countryCode : String
+    private lateinit var countryCode: String
 
     private var favourite: Favourite? = null
 
     private val geocoder by lazy {
         Geocoder(requireContext(), Locale.getDefault())
+    }
+
+    private val mySharedPref by lazy {
+        MySharedPref.getMyPref(requireContext())
     }
 
     private var _binding: FragmentMapsBinding? = null
@@ -59,8 +65,15 @@ class MapsFragment : DialogFragment() {
     companion object {
 
         const val TAG = "MapsFragment"
-        fun newInstance(): MapsFragment {
+
+        private var callerFragment = "fav"
+
+        private var mapListener : MapListener? = null
+
+        fun newInstance(callerFragment1: String, mapListener1: MapListener?): MapsFragment {
             val args = Bundle()
+            callerFragment = callerFragment1
+            mapListener = mapListener1
             val fragment = MapsFragment()
             fragment.arguments = args
             return fragment
@@ -82,12 +95,34 @@ class MapsFragment : DialogFragment() {
             childFragmentManager.findFragmentById(R.id.map_fragment) as SupportMapFragment?
         mapFragment?.getMapAsync(callback)
 
+
+        handleSaveBtnClick()
+
+    }
+
+    private fun handleSaveBtnClick() {
         binding.saveTv.setOnClickListener {
             if (favourite != null) {
-                insertFav(favourite!!)
+                checkCallerFragmentEvent()
                 dismiss()
             } else {
-                Toast.makeText(requireContext(), "Select city from map", Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), "Select city or pin from map", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    private fun checkCallerFragmentEvent() {
+        when (callerFragment) {
+            "fav" -> {
+                insertFav(favourite!!)
+            }
+            "initialSetting" ->{
+                mySharedPref.writeLat(lat.toString())
+                mySharedPref.writeLon(lon.toString())
+                mapListener?.mapLocationSelected()
+
+            }"setting" ->{
+
             }
         }
     }
@@ -121,7 +156,12 @@ class MapsFragment : DialogFragment() {
             googleMap.addMarker(marker)
 
             Log.i(TAG, "handleOnMapClickListener: $countryCode")
-            favourite = Favourite(latitude = lat, longitude = lon, address = myAddress, countryCode = countryCode)
+            favourite = Favourite(
+                latitude = lat,
+                longitude = lon,
+                address = myAddress,
+                countryCode = countryCode
+            )
         }
     }
 
@@ -137,7 +177,12 @@ class MapsFragment : DialogFragment() {
                     googleMap.addMarker(MarkerOptions().position(latLng).title(location))
                     googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10F))
                 }
-                favourite = Favourite(latitude = lat, longitude = lon, address = myAddress, countryCode = countryCode)
+                favourite = Favourite(
+                    latitude = lat,
+                    longitude = lon,
+                    address = myAddress,
+                    countryCode = countryCode
+                )
                 return false
             }
 

@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import eg.gov.iti.jets.weatherapp.model.*
 
-class MySharedPref(var context : Context) {
+class MySharedPref private constructor(var context : Context) {
 
     private val PREF_NAME = "SettingPref"
     private val  LANGUAGE= "language"
@@ -13,11 +13,22 @@ class MySharedPref(var context : Context) {
     private val WINDSPEED = "windSpeed"
     private val IS_FIRST = "is_First"
     private val NOTIFICATION = "notification"
-
+    private val LAT = "lat"
+    private val LON = "lon"
 
 
     private var pref : SharedPreferences = context!!.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
     private val editor = pref.edit()
+
+    companion object{
+
+        private var mySharedPref: MySharedPref? = null
+         fun getMyPref (context: Context): MySharedPref {
+             return if(mySharedPref == null)
+                 MySharedPref(context)
+             else mySharedPref!!
+        }
+    }
 
 
     fun writeIsFirst(isFirst : Boolean) {
@@ -52,11 +63,32 @@ class MySharedPref(var context : Context) {
         return pref.getBoolean(IS_FIRST, true)!!
     }
 
+    fun readLat() : String {
+        return pref.getString(LAT, "N/F")!!
+    }
+
+    fun readLon() : String {
+        return pref.getString(LON, "N/F")!!
+    }
+
+    fun writeLat(lat : String)  {
+        editor.putString(LAT, lat)
+        editor.commit()
+    }
+
+    fun writeLon(lon : String)  {
+        editor.putString(LON, lon)
+        editor.commit()
+    }
+
+
+
     fun getSetting(): Setting {
         return Setting(Language.valueOf(pref.getString(LANGUAGE, Language.English.name)!!),
             Location.valueOf(pref.getString(LOCATION, Location.GPS.name)!!),
             Temperature.valueOf(pref.getString(TEMPERATURE, Temperature.Celsius.name)!!),
-            WindSpeed.valueOf(pref.getString(WINDSPEED, WindSpeed.Meter.name)!!))
+            WindSpeed.valueOf(pref.getString(WINDSPEED, WindSpeed.Meter.name)!!),
+            Notification.valueOf(pref.getString(NOTIFICATION, Notification.Enable.name)!!))
     }
 
 

@@ -24,13 +24,13 @@ class SettingFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val mySharedPref by lazy {
-        MySharedPref(requireContext())
+        MySharedPref.getMyPref(requireContext())
     }
-    private var location = Location.GPS
-    private var language = Language.English
-    private var notification = Notification.Enable
-    private var windSpeed = WindSpeed.Meter
-    private var temperature = Temperature.Celsius
+    private lateinit var location : Location
+    private lateinit var language : Language
+    private lateinit var notification : Notification
+    private lateinit var windSpeed : WindSpeed
+    private lateinit var temperature : Temperature
 
 
     override fun onCreateView(
@@ -55,7 +55,17 @@ class SettingFragment : Fragment() {
         }
     }
 
+    private fun getMyPref(){
+        location = mySharedPref.getSetting().location
+        language = mySharedPref.getSetting().language
+        notification = mySharedPref.getSetting().notification
+        windSpeed = mySharedPref.getSetting().windSpeed
+        temperature = mySharedPref.getSetting().temperature
+    }
+
     private fun init() {
+        getMyPref()
+        setSetting()
         handleLanguageSelected()
         handleLocationSelected()
         handleNotificationSelected()
@@ -96,7 +106,7 @@ class SettingFragment : Fragment() {
     }
 
     private fun handleWindSpeedSelected() {
-        _binding?.locationRadioGroup?.setOnCheckedChangeListener { _, optionId ->
+        _binding?.windRadioGroup?.setOnCheckedChangeListener { _, optionId ->
             run {
                 when (optionId) {
                     R.id.meter_radio_button -> {
@@ -151,8 +161,8 @@ class SettingFragment : Fragment() {
         mySharedPref.writeNotification(notification)
     }
 
-    private fun applyLanguageChanges(){
-        if(language == Language.English)
+    private fun applyLanguageChanges() {
+        if (language == Language.English)
             setLanguage("eng")
         else
             setLanguage("ar")
@@ -193,6 +203,31 @@ class SettingFragment : Fragment() {
         val refresh = Intent(requireActivity(), MainActivity::class.java)
         requireActivity().finish()
         startActivity(refresh)
+    }
+
+    private fun setSetting() {
+        val setting = mySharedPref.getSetting()
+        if (setting.language == Language.English)
+            binding.englishRadioButton.isChecked = true
+        else binding.arabicRadioButton.isChecked = true
+
+        if (setting.notification == Notification.Enable)
+            binding.enableRadioButton.isChecked = true
+        else binding.disableRadioButton.isChecked = true
+
+        if (setting.windSpeed == WindSpeed.Meter)
+            binding.meterRadioButton.isChecked = true
+        else binding.mileRadioButton.isChecked = true
+
+        if (setting.location == Location.GPS)
+            binding.gpsRadioButton.isChecked = true
+        else binding.mapRadioButton.isChecked = true
+
+        when (setting.temperature) {
+            Temperature.Celsius -> binding.celsiusRadioButton.isChecked = true
+            Temperature.Kelvin -> binding.kelvinRadioButton.isChecked = true
+            else -> binding.fahrenheitRadioButton.isChecked = true
+        }
     }
 
     override fun onDestroyView() {

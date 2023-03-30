@@ -54,6 +54,8 @@
     <string name="save">Save</string>
     <string name="dismiss">dismiss</string>
 
+    <string name="search_place">Search for a place</string>
+
 
 
 </resources>

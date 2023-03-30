@@ -13,7 +13,8 @@ import eg.gov.iti.jets.weatherapp.databinding.HourItemBinding
 import eg.gov.iti.jets.weatherapp.model.Hourly
 import eg.gov.iti.jets.weatherapp.utils.*
 
-class HourAdapter (private val mySharedPref: MySharedPref) : ListAdapter<Hourly, HourAdapter.HourViewHolder>(HourDiffUtil()) {
+class HourAdapter(private val mySharedPref: MySharedPref) :
+    ListAdapter<Hourly, HourAdapter.HourViewHolder>(HourDiffUtil()) {
 
     private lateinit var hourItemBinding: HourItemBinding
 
@@ -32,9 +33,11 @@ class HourAdapter (private val mySharedPref: MySharedPref) : ListAdapter<Hourly,
             .placeholder(R.drawable.ic_launcher_background)
             .resize(200, 200)
             .into(holder.hourItemBinding.hourWeatherIcon)
-        holder.hourItemBinding.hourName.text = getTime("hh:mm a",hour.dt)
-        holder.hourItemBinding.hourTemp.text = getTemp(hour.temp,mySharedPref)+ Temp_Unit
-        holder.hourItemBinding.hourWindSpeed.text = getWindSpeed(hour.windSpeed,mySharedPref)+ WindSpeed_Unit
+        holder.hourItemBinding.hourName.text = getTime("hh:mm a", hour.dt)
+        holder.hourItemBinding.hourTemp.text =
+            getSplitString(getTemp(hour.temp, mySharedPref)) + Temp_Unit
+        holder.hourItemBinding.hourWindSpeed.text =
+            getSplitString(getWindSpeed(hour.windSpeed, mySharedPref)) + WindSpeed_Unit
 
     }
 

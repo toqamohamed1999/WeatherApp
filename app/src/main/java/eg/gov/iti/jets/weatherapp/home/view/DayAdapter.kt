@@ -36,7 +36,7 @@ class DayAdapter(private val mySharedPref: MySharedPref) : ListAdapter<Daily, Da
             holder.dayItemBinding.dayName.text = getTime("E, MMM dd",day.dt)
             holder.dayItemBinding.dayState.text = day.weather[0].description
             holder.dayItemBinding.dayMaxTemp.text = getSplitString(getTemp(day.temp.max, mySharedPref))
-            holder.dayItemBinding.dayMinTemp.text = getSplitString(getTemp(day.temp.min, mySharedPref))+ Temp_Unit
+            holder.dayItemBinding.dayMaxTemp.append(" / "+getSplitString(getTemp(day.temp.min, mySharedPref))+ Temp_Unit)
 
         }
 

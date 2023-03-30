@@ -1,5 +1,6 @@
 package eg.gov.iti.jets.weatherapp.alert.view
 
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.os.Bundle
@@ -14,6 +15,7 @@ import androidx.work.*
 import com.google.gson.Gson
 import eg.gov.iti.jets.weatherapp.alert.AlertWorker
 import eg.gov.iti.jets.weatherapp.databinding.AlertDialogBinding
+import eg.gov.iti.jets.weatherapp.utils.MyCustomDialog
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -90,6 +92,8 @@ class AlertDialogFragment : DialogFragment() {
         binding.okTv.setOnClickListener {
             setUpAlertWorker()
             dismiss()
+//            val alert = MyCustomDialog()
+//            alert.showAlertDialog(requireContext() as Activity)
         }
 
 
@@ -103,8 +107,7 @@ class AlertDialogFragment : DialogFragment() {
         Log.i(TAG, "setUpAlertWorker: alerttttttttt")
 
         var request = PeriodicWorkRequestBuilder<AlertWorker>(
-            5,TimeUnit.SECONDS,
-            2,TimeUnit.SECONDS)
+            5,TimeUnit.SECONDS)
             //  .setInputData(data.build())
             .build()
 

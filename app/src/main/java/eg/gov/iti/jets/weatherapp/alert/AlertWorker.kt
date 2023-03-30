@@ -9,15 +9,14 @@ import androidx.work.workDataOf
 import eg.gov.iti.jets.weatherapp.utils.MyCustomDialog
 
 
-class AlertWorker (context: Context, workerParams: WorkerParameters) :
+class AlertWorker (val context: Context, workerParams: WorkerParameters) :
     Worker(context, workerParams) {
 
     private val TAG = "AlertWorker"
 
     override fun doWork(): Result {
-        Log.i(TAG, "doWork: alertttttttt")
         return try {
-            Log.i(TAG, "doWork: alertttt")
+            Log.i(TAG, "doWork: alertttt inside")
             Result.success(workDataOf("output" to "myOutput"))
         }catch (ex : Exception){
             Log.i(TAG, "doWork: "+ex.message)
@@ -25,9 +24,10 @@ class AlertWorker (context: Context, workerParams: WorkerParameters) :
         }
     }
 
-    private fun setUpAlertDialog(activity : Activity){
+    private fun setUpAlertDialog(context: Context){
+        Log.i(TAG, "setUpAlertDialog: alertttt fun")
         val alert = MyCustomDialog()
-        alert.showAlertDialog(activity)
+        alert.showAlertDialog(context)
     }
 
 

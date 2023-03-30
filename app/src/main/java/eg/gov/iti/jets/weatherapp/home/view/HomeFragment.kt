@@ -162,7 +162,7 @@ class HomeFragment : Fragment(), LocationListener, MapListener {
         } else if (mySharedPref.readLat() != "N/F" && mySharedPref.readLon() != "N/F") {
             latitude = mySharedPref.readLat()
             longitude = mySharedPref.readLon()
-            getWeather()
+           /////////// getWeather()
         }
     }
 
@@ -170,7 +170,7 @@ class HomeFragment : Fragment(), LocationListener, MapListener {
         latitude = locationData.first
         longitude = locationData.second
 
-        getWeather()
+       //////////// getWeather()
     }
 
     private fun getWeather() {
@@ -250,7 +250,7 @@ class HomeFragment : Fragment(), LocationListener, MapListener {
         latitude = mySharedPref.readLat()
         longitude = mySharedPref.readLon()
 
-        getWeather()
+       /////////// getWeather()
     }
 
     override fun confirmInitialSetting() {

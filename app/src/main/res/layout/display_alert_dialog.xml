@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_view"
-    android:layout_width="match_parent"
+    android:layout_gravity="top|center_horizontal"
+    android:layout_width="310dp"
     android:layout_height="wrap_content"
     android:layout_marginStart="16dp"
     android:layout_marginTop="10dp"
@@ -15,13 +16,13 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraint_layout"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="140dp"
         android:paddingVertical="10dp"
         android:background="@drawable/side_nav_bar"
         android:paddingHorizontal="20dp">
 
         <TextView
-            android:id="@+id/alertItem_location_textView"
+            android:id="@+id/alertItem_title_textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/app_name"
@@ -30,6 +31,7 @@
             android:textSize="25sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/alertItem_time_textView"
             android:layout_width="wrap_content"
@@ -38,21 +40,36 @@
             android:text="@string/time_date"
             android:textColor="@color/white"
             android:textSize="16sp"
-            app:layout_constraintTop_toBottomOf="@id/alertItem_location_textView"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@id/alertItem_location_textView"
-            />
+            app:layout_constraintStart_toStartOf="@id/alertItem_title_textView"
+            app:layout_constraintTop_toBottomOf="@id/alertItem_title_textView"
+            app:layout_constraintVertical_bias="0.159" />
 
-        <ImageButton
-            android:id="@+id/alertItem_delete_button"
+        <ImageView
+            android:id="@+id/alertItem_imageView"
             android:layout_width="100dp"
-            android:layout_height="match_parent"
+            android:layout_height="80dp"
             android:layout_marginStart="20dp"
             android:background="@drawable/logo"
-            android:contentDescription="pic"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/alertItem_dismiss_textView"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text="@string/dismiss"
+            android:textStyle="bold"
+            android:background="@drawable/rounded_btn"
+            android:textSize="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/alertItem_time_textView"
+            android:layout_marginBottom="10dp"
+            />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </com.google.android.material.card.MaterialCardView>

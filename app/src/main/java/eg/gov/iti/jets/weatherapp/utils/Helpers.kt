@@ -1,11 +1,16 @@
 package eg.gov.iti.jets.weatherapp.utils
 
+import android.app.Activity
+import android.view.View
+import android.widget.TextView
+import com.google.android.material.snackbar.Snackbar
 import eg.gov.iti.jets.weatherapp.MySharedPref
 import eg.gov.iti.jets.weatherapp.model.Temperature
 import eg.gov.iti.jets.weatherapp.model.WindSpeed
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.roundToInt
+import eg.gov.iti.jets.weatherapp.R
 
 
 var Temp_Unit = " º C"
@@ -26,14 +31,14 @@ fun getSplitString(str : String): String =
     else str.substring(0,str.indexOf("."))
 
 
-fun convertFromKelvinToCelsius(tempKelvin: Double): Double {
-    return (tempKelvin - 273.15f).roundToInt().toDouble()
-}
-
-fun convertFromKelvinToFahrenheit(tempKelvin: Double): Double {
-    return (1.8 * (tempKelvin - 273) + 32).roundToInt().toDouble()
-
-}
+//fun convertFromKelvinToCelsius(tempKelvin: Double): Double {
+//    return (tempKelvin - 273.15f).roundToInt().toDouble()
+//}
+//
+//fun convertFromKelvinToFahrenheit(tempKelvin: Double): Double {
+//    return (1.8 * (tempKelvin - 273) + 32).roundToInt().toDouble()
+//
+//}
 
 fun convertFromCelsiusToKelvin(tempCelsius: Double): Double {
     return (tempCelsius + 273.15f).roundToInt().toDouble()
@@ -43,21 +48,21 @@ fun convertFromCelsiusToFahrenheit(tempCelsius: Double): Double {
     return ((tempCelsius * (9/5)) + 32).roundToInt().toDouble()
 }
 
-fun convertFromFahrenheitToCelsius(tempF: Double): Double {
-    return ((tempF - 32) * (5/9)).roundToInt().toDouble()
-}
-
-fun convertFromFahrenheitToKelvin(tempF: Double): Double {
-    return (((tempF - 32) * (5/9)) + 273.15f).roundToInt().toDouble()
-}
-
 fun convertMeterToMile(metersPerSec: Double): Double {
     return (metersPerSec *  2.237).roundToInt().toDouble()
 }
 
-fun convertMileToMeter(milesPerSec: Double): Double {
-    return (milesPerSec /  2.237).roundToInt().toDouble()
-}
+//fun convertFromFahrenheitToCelsius(tempF: Double): Double {
+//    return ((tempF - 32) * (5/9)).roundToInt().toDouble()
+//}
+//
+//fun convertFromFahrenheitToKelvin(tempF: Double): Double {
+//    return (((tempF - 32) * (5/9)) + 273.15f).roundToInt().toDouble()
+//}
+//
+//fun convertMileToMeter(milesPerSec: Double): Double {
+//    return (milesPerSec /  2.237).roundToInt().toDouble()
+//}
 
 fun getTemp(temp: String,mySharedPref: MySharedPref) : String {
 
@@ -88,6 +93,29 @@ fun getWindSpeed(windSpeed : String,mySharedPref: MySharedPref) : String {
             windSpeed
         }
     }
+}
+ fun showSnackBar(activity: Activity,msg :String,icon : Int) {
+
+//        Snackbar.make(
+//            requireActivity().findViewById(android.R.id.content),
+//            "No network connection!!", 3000)
+//            .show();
+
+    val snackBar: Snackbar = Snackbar.make(
+        activity.findViewById(android.R.id.content), msg, 4000
+    )
+    val snackBarLayout = snackBar.view
+    val textView =
+        snackBarLayout.findViewById<View>(com.google.android.material.R.id.snackbar_text) as TextView
+    textView.setCompoundDrawablesWithIntrinsicBounds(
+        icon,
+        0,
+        0,
+        0
+    )
+    textView.compoundDrawablePadding =
+        activity.resources.getDimensionPixelOffset(R.dimen.snackBar_margin)
+    snackBar.show()
 }
 
 

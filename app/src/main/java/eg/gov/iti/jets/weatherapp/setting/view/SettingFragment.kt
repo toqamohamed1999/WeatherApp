@@ -1,9 +1,7 @@
 package eg.gov.iti.jets.weatherapp.setting.view
 
 import android.content.Intent
-import android.content.res.Configuration
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +11,6 @@ import eg.gov.iti.jets.weatherapp.MySharedPref
 import eg.gov.iti.jets.weatherapp.R
 import eg.gov.iti.jets.weatherapp.databinding.FragmentSettingBinding
 import eg.gov.iti.jets.weatherapp.model.*
-import java.util.*
 
 
 class SettingFragment : Fragment() {
@@ -40,8 +37,7 @@ class SettingFragment : Fragment() {
     ): View {
 
         _binding = FragmentSettingBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-        return root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -50,18 +46,11 @@ class SettingFragment : Fragment() {
         init()
 
         binding.saveTv.setOnClickListener {
-            updatePref()
-            applyLanguageChanges()
+          //  applyLanguageChanges()
         }
     }
 
-    private fun getMyPref(){
-        location = mySharedPref.getSetting().location
-        language = mySharedPref.getSetting().language
-        notification = mySharedPref.getSetting().notification
-        windSpeed = mySharedPref.getSetting().windSpeed
-        temperature = mySharedPref.getSetting().temperature
-    }
+
 
     private fun init() {
         getMyPref()
@@ -71,6 +60,14 @@ class SettingFragment : Fragment() {
         handleNotificationSelected()
         handleTemperatureSelected()
         handleWindSpeedSelected()
+    }
+
+    private fun getMyPref(){
+        location = mySharedPref.getSetting().location
+        language = mySharedPref.getSetting().language
+        notification = mySharedPref.getSetting().notification
+        windSpeed = mySharedPref.getSetting().windSpeed
+        temperature = mySharedPref.getSetting().temperature
     }
 
 
@@ -85,6 +82,7 @@ class SettingFragment : Fragment() {
                         language = Language.Arabic
                     }
                 }
+                mySharedPref.writeLanguage(language)
             }
         }
 
@@ -101,6 +99,7 @@ class SettingFragment : Fragment() {
                         location = Location.Map
                     }
                 }
+                mySharedPref.writeLocation(location)
             }
         }
     }
@@ -116,6 +115,7 @@ class SettingFragment : Fragment() {
                         windSpeed = WindSpeed.Mile
                     }
                 }
+                mySharedPref.writeWindSpeed(windSpeed)
             }
         }
     }
@@ -134,6 +134,7 @@ class SettingFragment : Fragment() {
                         temperature = Temperature.Fahrenheit
                     }
                 }
+                mySharedPref.writeTemperature(temperature)
             }
         }
     }
@@ -149,10 +150,11 @@ class SettingFragment : Fragment() {
                         notification = Notification.Disable
                     }
                 }
+                mySharedPref.writeNotification(notification)
             }
         }
     }
-
+/*
     private fun updatePref() {
         mySharedPref.writeLanguage(language)
         mySharedPref.writeLocation(location)
@@ -161,12 +163,15 @@ class SettingFragment : Fragment() {
         mySharedPref.writeNotification(notification)
     }
 
+
+
     private fun applyLanguageChanges() {
         if (language == Language.English)
             setLanguage("eng")
         else
             setLanguage("ar")
     }
+
 
 
     private fun setLanguage(lang: String?) {
@@ -181,7 +186,7 @@ class SettingFragment : Fragment() {
 
         //  onConfigurationChanged(conf)
     }
-
+*/
 
 /*
     private fun setLan(language: String) {
@@ -199,11 +204,13 @@ class SettingFragment : Fragment() {
 
 */
 
-    private fun refresh() {
+ /*   private fun refresh() {
         val refresh = Intent(requireActivity(), MainActivity::class.java)
         requireActivity().finish()
         startActivity(refresh)
     }
+
+*/
 
     private fun setSetting() {
         val setting = mySharedPref.getSetting()
@@ -229,6 +236,7 @@ class SettingFragment : Fragment() {
             else -> binding.fahrenheitRadioButton.isChecked = true
         }
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

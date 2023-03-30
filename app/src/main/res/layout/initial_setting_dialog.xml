@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     tools:ignore="MissingDefaultResource"
-    tools:context=".setting.view.InitialSettingFragment">
+    tools:context=".setting.InitialSettingFragment">
 
     <androidx.cardview.widget.CardView
         android:layout_width="340dp"

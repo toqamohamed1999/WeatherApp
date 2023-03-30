@@ -1,4 +1,4 @@
-package eg.gov.iti.jets.weatherapp.setting.view
+package eg.gov.iti.jets.weatherapp.setting
 
 import android.content.Intent
 import android.content.res.Configuration

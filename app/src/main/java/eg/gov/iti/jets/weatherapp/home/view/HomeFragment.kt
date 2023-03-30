@@ -6,12 +6,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import eg.gov.iti.jets.foodplanner.NetworkChecker
 import eg.gov.iti.jets.mymvvm.Utilites.ApiState
@@ -26,7 +24,7 @@ import eg.gov.iti.jets.weatherapp.home.viewModel.HomeViewModel
 import eg.gov.iti.jets.weatherapp.home.viewModel.HomeViewModelFactory
 import eg.gov.iti.jets.weatherapp.location.MyLocation
 import eg.gov.iti.jets.weatherapp.model.*
-import eg.gov.iti.jets.weatherapp.setting.view.InitialSettingFragment
+import eg.gov.iti.jets.weatherapp.setting.InitialSettingFragment
 import eg.gov.iti.jets.weatherapp.utils.*
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -207,17 +205,22 @@ class HomeFragment : Fragment(), LocationListener, MapListener {
         dayAdapter.submitList(weatherRoot.daily)
         hourAdapter.submitList(weatherRoot.hourly)
 
-        Picasso.get().load(getIcon(weatherRoot.hourly[0].weather[0].icon))
+        Picasso.get().load(getIcon(weatherRoot.daily[0].weather[0].icon))
             .placeholder(eg.gov.iti.jets.weatherapp.R.drawable.ic_launcher_background)
             .resize(200, 200)
             .into(binding.homeWeatherImageView)
 
-        _binding?.homeStateTextView?.text = weatherRoot.hourly[0].weather[0].description
+        _binding?.homeStateTextView?.text = weatherRoot.daily[0].weather[0].description
         _binding?.homeLocationTextView?.text = weatherRoot.timezone
         _binding?.homeTimeDateTextView?.text =
-            getTime("hh:mm a   E, MMM dd, yyyy", weatherRoot.hourly[0].dt)
-        _binding?.additional?.humidityValueTextview?.text = weatherRoot.hourly[0].humidity + " %"
-        _binding?.additional?.pressureValueTextview?.text = weatherRoot.hourly[0].pressure + " hpa"
+            getTime("hh:mm a   E, MMM dd, yyyy", weatherRoot.daily[0].dt)
+        _binding?.additional?.humidityValueTextview?.text = weatherRoot.daily[0].humidity + " %"
+        _binding?.additional?.pressureValueTextview?.text = weatherRoot.daily[0].pressure + " hpa"
+
+        _binding?.additional?.cloudsValueTextview?.text = weatherRoot.daily[0].clouds
+        _binding?.additional?.sunriseValueTextView?.text = getTime("hh:mm a",weatherRoot.daily[0].sunrise)
+        _binding?.additional?.sunsetValueTextview?.text = getTime("hh:mm a",weatherRoot.daily[0].sunset)
+
 
         _binding?.homeTempTextView?.text =
             getSplitString(getTemp(weatherRoot.daily[0].temp.max, mySharedPref))
@@ -231,7 +234,7 @@ class HomeFragment : Fragment(), LocationListener, MapListener {
         )
 
         _binding?.additional?.windValueTextView?.text =
-            getWindSpeed(weatherRoot.hourly[0].windSpeed, mySharedPref) + WindSpeed_Unit
+            getWindSpeed(weatherRoot.daily[0].windSpeed, mySharedPref) + WindSpeed_Unit
     }
 
     private fun getSharedInfo() {

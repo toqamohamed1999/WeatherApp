@@ -1,14 +1,10 @@
-package eg.gov.iti.jets.weatherapp.setting.view
+package eg.gov.iti.jets.weatherapp.setting
 
-import android.content.Intent
-import android.content.res.Configuration
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import eg.gov.iti.jets.weatherapp.MainActivity
 import eg.gov.iti.jets.weatherapp.MySharedPref
 import eg.gov.iti.jets.weatherapp.R
 import eg.gov.iti.jets.weatherapp.databinding.FragmentSettingBinding
@@ -224,12 +220,5 @@ override fun onDestroyView() {
             // refresh()
 
             onConfigurationChanged(conf)
-        }
-
-
-        private fun refresh() {
-            val refresh = Intent(requireActivity(), MainActivity::class.java)
-            requireActivity().finish()
-            startActivity(refresh)
         }
 */

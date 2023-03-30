@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView
-    android:layout_width="match_parent"
-    android:layout_height="120dp"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardCornerRadius="15dp"
+    android:layout_width="match_parent"
+    android:layout_height="220dp"
     android:layout_marginStart="10dp"
     android:layout_marginEnd="10dp"
     android:layout_marginBottom="20dp"
     android:elevation="20dp"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    app:cardCornerRadius="15dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -25,7 +24,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
-            app:lottie_rawRes="@raw/humidly"/>
+            app:lottie_rawRes="@raw/humidly" />
 
         <TextView
             android:id="@+id/humidity_value_textview"
@@ -34,27 +33,27 @@
             android:layout_marginBottom="6dp"
             android:text="99 %"
             android:textColor="@color/white"
-            app:layout_constraintTop_toBottomOf="@+id/lottie_humidity"
+            app:layout_constraintEnd_toEndOf="@id/lottie_humidity"
             app:layout_constraintStart_toStartOf="@id/lottie_humidity"
-            app:layout_constraintEnd_toEndOf="@id/lottie_humidity"/>
+            app:layout_constraintTop_toBottomOf="@+id/lottie_humidity" />
 
-    <TextView
-        android:id="@+id/humidity_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/humidity"
-        android:textColor="@color/white"
-        app:layout_constraintTop_toBottomOf="@+id/humidity_value_textview"
-        app:layout_constraintStart_toStartOf="@id/lottie_humidity"
-        app:layout_constraintEnd_toEndOf="@id/lottie_humidity"/>
+        <TextView
+            android:id="@+id/humidity_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/humidity"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="@id/lottie_humidity"
+            app:layout_constraintStart_toStartOf="@id/lottie_humidity"
+            app:layout_constraintTop_toBottomOf="@+id/humidity_value_textview" />
 
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/lottie_wind"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:layout_marginTop="16dp"
             android:layout_marginStart="70dp"
+            android:layout_marginTop="16dp"
             app:layout_constraintStart_toEndOf="@+id/lottie_humidity"
             app:layout_constraintTop_toTopOf="parent"
             app:lottie_autoPlay="true"
@@ -62,15 +61,15 @@
             app:lottie_rawRes="@raw/wind_speed" />
 
         <TextView
-        android:id="@+id/wind_value_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/white"
-        android:layout_marginBottom="24dp"
-        android:text="13 km/h"
-            app:layout_constraintTop_toBottomOf="@+id/lottie_wind"
+            android:id="@+id/wind_value_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:text="13 km/h"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="@id/lottie_wind"
             app:layout_constraintStart_toStartOf="@id/lottie_wind"
-            app:layout_constraintEnd_toEndOf="@id/lottie_wind" />
+            app:layout_constraintTop_toBottomOf="@+id/lottie_wind" />
 
         <TextView
             android:id="@+id/wind_textView"
@@ -79,17 +78,17 @@
             android:layout_marginBottom="8dp"
             android:text="@string/wind_speed"
             android:textColor="@color/white"
-            app:layout_constraintTop_toBottomOf="@id/wind_value_textView"
+            app:layout_constraintEnd_toEndOf="@id/lottie_wind"
             app:layout_constraintStart_toStartOf="@id/lottie_wind"
-            app:layout_constraintEnd_toEndOf="@id/lottie_wind" />
+            app:layout_constraintTop_toBottomOf="@id/wind_value_textView" />
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/lottie_pressure"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginStart="70dp"
-            android:layout_marginEnd="30dp"
             android:layout_marginTop="16dp"
+            android:layout_marginEnd="30dp"
             app:layout_constraintStart_toEndOf="@id/lottie_wind"
             app:layout_constraintTop_toTopOf="parent"
             app:lottie_autoPlay="true"
@@ -103,9 +102,9 @@
             android:layout_marginBottom="6dp"
             android:text="1090"
             android:textColor="@color/white"
-            app:layout_constraintTop_toBottomOf="@+id/lottie_pressure"
+            app:layout_constraintEnd_toEndOf="@id/lottie_pressure"
             app:layout_constraintStart_toStartOf="@id/lottie_pressure"
-            app:layout_constraintEnd_toEndOf="@id/lottie_pressure"/>
+            app:layout_constraintTop_toBottomOf="@+id/lottie_pressure" />
 
         <TextView
             android:id="@+id/pressure_textview"
@@ -113,9 +112,114 @@
             android:layout_height="wrap_content"
             android:text="@string/pressure"
             android:textColor="@color/white"
-            app:layout_constraintTop_toBottomOf="@+id/pressure_value_textview"
+            app:layout_constraintEnd_toEndOf="@id/lottie_pressure"
             app:layout_constraintStart_toStartOf="@id/lottie_pressure"
-            app:layout_constraintEnd_toEndOf="@id/lottie_pressure"/>
+            app:layout_constraintTop_toBottomOf="@+id/pressure_value_textview" />
+
+
+        ////////////////////////////////////////////
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottie_clouds"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="15dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/humidity_textview"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/cloud2" />
+
+        <TextView
+            android:id="@+id/clouds_value_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:text="99 %"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="@id/lottie_clouds"
+            app:layout_constraintStart_toStartOf="@id/lottie_clouds"
+            app:layout_constraintTop_toBottomOf="@+id/lottie_clouds" />
+
+        <TextView
+            android:id="@+id/clouds_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/clouds"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="@id/lottie_clouds"
+            app:layout_constraintStart_toStartOf="@id/lottie_clouds"
+            app:layout_constraintTop_toBottomOf="@+id/clouds_value_textview" />
+
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottie_sunrise"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="70dp"
+            android:layout_marginTop="15dp"
+            app:layout_constraintStart_toEndOf="@+id/lottie_clouds"
+            app:layout_constraintTop_toBottomOf="@id/wind_textView"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/sunrise" />
+
+        <TextView
+            android:id="@+id/sunrise_value_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:text="13 km/h"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="@id/lottie_sunrise"
+            app:layout_constraintStart_toStartOf="@id/lottie_sunrise"
+            app:layout_constraintTop_toBottomOf="@+id/lottie_sunrise" />
+
+        <TextView
+            android:id="@+id/sunrise_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="@string/sunrise"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="@id/lottie_sunrise"
+            app:layout_constraintStart_toStartOf="@id/lottie_sunrise"
+            app:layout_constraintTop_toBottomOf="@id/sunrise_value_textView" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottie_sunset"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="70dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="30dp"
+            app:layout_constraintStart_toEndOf="@id/lottie_wind"
+            app:layout_constraintTop_toBottomOf="@id/pressure_textview"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/sunset" />
+
+        <TextView
+            android:id="@+id/sunset_value_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:text="1090"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="@id/lottie_sunset"
+            app:layout_constraintStart_toStartOf="@id/lottie_sunset"
+            app:layout_constraintTop_toBottomOf="@+id/lottie_sunset" />
+
+        <TextView
+            android:id="@+id/sunset_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sunset"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="@id/lottie_sunset"
+            app:layout_constraintStart_toStartOf="@id/lottie_sunset"
+            app:layout_constraintTop_toBottomOf="@+id/sunset_value_textview" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

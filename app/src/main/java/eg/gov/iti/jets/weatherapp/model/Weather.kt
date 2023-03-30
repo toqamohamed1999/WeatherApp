@@ -51,8 +51,8 @@ data class Weather(
 
 data class Daily(
     val dt: Long,
-    val sunrise: String,
-    val sunset: String,
+    val sunrise: Long,
+    val sunset: Long,
     val moonrise: String,
     @SerializedName("moonset")
     val moonSet: String,

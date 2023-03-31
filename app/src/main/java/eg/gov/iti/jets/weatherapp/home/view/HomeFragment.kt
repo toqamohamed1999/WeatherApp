@@ -162,7 +162,8 @@ class HomeFragment : Fragment(), LocationListener, MapListener {
         } else if (mySharedPref.readLat() != "N/F" && mySharedPref.readLon() != "N/F") {
             latitude = mySharedPref.readLat()
             longitude = mySharedPref.readLon()
-           /////////// getWeather()
+            ///////////
+            getWeather()
         }
     }
 
@@ -170,7 +171,8 @@ class HomeFragment : Fragment(), LocationListener, MapListener {
         latitude = locationData.first
         longitude = locationData.second
 
-       //////////// getWeather()
+        ////////////
+        getWeather()
     }
 
     private fun getWeather() {
@@ -184,7 +186,7 @@ class HomeFragment : Fragment(), LocationListener, MapListener {
 
 
     private fun showSnackBar() {
-        showSnackBar(requireActivity(),"No network Connection!", R.drawable.baseline_wifi_off_24)
+        showSnackBar(requireActivity(), "No network Connection!", R.drawable.baseline_wifi_off_24)
     }
 
 
@@ -212,14 +214,16 @@ class HomeFragment : Fragment(), LocationListener, MapListener {
 
         _binding?.homeStateTextView?.text = weatherRoot.daily[0].weather[0].description
         _binding?.homeLocationTextView?.text = weatherRoot.timezone
-        _binding?.homeTimeDateTextView?.text =
-            getTime("hh:mm a   E, MMM dd, yyyy", weatherRoot.daily[0].dt)
-        _binding?.additional?.humidityValueTextview?.text = weatherRoot.daily[0].humidity + " %"
-        _binding?.additional?.pressureValueTextview?.text = weatherRoot.daily[0].pressure + " hpa"
+        _binding?.homeTimeDateTextView?.text = getCurrentDate()
+           // getTime("hh:mm a   E, MMM dd, yyyy", weatherRoot.daily[0].dt)
+        _binding?.additional?.humidityValueTextview?.text = "${weatherRoot.daily[0].humidity} %"
+        _binding?.additional?.pressureValueTextview?.text = "${weatherRoot.daily[0].pressure} hpa"
 
-        _binding?.additional?.cloudsValueTextview?.text = weatherRoot.daily[0].clouds
-        _binding?.additional?.sunriseValueTextView?.text = getTime("hh:mm a",weatherRoot.daily[0].sunrise)
-        _binding?.additional?.sunsetValueTextview?.text = getTime("hh:mm a",weatherRoot.daily[0].sunset)
+        _binding?.additional?.cloudsValueTextview?.text = "${weatherRoot.daily[0].clouds} %"
+        _binding?.additional?.sunriseValueTextView?.text =
+            getTime("hh:mm a", weatherRoot.daily[0].sunrise)
+        _binding?.additional?.sunsetValueTextview?.text =
+            getTime("hh:mm a", weatherRoot.daily[0].sunset)
 
 
         _binding?.homeTempTextView?.text =
@@ -250,7 +254,8 @@ class HomeFragment : Fragment(), LocationListener, MapListener {
         latitude = mySharedPref.readLat()
         longitude = mySharedPref.readLon()
 
-       /////////// getWeather()
+        ///////////
+        getWeather()
     }
 
     override fun confirmInitialSetting() {

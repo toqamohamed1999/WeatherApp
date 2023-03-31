@@ -126,6 +126,10 @@ fun getDate(strDate : String) : Date?{
 }
 
 
+fun getCurrentDate():String{
+    val sdf = SimpleDateFormat("hh:mm a   E, MMM dd, yyyy", Locale.getDefault())
+    return sdf.format(Date())
+}
 
 //Celsius to Kelvin: K = C + 273.15
 //Kelvin to Celcius: C = K - 273.15

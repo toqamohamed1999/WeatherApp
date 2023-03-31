@@ -88,7 +88,8 @@
                         android:drawableStart="@drawable/baseline_edit_calendar_24"
                         android:gravity="center"
                         android:paddingStart="10dp"
-                        android:text="@string/start_date"
+                        android:hint="@string/start_date"
+                        android:textColorHint="@color/teal_700"
                         android:textColor="@color/white"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -110,7 +111,8 @@
                         android:drawableStart="@drawable/baseline_more_time_24"
                         android:gravity="center"
                         android:paddingStart="10dp"
-                        android:text="@string/start_time"
+                        android:hint="@string/start_time"
+                        android:textColorHint="@color/teal_700"
                         android:textColor="@color/white"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -168,7 +170,8 @@
                         android:drawableStart="@drawable/baseline_edit_calendar_24"
                         android:gravity="center"
                         android:paddingStart="10dp"
-                        android:text="@string/end_date"
+                        android:hint="@string/end_date"
+                        android:textColorHint="@color/teal_700"
                         android:textColor="@color/white"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -190,7 +193,8 @@
                         android:drawableStart="@drawable/baseline_more_time_24"
                         android:gravity="center"
                         android:paddingStart="10dp"
-                        android:text="@string/end_time"
+                        android:textColorHint="@color/teal_700"
+                        android:hint="@string/end_time"
                         android:textColor="@color/white"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -239,6 +243,7 @@
                 android:background="@drawable/rounded_btn"
                 android:gravity="center"
                 android:text="@string/cancel"
+                android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@id/okTv"
@@ -255,6 +260,7 @@
                 android:text="@string/ok"
                 android:textSize="16sp"
                 android:textStyle="bold"
+                android:textColor="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/languag_radio_group" />
 

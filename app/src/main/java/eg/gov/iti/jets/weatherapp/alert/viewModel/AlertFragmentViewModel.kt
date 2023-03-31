@@ -20,11 +20,14 @@ class AlertFragmentViewModel (private val repoInterface: RepoInterface) : ViewMo
     private val TAG = "AlertFragmentViewModel"
 
     private var alertMutableStateFlow = MutableStateFlow<RoomState>(RoomState.Loading)
-    val weatherStateFlow = alertMutableStateFlow.asStateFlow()
+    val alertStateFlow = alertMutableStateFlow.asStateFlow()
 
 
+    init {
+        getStoredAlerts()
+    }
 
-    fun getStoredAlerts(){
+    private fun getStoredAlerts(){
 
         viewModelScope.launch(Dispatchers.IO) {
             repoInterface.getStoredAlerts()
@@ -33,13 +36,6 @@ class AlertFragmentViewModel (private val repoInterface: RepoInterface) : ViewMo
                 }.collect{
                     alertMutableStateFlow.value = RoomState.SuccessAlert(it)
                 }
-        }
-    }
-
-
-    fun insertAlert(alert: AlertModel){
-        viewModelScope.launch(Dispatchers.IO) {
-            repoInterface.insertAlert(alert)
         }
     }
 

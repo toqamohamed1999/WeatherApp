@@ -13,13 +13,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.work.*
+import eg.gov.iti.jets.mymvvm.datatbase.LocaleSource
+import eg.gov.iti.jets.mymvvm.model.Repo
+import eg.gov.iti.jets.mymvvm.network.RemoteSource
 import eg.gov.iti.jets.weatherapp.alert.AlertService
 import eg.gov.iti.jets.weatherapp.alert.AlertWorker
+import eg.gov.iti.jets.weatherapp.alert.viewModel.AlertDialogModelFactory
+import eg.gov.iti.jets.weatherapp.alert.viewModel.AlertDialogViewModel
 import eg.gov.iti.jets.weatherapp.databinding.AlertDialogBinding
+import eg.gov.iti.jets.weatherapp.utils.getDate
 import java.util.*
 import java.util.concurrent.TimeUnit
+import eg.gov.iti.jets.weatherapp.R
 
 
 //The order of execution of the above methods will be:
@@ -35,6 +44,25 @@ class AlertDialogFragment : DialogFragment() {
     private var mYear: Int? = null
     private var mMonth: Int? = null
     private var mHour: Int? = null
+
+    private var startDate: String? = null
+    private var endDate: String? = null
+    private var startTime: String? = null
+    private var endTime: String? = null
+
+    private var fullStartDate: Date? = null
+    private var fullEndDate: Date? = null
+
+    private val viewModel: AlertDialogViewModel by lazy {
+
+        val factory = AlertDialogModelFactory(
+            Repo.getInstance(
+                RemoteSource(), LocaleSource(requireContext())
+            )!!
+        )
+
+        ViewModelProvider(this, factory)[AlertDialogViewModel::class.java]
+    }
 
     companion object {
 
@@ -101,8 +129,11 @@ class AlertDialogFragment : DialogFragment() {
 
 //            checkOverlayPermission();
 //            startService();
-            setUpAlertWorker()
-            dismiss()
+
+            //          setUpAlertWorker()
+
+            checkAlertTerms()
+            //dismiss()
         }
 
     }
@@ -129,7 +160,8 @@ class AlertDialogFragment : DialogFragment() {
 //        WorkManager.getInstance(requireContext())
 //            .enqueue(request)
 
-        val workInfo = WorkManager.getInstance(requireContext()).getWorkInfoById(workRequest.id).get()
+        val workInfo =
+            WorkManager.getInstance(requireContext()).getWorkInfoById(workRequest.id).get()
 
 
         /*
@@ -176,8 +208,16 @@ class AlertDialogFragment : DialogFragment() {
 
         val datePickerDialog = DatePickerDialog(
             requireActivity(),
-            DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
-                dateTextView.text = (dayOfMonth.toString() + "-" + (monthOfYear + 1) + "-" + year)
+            DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
+
+                val strDate = dayOfMonth.toString() + "-" + (monthOfYear + 1) + "-" + year
+                dateTextView.text = strDate
+
+                when (dateTextView.id) {
+                    R.id.from_date_textview -> startDate = strDate
+                    else -> endDate = strDate
+                }
+
             },
             mYear!!,
             mMonth!!,
@@ -194,7 +234,14 @@ class AlertDialogFragment : DialogFragment() {
 
         val timePickerDialog = TimePickerDialog(
             requireActivity(), { _, hourOfDay, minute ->
+
                 timeTextView.text = "$hourOfDay:$minute"
+
+                when (timeTextView.id) {
+                    R.id.from_time_textview -> startTime = "$hourOfDay:$minute"
+                    else -> endTime = "$hourOfDay:$minute"
+                }
+
             }, mHour!!, mMinute!!, false
         )
         timePickerDialog.show()
@@ -237,10 +284,46 @@ class AlertDialogFragment : DialogFragment() {
         }
     }
 
+    private fun checkAlertTerms(): Boolean {
+        if (startDate == null) {
+            Toast.makeText(requireContext(), "Select start date", Toast.LENGTH_LONG).show()
+            return false
+        } else if (endDate == null) {
+            Toast.makeText(requireContext(), "Select end date", Toast.LENGTH_LONG).show()
+            return false
+        } else if (startTime == null) {
+            Toast.makeText(requireContext(), "Select start time", Toast.LENGTH_LONG).show()
+            return false
+        } else if (endTime == null) {
+            Toast.makeText(requireContext(), "Select end time", Toast.LENGTH_LONG).show()
+            return false
+        }
+        checkAlertDurationValidation()
+        return true
+    }
+
+    private fun checkAlertDurationValidation(): Boolean {
+        fullStartDate = getDate("$startDate $startTime")
+        fullEndDate = getDate("$endDate $endTime")
+
+        if (fullEndDate != null && fullStartDate != null) {
+            if (fullEndDate!! >= fullStartDate) {
+                return true
+            } else {
+                Toast.makeText(
+                    requireContext(),
+                    "End date should be after start date",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+        return false
+    }
+
 
     override fun onResume() {
         super.onResume()
-        startService()
+      ///////////  startService()
     }
 
 }

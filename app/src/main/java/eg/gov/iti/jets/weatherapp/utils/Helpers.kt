@@ -5,12 +5,13 @@ import android.view.View
 import android.widget.TextView
 import com.google.android.material.snackbar.Snackbar
 import eg.gov.iti.jets.weatherapp.MySharedPref
+import eg.gov.iti.jets.weatherapp.R
 import eg.gov.iti.jets.weatherapp.model.Temperature
 import eg.gov.iti.jets.weatherapp.model.WindSpeed
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.roundToInt
-import eg.gov.iti.jets.weatherapp.R
 
 
 var Temp_Unit = " º C"
@@ -111,6 +112,17 @@ fun getWindSpeed(windSpeed : String,mySharedPref: MySharedPref) : String {
     textView.compoundDrawablePadding =
         activity.resources.getDimensionPixelOffset(R.dimen.snackBar_margin)
     snackBar.show()
+}
+
+fun getDate(strDate : String) : Date?{
+    //val dtStart = "05-11-2017 05:42"
+    val format = SimpleDateFormat("dd-MM-yyyy hh:mm")
+    try {
+        return format.parse(strDate)
+    } catch (e: ParseException) {
+        e.printStackTrace()
+    }
+    return null
 }
 
 

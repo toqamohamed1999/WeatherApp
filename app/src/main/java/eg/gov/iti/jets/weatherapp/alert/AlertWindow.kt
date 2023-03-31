@@ -2,15 +2,13 @@ package eg.gov.iti.jets.weatherapp.alert
 
 import android.content.Context
 import android.content.Context.WINDOW_SERVICE
-import android.content.DialogInterface
 import android.graphics.PixelFormat
+import android.media.MediaPlayer
 import android.os.Build
-import android.print.PrintAttributes.Margins
 import android.util.Log
 import android.view.*
 import android.widget.TextView
 import eg.gov.iti.jets.weatherapp.R
-import eg.gov.iti.jets.weatherapp.databinding.DisplayAlertDialogBinding
 
 
 class AlertWindow(val context: Context) {
@@ -22,6 +20,8 @@ class AlertWindow(val context: Context) {
     private var mParams: WindowManager.LayoutParams? = null
     private val mWindowManager: WindowManager
     private val layoutInflater: LayoutInflater
+
+    private val mediaPlayer = MediaPlayer.create(context,R.raw.weather_sound)
 
     init {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -40,10 +40,14 @@ class AlertWindow(val context: Context) {
         layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         // inflating the view with the custom layout we created
         mView = layoutInflater.inflate(R.layout.display_alert_dialog, null)
+
         // set onClickListener on the remove button, which removes
         // the view from the window
-
         mView.findViewById<TextView>(R.id.alertItem_dismiss_textView).setOnClickListener {
+            //stop media player
+            if(mediaPlayer.isPlaying){
+                mediaPlayer.stop()
+            }
             close()
         }
 
@@ -64,6 +68,10 @@ class AlertWindow(val context: Context) {
                     mWindowManager.addView(mView, mParams)
                 }
             }
+            //start media player
+            if(!mediaPlayer.isPlaying){
+                mediaPlayer.start()
+            }
         } catch (e: Exception) {
             Log.d(TAG, e.toString())
         }
@@ -78,8 +86,6 @@ class AlertWindow(val context: Context) {
             // remove all views
             (mView.parent as ViewGroup).removeAllViews()
 
-            // the above steps are necessary when you are adding and removing
-            // the view simultaneously, it might give some exceptions
         } catch (e: Exception) {
             Log.i(TAG, e.toString())
         }

@@ -116,13 +116,10 @@ class MapsFragment : DialogFragment() {
             "fav" -> {
                 insertFav(favourite!!)
             }
-            "initialSetting" ->{
+            "initialSetting" ,"setting"->{
                 mySharedPref.writeLat(lat.toString())
                 mySharedPref.writeLon(lon.toString())
                 mapListener?.mapLocationSelected()
-
-            }"setting" ->{
-
             }
         }
     }

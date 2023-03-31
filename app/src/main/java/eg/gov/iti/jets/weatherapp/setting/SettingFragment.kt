@@ -1,5 +1,8 @@
 package eg.gov.iti.jets.weatherapp.setting
 
+import android.app.AlertDialog
+import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +11,7 @@ import androidx.fragment.app.Fragment
 import eg.gov.iti.jets.weatherapp.MySharedPref
 import eg.gov.iti.jets.weatherapp.R
 import eg.gov.iti.jets.weatherapp.databinding.FragmentSettingBinding
+import eg.gov.iti.jets.weatherapp.map.view.MapsFragment
 import eg.gov.iti.jets.weatherapp.model.*
 import java.util.*
 
@@ -73,7 +77,7 @@ class SettingFragment : Fragment() {
                         location = Location.GPS
                     }
                     R.id.map_radio_button -> {
-                        location = Location.Map
+                        showAlertDialog(requireContext())
                     }
                 }
                 mySharedPref.writeLocation(location)
@@ -155,10 +159,9 @@ class SettingFragment : Fragment() {
     private fun applyLanguageChanges() {
         if (language == Language.English)
             setLanguage("eng")
-         else
+        else
             setLanguage("ar")
     }
-
 
 
     private fun setLanguage(language: String) {
@@ -174,40 +177,60 @@ class SettingFragment : Fragment() {
     }
 
 
-private fun setSetting() {
-    val setting = mySharedPref.getSetting()
-    if (setting.language == Language.English)
-        binding.englishRadioButton.isChecked = true
-    else binding.arabicRadioButton.isChecked = true
+    private fun setSetting() {
+        val setting = mySharedPref.getSetting()
+        if (setting.language == Language.English)
+            binding.englishRadioButton.isChecked = true
+        else binding.arabicRadioButton.isChecked = true
 
-    if (setting.notification == Notification.Enable)
-        binding.enableRadioButton.isChecked = true
-    else binding.disableRadioButton.isChecked = true
+        if (setting.notification == Notification.Enable)
+            binding.enableRadioButton.isChecked = true
+        else binding.disableRadioButton.isChecked = true
 
-    if (setting.windSpeed == WindSpeed.Meter)
-        binding.meterRadioButton.isChecked = true
-    else binding.mileRadioButton.isChecked = true
+        if (setting.windSpeed == WindSpeed.Meter)
+            binding.meterRadioButton.isChecked = true
+        else binding.mileRadioButton.isChecked = true
 
-    if (setting.location == Location.GPS)
-        binding.gpsRadioButton.isChecked = true
-    else binding.mapRadioButton.isChecked = true
+        if (setting.location == Location.GPS)
+            binding.gpsRadioButton.isChecked = true
+        else binding.mapRadioButton.isChecked = true
 
-    when (setting.temperature) {
-        Temperature.Celsius -> binding.celsiusRadioButton.isChecked = true
-        Temperature.Kelvin -> binding.kelvinRadioButton.isChecked = true
-        else -> binding.fahrenheitRadioButton.isChecked = true
+        when (setting.temperature) {
+            Temperature.Celsius -> binding.celsiusRadioButton.isChecked = true
+            Temperature.Kelvin -> binding.kelvinRadioButton.isChecked = true
+            else -> binding.fahrenheitRadioButton.isChecked = true
+        }
     }
+
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+
+    private fun showAlertDialog(context: Context) {
+        AlertDialog.Builder(context)
+            .setTitle("Open Map")
+            .setMessage("Do you want to choose your location from a map?")
+            .setPositiveButton(android.R.string.ok,
+                DialogInterface.OnClickListener { _, _ ->
+                    openMap()
+                    mySharedPref.writeLocation(Location.Map)
+                })
+            .setNegativeButton(android.R.string.cancel) { _, _ ->
+                binding.gpsRadioButton.isChecked = true
+            }
+            .setIcon(android.R.drawable.ic_dialog_map)
+            .show()
+    }
+
+    private fun openMap() {
+        MapsFragment.newInstance("setting", null)
+            .show(requireActivity().supportFragmentManager, MapsFragment.TAG)
+    }
+
 }
-
-
-override fun onDestroyView() {
-    super.onDestroyView()
-    _binding = null
-}
-
-
-}
-
 /*
         private fun setLanguage(lang: String?) {
             val myLocale = Locale(lang)

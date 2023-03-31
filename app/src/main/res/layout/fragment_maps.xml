@@ -43,8 +43,6 @@
         android:background="@drawable/rounded_btn_save"
         android:gravity="center"
         android:text="@string/save"
-        android:paddingStart="10dp"
-        android:drawableStart="@drawable/baseline_favorite_24"
         android:textSize="16sp"
         android:textStyle="bold"
         android:textColor="@color/black"

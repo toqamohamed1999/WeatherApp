@@ -19,6 +19,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.snackbar.Snackbar
 import eg.gov.iti.jets.mymvvm.datatbase.LocaleSource
 import eg.gov.iti.jets.mymvvm.model.Repo
 import eg.gov.iti.jets.mymvvm.network.RemoteSource
@@ -31,6 +32,7 @@ import eg.gov.iti.jets.weatherapp.map.viewModel.MapViewModelFactory
 import eg.gov.iti.jets.weatherapp.model.Favourite
 import kotlinx.coroutines.launch
 import java.util.*
+
 
 class MapsFragment : DialogFragment() {
 
@@ -159,6 +161,7 @@ class MapsFragment : DialogFragment() {
                 address = myAddress,
                 countryCode = countryCode
             )
+            showMySnackBar()
         }
     }
 
@@ -218,5 +221,19 @@ class MapsFragment : DialogFragment() {
         }
         Toast.makeText(requireContext(), "Inserted to favourites", Toast.LENGTH_LONG).show()
     }
+
+    private fun showMySnackBar(){
+        val snackbar = Snackbar
+            .make(binding.root, myAddress, 4000)
+            .setAction("Save") {
+                if (favourite != null) {
+                    checkCallerFragmentEvent()
+                    dismiss()
+                }
+            }
+        snackbar.show()
+    }
+
+
 
 }

@@ -19,17 +19,20 @@ import eg.gov.iti.jets.weatherapp.LOCATION_PERMISSION_CODE
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-class MyLocation(private val activity: Activity,private val locationListener: eg.gov.iti.jets.weatherapp.home.view.LocationListener) {
+class MyLocation(
+    private val activity: Activity,
+    private val locationListener: eg.gov.iti.jets.weatherapp.home.view.LocationListener
+) {
 
     private val TAG = "MyLocation"
 
-    private lateinit var fusedLocationProviderClient : FusedLocationProviderClient
-    private lateinit var latitude : String
-    private lateinit var longitude : String
-    private lateinit var address : String
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+    private lateinit var latitude: String
+    private lateinit var longitude: String
+    private lateinit var address: String
 
 
-    private fun checkPermission():Boolean{
+    private fun checkPermission(): Boolean {
         return ActivityCompat.checkSelfPermission(
             activity,
             Manifest.permission.ACCESS_FINE_LOCATION
@@ -40,19 +43,20 @@ class MyLocation(private val activity: Activity,private val locationListener: eg
                 ) == PackageManager.PERMISSION_GRANTED
     }
 
-     private fun isLocationEnabled():Boolean{
-        val locationManager : LocationManager =
+    private fun isLocationEnabled(): Boolean {
+        val locationManager: LocationManager =
             activity.getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
                 locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
     }
 
-    private fun requestPermission(){
+    private fun requestPermission() {
 
         ActivityCompat.requestPermissions(
             activity,
-            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION,
+            arrayOf(
+                Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ), LOCATION_PERMISSION_CODE
         )
@@ -60,7 +64,7 @@ class MyLocation(private val activity: Activity,private val locationListener: eg
 
 
     @SuppressLint("MissingPermission")
-    private fun requestLocationData(){
+    private fun requestLocationData() {
         val locationRequest = LocationRequest()
         locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         locationRequest.interval = 0
@@ -75,7 +79,7 @@ class MyLocation(private val activity: Activity,private val locationListener: eg
         )
     }
 
-    private val myLocationCallback : LocationCallback = object : LocationCallback(){
+    private val myLocationCallback: LocationCallback = object : LocationCallback() {
 
         override fun onLocationResult(locationResult: LocationResult) {
             super.onLocationResult(locationResult)
@@ -83,44 +87,46 @@ class MyLocation(private val activity: Activity,private val locationListener: eg
             latitude = lastLocation?.latitude.toString()
             longitude = lastLocation?.longitude.toString()
 
+            ///address
+            getAddress()
 
             Log.i(TAG, "onLocationResult: ttt$latitude  $longitude")
-            locationListener.setLocation(Pair(latitude,longitude))
+            locationListener.setLocation(Pair(latitude, longitude))
         }
     }
 
     @SuppressLint("MissingPermission")
-    fun getLastLocation(){
-        if(checkPermission()){
-            if(isLocationEnabled()){
+    fun getLastLocation() {
+        if (checkPermission()) {
+            if (isLocationEnabled()) {
 
                 requestLocationData()
 
-            }else{
-                Toast.makeText(activity,"Please, enable your location", Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(activity, "Please, enable your location", Toast.LENGTH_LONG).show()
                 activity.startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
             }
-        }else{
+        } else {
             requestPermission()
         }
 
     }
 
-//    private fun getAddress(){
-//        val geocoder = Geocoder(activity, Locale.getDefault())
-//
-//        val addresses: List<Address>? = geocoder.getFromLocation(
-//            latitude.toDouble(),
-//            longitude.toDouble(),
-//            1
-//        )
-//        address = addresses!![0].getAddressLine(0)
-//
-////        val city: String = addresses!![0].locality
-////        val state: String = addresses!![0].adminArea
-////        val country: String = addresses!![0].countryName
-////        val postalCode: String = addresses!![0].postalCode
-////        val knownName: String = addresses!![0].featureName
-//
-//    }
+    private fun getAddress() {
+        val geocoder = Geocoder(activity, Locale.getDefault())
+
+        val addresses: List<Address>? = geocoder.getFromLocation(
+            latitude.toDouble(),
+            longitude.toDouble(),
+            1
+        )
+        address = addresses!![0].getAddressLine(0)
+
+//        val city: String = addresses!![0].locality
+//        val state: String = addresses!![0].adminArea
+//        val country: String = addresses!![0].countryName
+//        val postalCode: String = addresses!![0].postalCode
+//        val knownName: String = addresses!![0].featureName
+
+    }
 }

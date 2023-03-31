@@ -6,16 +6,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
-import eg.gov.iti.jets.mymvvm.DayDiffUtil
 import eg.gov.iti.jets.weatherapp.R
-import eg.gov.iti.jets.weatherapp.databinding.DayItemBinding
 import eg.gov.iti.jets.weatherapp.databinding.FavItemBinding
-import eg.gov.iti.jets.weatherapp.home.view.DayAdapter
-import eg.gov.iti.jets.weatherapp.model.Daily
 import eg.gov.iti.jets.weatherapp.model.Favourite
 import eg.gov.iti.jets.weatherapp.utils.*
 
-class FavAdapter(var deleteFavListener: DeleteFavListener) : ListAdapter<Favourite, FavAdapter.FavViewHolder>(FavDiffUtil()) {
+class FavAdapter(var favListener: FavListener) :
+    ListAdapter<Favourite, FavAdapter.FavViewHolder>(FavDiffUtil()) {
 
     private lateinit var favItemBinding: FavItemBinding
 
@@ -37,9 +34,17 @@ class FavAdapter(var deleteFavListener: DeleteFavListener) : ListAdapter<Favouri
             .resize(200, 200)
             .into(holder.favItemBinding.favItemFlagImageView)
 
-        holder.favItemBinding.favItemDeleteButton.setOnClickListener{
-                deleteFavListener.deleteFav(favItem)
-            }
+        holder.favItemBinding.favItemDeleteButton.setOnClickListener {
+            favListener.deleteFav(favItem)
+        }
+
+        holder.favItemBinding.constraintLayout.setOnClickListener {
+            favListener.navigateToDetails(favItem)
+        }
+
+        holder.favItemBinding.favItemLocationTextView.setOnClickListener {
+            favListener.navigateToDetails(favItem)
+        }
     }
 
     inner class FavViewHolder(var favItemBinding: FavItemBinding) :

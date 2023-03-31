@@ -29,6 +29,7 @@ import eg.gov.iti.jets.weatherapp.utils.getDate
 import java.util.*
 import java.util.concurrent.TimeUnit
 import eg.gov.iti.jets.weatherapp.R
+import eg.gov.iti.jets.weatherapp.model.AlertModel
 
 
 //The order of execution of the above methods will be:
@@ -52,6 +53,8 @@ class AlertDialogFragment : DialogFragment() {
 
     private var fullStartDate: Date? = null
     private var fullEndDate: Date? = null
+
+    private lateinit var alert : AlertModel
 
     private val viewModel: AlertDialogViewModel by lazy {
 
@@ -123,19 +126,25 @@ class AlertDialogFragment : DialogFragment() {
         }
 
         binding.okTv.setOnClickListener {
-//            setUpAlertWorker()
-//            val alert = MyCustomDialog()
-//            alert.showAlertDialog(requireContext() as Activity)
-
-//            checkOverlayPermission();
-//            startService();
-
-            //          setUpAlertWorker()
-
-            checkAlertTerms()
-            //dismiss()
+            handleAlertClick()
         }
 
+    }
+
+    private fun handleAlertClick(){
+        if(Settings.canDrawOverlays(requireContext())) {
+            if (checkAlertTerms()) {
+                alert = AlertModel(
+                    startDate = fullStartDate.toString(),
+                    endDate = fullEndDate.toString()
+                )
+                setUpAlertWorker()
+                viewModel.insertAlert(alert)
+                dismiss()
+            }
+        }else{
+            checkOverlayPermission()
+        }
     }
 
     private fun setUpAlertWorker() {
@@ -143,11 +152,13 @@ class AlertDialogFragment : DialogFragment() {
 //        data.putString("","")
 //        data.build()
 
-        Log.i(TAG, "setUpAlertWorker: alerttttttttt")
+        var delay = getDelay(fullStartDate!!)
+        Log.i(TAG, "setUpAlertWorker: alertttt $delay")
 
         var workRequest = PeriodicWorkRequestBuilder<AlertWorker>(
-            5, TimeUnit.SECONDS
-        )
+            1, TimeUnit.DAYS
+        ).setInitialDelay(delay,TimeUnit.MILLISECONDS)
+
             //  .setInputData(data.build())
             .build()
 
@@ -157,25 +168,8 @@ class AlertDialogFragment : DialogFragment() {
             workRequest
         )
 
-//        WorkManager.getInstance(requireContext())
-//            .enqueue(request)
-
         val workInfo =
             WorkManager.getInstance(requireContext()).getWorkInfoById(workRequest.id).get()
-
-
-        /*
-        WorkManager.getInstance(requireContext()).getWorkInfoByIdLiveData(request.id).observe(requireActivity(),
-            Observer {
-                if(it.state == WorkInfo.State.SUCCEEDED) {
-                    val myObjectGson = it.outputData.getString("output")
-                    val myObject = Gson().fromJson(myObjectGson, MyObject::class.java)
-                    productsList = myObject.products
-                    productAdapter.submitList(productsList)
-                }
-            })
-
-         */
 
 
 /*
@@ -232,6 +226,7 @@ class AlertDialogFragment : DialogFragment() {
         mHour = c2.get(Calendar.HOUR_OF_DAY)
         mMinute = c2.get(Calendar.MINUTE)
 
+
         val timePickerDialog = TimePickerDialog(
             requireActivity(), { _, hourOfDay, minute ->
 
@@ -248,32 +243,37 @@ class AlertDialogFragment : DialogFragment() {
     }
 
 
-    private fun startService() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
-            if (Settings.canDrawOverlays(requireContext())) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    requireContext().startForegroundService(
-                        Intent(
-                            requireContext(), AlertService::class.java
-                        )
-                    )
-                } else {
-                    requireContext().startService(
-                        Intent(
-                            requireContext(), AlertService::class.java
-                        )
-                    )
-                }
-            }
-        } else {
-            requireContext().startService(Intent(requireContext(), AlertService::class.java))
+    private fun getDelay(hour : Int, minute:Int) : Long{
+        val calendar: Calendar = Calendar.getInstance()
+        val nowMillis: Long = calendar.timeInMillis
+
+        calendar.set(Calendar.HOUR_OF_DAY, hour)
+        calendar.set(Calendar.MINUTE, minute)
+        calendar.set(Calendar.DAY_OF_MONTH, 0)
+        calendar.set(Calendar.MONTH, 0)
+        calendar.set(Calendar.YEAR, 0)
+
+        if (calendar.before(Calendar.getInstance())) {
+            calendar.add(Calendar.DATE, 1)
         }
+
+        val diff: Long = calendar.timeInMillis - nowMillis
+
+        Log.i(TAG, "getDelay: $diff")
+
+        return diff
+    }
+
+    private fun getDelay(date: Date): Long {
+        val calendar: Calendar = Calendar.getInstance()
+        return date.time - calendar.timeInMillis
     }
 
     private fun checkOverlayPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!Settings.canDrawOverlays(requireContext())) {
+                Toast.makeText(requireContext(),"Give app permission to display alert over apps",Toast.LENGTH_LONG).show()
                 // send user to the device settings
                 val myIntent = Intent(
                     Settings.ACTION_MANAGE_OVERLAY_PERMISSION,

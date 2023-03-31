@@ -16,7 +16,7 @@ class AlertWindow(val context: Context) {
     private val TAG = "AlertWindow"
 
     // declaring required variables
-    private val mView: View
+    private var mView: View
     private var mParams: WindowManager.LayoutParams? = null
     private val mWindowManager: WindowManager
     private val layoutInflater: LayoutInflater

@@ -33,7 +33,7 @@ class AlertDialogModelFactory(private val repoInterface: RepoInterface) :
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
         return if (modelClass.isAssignableFrom(AlertDialogViewModel::class.java)) {
-            AlertFragmentViewModel(repoInterface) as T
+            AlertDialogViewModel(repoInterface) as T
         } else {
             throw java.lang.IllegalArgumentException("AlertDialogViewModel class not found")
         }

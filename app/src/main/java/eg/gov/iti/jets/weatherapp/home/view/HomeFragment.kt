@@ -171,6 +171,9 @@ class HomeFragment : Fragment(), LocationListener, MapListener {
         latitude = locationData.first
         longitude = locationData.second
 
+        mySharedPref.writeLat(latitude)
+        mySharedPref.writeLon(longitude)
+
         ////////////
         //getWeather()
     }

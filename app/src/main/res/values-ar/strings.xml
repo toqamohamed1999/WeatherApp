@@ -57,13 +57,11 @@
     <string name="end_time">نهاية الوقت</string>
 
     <string name="save">حفظ</string>
-
     <string name="dismiss">إخفاء</string>
-
     <string name="search_place">البحث عن مكان</string>
-
     <string name="sunset">الغروب</string>
-
     <string name="sunrise">الشروق</string>
+    <string name="details">التفاصيل</string>
+
 
 </resources>

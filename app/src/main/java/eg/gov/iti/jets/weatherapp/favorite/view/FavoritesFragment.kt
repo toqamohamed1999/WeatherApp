@@ -1,16 +1,19 @@
 package eg.gov.iti.jets.weatherapp.favorite.view
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import eg.gov.iti.jets.mymvvm.datatbase.LocaleSource
 import eg.gov.iti.jets.mymvvm.model.Repo
 import eg.gov.iti.jets.mymvvm.network.RemoteSource
+import eg.gov.iti.jets.weatherapp.R
 import eg.gov.iti.jets.weatherapp.databinding.FragmentFavoritesBinding
 import eg.gov.iti.jets.weatherapp.favorite.viewModel.FavouriteFragmentViewModel
 import eg.gov.iti.jets.weatherapp.favorite.viewModel.FavouriteViewModelFactory
@@ -21,7 +24,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 
-class FavoritesFragment : Fragment(),DeleteFavListener {
+class FavoritesFragment : Fragment(),FavListener {
 
     private val TAG = "FavoritesFragment"
 
@@ -101,6 +104,12 @@ class FavoritesFragment : Fragment(),DeleteFavListener {
         lifecycleScope.launch {
             viewModel.deleteFavourite(favourite)
         }
+    }
+
+    override fun navigateToDetails(favourite: Favourite) {
+        var bundle = Bundle()
+        bundle.putSerializable("fav",favourite)
+        findNavController().navigate(R.id.action_nav_favorites_to_favDetailsFragment2,bundle)
     }
 
     override fun onDestroyView() {

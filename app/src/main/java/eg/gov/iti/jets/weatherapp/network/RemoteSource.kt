@@ -13,7 +13,6 @@ class RemoteSource :RemoteSourceInterface{
         units: String,
         lang: String
     ): WeatherRoot {
-        Log.i(TAG, "getCurrentWeather: "+APIClient.apiInterface.getCurrentWeather(lat, lon, units, lang))
         return APIClient.apiInterface.getCurrentWeather(lat, lon, units, lang)
     }
 }

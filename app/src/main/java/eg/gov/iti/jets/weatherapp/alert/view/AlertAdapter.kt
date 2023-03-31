@@ -33,12 +33,8 @@ class AlertAdapter(var deleteAlertListener: DeleteAlertListener) :
     override fun onBindViewHolder(holder: AlertViewHolder, position: Int) {
         val alert = getItem(position)
 
-//        holder.alertItemBinding.favItemLocationTextView.text = favItem.address
-//
-//        Picasso.get().load(getFlagIcon(alert.countryCode!!))
-//            .placeholder(R.drawable.ic_launcher_foreground)
-//            .resize(200, 200)
-//            .into(holder.alertItemBinding.favItemFlagImageView)
+        holder.alertItemBinding.alertItemTimeTextView.text =
+            "From: ${alert.startDate?.substring(0, 16)}\n To:  ${alert.endDate?.substring(0, 16)}"
 
         holder.alertItemBinding.alertItemDeleteButton.setOnClickListener {
             deleteAlertListener.deleteAlert(alert)

@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.work.WorkManager
 import eg.gov.iti.jets.mymvvm.datatbase.LocaleSource
 import eg.gov.iti.jets.mymvvm.model.Repo
 import eg.gov.iti.jets.mymvvm.network.RemoteSource
@@ -105,6 +106,8 @@ class AlertsFragment : Fragment(),DeleteAlertListener {
         lifecycleScope.launch {
             viewModel.deleteAlert(alertModel)
         }
+        WorkManager.getInstance()?.cancelUniqueWork(id.toString())
+
     }
 
     override fun onDestroyView() {

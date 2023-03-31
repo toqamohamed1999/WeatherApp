@@ -2,6 +2,7 @@ package eg.gov.iti.jets.weatherapp.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.util.*
 
 @Entity(tableName = "alert")
 data class AlertModel(
@@ -10,9 +11,7 @@ data class AlertModel(
     val id: Int? = null,
     var latitude: Double? = null,
     var longitude: Double? = null,
-    var startDate: Long? = null,
-    var endDate: Long? = null,
-    var startTime: Long? = null,
-    var endTime: Long? = null,
+    var startDate: String? = null,
+    var endDate: String? = null
 
-) {}
+    ) {}

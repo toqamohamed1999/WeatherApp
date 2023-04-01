@@ -1,5 +1,8 @@
 package eg.gov.iti.jets.weatherapp.favorite.view
 
+import android.app.AlertDialog
+import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -19,6 +22,7 @@ import eg.gov.iti.jets.weatherapp.favorite.viewModel.FavouriteFragmentViewModel
 import eg.gov.iti.jets.weatherapp.favorite.viewModel.FavouriteViewModelFactory
 import eg.gov.iti.jets.weatherapp.map.view.MapsFragment
 import eg.gov.iti.jets.weatherapp.model.Favourite
+import eg.gov.iti.jets.weatherapp.model.Location
 import eg.gov.iti.jets.weatherapp.utils.RoomState
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -105,15 +109,30 @@ class FavoritesFragment : Fragment(),FavListener {
     }
 
     override fun deleteFav(favourite: Favourite) {
-        lifecycleScope.launch {
-            viewModel.deleteFavourite(favourite)
-        }
+        showAlertDialog(requireContext(),favourite)
     }
 
     override fun navigateToDetails(favourite: Favourite) {
         var bundle = Bundle()
         bundle.putSerializable("fav",favourite)
         findNavController().navigate(R.id.action_nav_favorites_to_favDetailsFragment2,bundle)
+    }
+
+    private fun showAlertDialog(context: Context,favourite: Favourite) {
+        AlertDialog.Builder(context)
+            .setTitle("Delete location")
+            .setMessage("Do you want to delete location from favourite?")
+            .setPositiveButton(android.R.string.ok,
+                DialogInterface.OnClickListener { _, _ ->
+
+                    lifecycleScope.launch {
+                        viewModel.deleteFavourite(favourite)
+                    }
+
+                })
+            .setNegativeButton(android.R.string.cancel ,null)
+            .setIcon(android.R.drawable.ic_delete)
+            .show()
     }
 
     override fun onDestroyView() {

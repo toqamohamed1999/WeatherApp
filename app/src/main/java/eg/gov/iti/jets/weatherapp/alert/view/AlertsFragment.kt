@@ -1,5 +1,8 @@
 package eg.gov.iti.jets.weatherapp.alert.view
 
+import android.app.AlertDialog
+import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -107,11 +110,26 @@ class AlertsFragment : Fragment(),DeleteAlertListener {
     }
 
     override fun deleteAlert(alertModel: AlertModel) {
-        lifecycleScope.launch {
-            viewModel.deleteAlert(alertModel)
-        }
-        WorkManager.getInstance()?.cancelUniqueWork(id.toString())
 
+        showAlertDialog(requireContext(),alertModel)
+    }
+
+    private fun showAlertDialog(context: Context, alertModel: AlertModel) {
+        AlertDialog.Builder(context)
+            .setTitle("Delete alert")
+            .setMessage("Do you want to delete alert?")
+            .setPositiveButton(android.R.string.ok,
+                DialogInterface.OnClickListener { _, _ ->
+
+                    lifecycleScope.launch {
+                        viewModel.deleteAlert(alertModel)
+                    }
+                    WorkManager.getInstance()?.cancelUniqueWork(id.toString())
+
+                })
+            .setNegativeButton(android.R.string.cancel ,null)
+            .setIcon(android.R.drawable.ic_delete)
+            .show()
     }
 
     override fun onDestroyView() {

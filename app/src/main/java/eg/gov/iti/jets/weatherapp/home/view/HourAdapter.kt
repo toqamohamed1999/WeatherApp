@@ -30,7 +30,7 @@ class HourAdapter(private val mySharedPref: MySharedPref) :
         val hour = getItem(position)
 
         Picasso.get().load(getIcon(hour.weather[0].icon))
-            .placeholder(R.drawable.ic_launcher_background)
+            .placeholder(R.drawable.ic_launcher_foreground)
             .resize(200, 200)
             .into(holder.hourItemBinding.hourWeatherIcon)
         holder.hourItemBinding.hourName.text = getTime("hh:mm a", hour.dt)

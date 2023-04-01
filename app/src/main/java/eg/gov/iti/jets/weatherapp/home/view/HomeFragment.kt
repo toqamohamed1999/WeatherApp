@@ -213,7 +213,7 @@ class HomeFragment : Fragment(), LocationListener, MapListener {
         hourAdapter.submitList(weatherRoot.hourly)
 
         Picasso.get().load(getIcon(weatherRoot.daily[0].weather[0].icon))
-            .placeholder(eg.gov.iti.jets.weatherapp.R.drawable.ic_launcher_background)
+            .placeholder(R.drawable.ic_launcher_foreground)
             .resize(200, 200)
             .into(binding.homeWeatherImageView)
 

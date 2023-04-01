@@ -30,7 +30,7 @@ class DayAdapter(private val mySharedPref: MySharedPref) : ListAdapter<Daily, Da
             val day = getItem(position)
 
             Picasso.get().load(getIcon(day.weather[0].icon))
-                .placeholder(R.drawable.ic_launcher_background)
+                .placeholder(R.drawable.ic_launcher_foreground)
                 .resize(200, 200)
                 .into(holder.dayItemBinding.dayWeatherIcon)
             holder.dayItemBinding.dayName.text = getTime("E, MMM dd",day.dt)

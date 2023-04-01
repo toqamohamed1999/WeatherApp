@@ -87,6 +87,10 @@ class FavoritesFragment : Fragment(),FavListener {
 //                        binding.progressbar.visibility = View.GONE
 //                        binding.homeConstraintLayout.visibility = View.VISIBLE
 
+                        if(it.favouriteList.isEmpty())
+                            binding.noFavLayout.visibility = View.VISIBLE
+                         else binding.noFavLayout.visibility = View.GONE
+
                         favAdapter.submitList(it.favouriteList)
 
                     }

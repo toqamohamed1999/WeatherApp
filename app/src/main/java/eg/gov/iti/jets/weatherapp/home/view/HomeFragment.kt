@@ -129,10 +129,12 @@ class HomeFragment : Fragment(), LocationListener, MapListener {
                 when (it) {
                     is ApiState.Loading, RoomState.Loading -> {
                         binding.progressbar.visibility = View.VISIBLE
+                        binding.lottieMapRound.visibility = View.VISIBLE
                         binding.homeConstraintLayout.visibility = View.GONE
                     }
                     is ApiState.Success -> {
                         binding.progressbar.visibility = View.GONE
+                        binding.lottieMapRound.visibility = View.GONE
                         binding.homeConstraintLayout.visibility = View.VISIBLE
 
                         weatherRoot = it.weatherRoot

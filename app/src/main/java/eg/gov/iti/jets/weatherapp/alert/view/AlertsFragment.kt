@@ -89,6 +89,10 @@ class AlertsFragment : Fragment(),DeleteAlertListener {
 //                        binding.progressbar.visibility = View.GONE
 //                        binding.homeConstraintLayout.visibility = View.VISIBLE
 
+                        if(it.alertModelList.isEmpty())
+                            binding.noAlertLayout.visibility = View.VISIBLE
+                        else binding.noAlertLayout.visibility = View.GONE
+
                         alertAdapter.submitList(it.alertModelList)
 
                     }

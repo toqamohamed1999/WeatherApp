@@ -133,11 +133,13 @@ class FavDetailsFragment : Fragment() {
                 when (it) {
                     is ApiState.Loading -> {
                         binding.progressbar.visibility = View.VISIBLE
+                        binding.lottieMapRound.visibility = View.VISIBLE
                         binding.favConstraintLayout.visibility = View.GONE
                         Log.i(TAG, "observeWeatherData: loading")
                     }
                     is ApiState.Success -> {
                         binding.progressbar.visibility = View.GONE
+                        binding.lottieMapRound.visibility = View.GONE
                         binding.favConstraintLayout.visibility = View.VISIBLE
 
                         Log.i(TAG, "observeWeatherData: success")

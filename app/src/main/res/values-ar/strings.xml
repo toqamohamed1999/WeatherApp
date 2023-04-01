@@ -63,5 +63,7 @@
     <string name="sunrise">الشروق</string>
     <string name="details">التفاصيل</string>
 
+    <string name="no_location_alerts">لا يوجد تنبيهات</string>
+    <string name="no_favourite_locations">لا يوجد مواقع مفضلة</string>
 
 </resources>

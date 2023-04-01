@@ -58,6 +58,8 @@
     <string name="sunset">Sunset</string>
     <string name="sunrise">Sunrise</string>
     <string name="details">Details</string>
+    <string name="no_location_alerts">No Location Alerts</string>
+    <string name="no_favourite_locations">No Favourite Locations</string>
 
 
 </resources>

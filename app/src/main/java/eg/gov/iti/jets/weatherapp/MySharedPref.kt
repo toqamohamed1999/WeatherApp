@@ -2,6 +2,7 @@ package eg.gov.iti.jets.weatherapp
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.location.Address
 import eg.gov.iti.jets.weatherapp.model.*
 
 class MySharedPref private constructor(var context : Context) {
@@ -15,6 +16,7 @@ class MySharedPref private constructor(var context : Context) {
     private val NOTIFICATION = "notification"
     private val LAT = "lat"
     private val LON = "lon"
+    private val ADDRESS = "address"
 
 
     private var pref : SharedPreferences = context!!.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
@@ -71,6 +73,11 @@ class MySharedPref private constructor(var context : Context) {
         return pref.getString(LON, "N/F")!!
     }
 
+    fun readAddress() : String {
+        return pref.getString(ADDRESS, "N/F")!!
+    }
+
+
     fun writeLat(lat : String)  {
         editor.putString(LAT, lat)
         editor.commit()
@@ -78,6 +85,11 @@ class MySharedPref private constructor(var context : Context) {
 
     fun writeLon(lon : String)  {
         editor.putString(LON, lon)
+        editor.commit()
+    }
+
+    fun writeAddress(address : String)  {
+        editor.putString(ADDRESS, address)
         editor.commit()
     }
 

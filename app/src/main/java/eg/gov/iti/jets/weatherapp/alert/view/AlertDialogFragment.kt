@@ -20,6 +20,7 @@ import androidx.work.*
 import eg.gov.iti.jets.mymvvm.datatbase.LocaleSource
 import eg.gov.iti.jets.mymvvm.model.Repo
 import eg.gov.iti.jets.mymvvm.network.RemoteSource
+import eg.gov.iti.jets.weatherapp.MySharedPref
 import eg.gov.iti.jets.weatherapp.alert.AlertService
 import eg.gov.iti.jets.weatherapp.alert.AlertWorker
 import eg.gov.iti.jets.weatherapp.alert.viewModel.AlertDialogModelFactory
@@ -55,6 +56,11 @@ class AlertDialogFragment : DialogFragment() {
     private var fullEndDate: Date? = null
 
     private lateinit var alert : AlertModel
+
+
+    private val mySharedPref by lazy {
+        MySharedPref.getMyPref(requireContext())
+    }
 
     private val viewModel: AlertDialogViewModel by lazy {
 
@@ -135,8 +141,11 @@ class AlertDialogFragment : DialogFragment() {
         if(Settings.canDrawOverlays(requireContext())) {
             if (checkAlertTerms()) {
                 alert = AlertModel(
+                    latitude = mySharedPref.readLat(),
+                    longitude = mySharedPref.readLon(),
                     startDate = fullStartDate.toString(),
-                    endDate = fullEndDate.toString()
+                    endDate = fullEndDate.toString(),
+                    address = mySharedPref.readAddress()
                 )
                 setUpAlertWorker()
                 viewModel.insertAlert(alert)

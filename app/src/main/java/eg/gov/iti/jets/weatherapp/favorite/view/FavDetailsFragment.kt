@@ -161,6 +161,8 @@ class FavDetailsFragment : Fragment() {
         if (NetworkChecker.isNetworkAvailable(requireContext())) {
             viewModel.getFavDetailsWeather(latitude, longitude, unit, lang)
         } else {
+            binding.lottieNoInternet.visibility = View.VISIBLE
+            binding.lottieMapRound.visibility = View.GONE
             showSnackBar()
         }
     }

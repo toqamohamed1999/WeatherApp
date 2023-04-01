@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import eg.gov.iti.jets.mymvvm.DayDiffUtil
+import eg.gov.iti.jets.weatherapp.MySharedPref
 import eg.gov.iti.jets.weatherapp.R
 import eg.gov.iti.jets.weatherapp.databinding.AlertItemBinding
 import eg.gov.iti.jets.weatherapp.databinding.DayItemBinding
@@ -17,7 +18,7 @@ import eg.gov.iti.jets.weatherapp.model.Daily
 import eg.gov.iti.jets.weatherapp.model.Favourite
 import eg.gov.iti.jets.weatherapp.utils.*
 
-class AlertAdapter(var deleteAlertListener: DeleteAlertListener) :
+class AlertAdapter(val context: Context,var deleteAlertListener: DeleteAlertListener) :
     ListAdapter<AlertModel, AlertAdapter.AlertViewHolder>(AlertDiffUtil()) {
 
     private lateinit var alertItemBinding: AlertItemBinding
@@ -33,8 +34,11 @@ class AlertAdapter(var deleteAlertListener: DeleteAlertListener) :
     override fun onBindViewHolder(holder: AlertViewHolder, position: Int) {
         val alert = getItem(position)
 
+        holder.alertItemBinding.alertItemLocationTextView.text = alert.address
+
         holder.alertItemBinding.alertItemTimeTextView.text =
-            "From: ${alert.startDate?.substring(0, 16)}\n To:  ${alert.endDate?.substring(0, 16)}"
+            context.resources.getString(R.string.from)+" :  "+alert.startDate?.substring(0, 16)+
+        "\n "+ context.resources.getString(R.string.to)+" :  "+alert.endDate?.substring(0, 16)
 
         holder.alertItemBinding.alertItemDeleteButton.setOnClickListener {
             deleteAlertListener.deleteAlert(alert)

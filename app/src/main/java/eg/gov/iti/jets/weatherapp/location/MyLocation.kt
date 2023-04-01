@@ -14,14 +14,15 @@ import android.provider.Settings
 import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.fragment.app.Fragment
 import com.google.android.gms.location.*
 import eg.gov.iti.jets.weatherapp.LOCATION_PERMISSION_CODE
 import java.util.*
-import java.util.concurrent.TimeUnit
+import eg.gov.iti.jets.weatherapp.home.view.LocationListener
 
 class MyLocation(
-    private val activity: Activity,
-    private val locationListener: eg.gov.iti.jets.weatherapp.home.view.LocationListener
+    private val activity: Activity, private val fragment: Fragment,
+    private val locationListener: LocationListener
 ) {
 
     private val TAG = "MyLocation"
@@ -52,7 +53,14 @@ class MyLocation(
     }
 
     private fun requestPermission() {
-
+        fragment.requestPermissions( //Method of Fragment
+            arrayOf(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ), LOCATION_PERMISSION_CODE
+        )
+//on activity
+/*
         ActivityCompat.requestPermissions(
             activity,
             arrayOf(
@@ -60,6 +68,9 @@ class MyLocation(
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ), LOCATION_PERMISSION_CODE
         )
+
+ */
+
     }
 
 

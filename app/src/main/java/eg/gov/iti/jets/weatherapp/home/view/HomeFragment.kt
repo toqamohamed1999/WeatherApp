@@ -1,11 +1,13 @@
 package eg.gov.iti.jets.weatherapp.home.view
 
+import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -52,7 +54,7 @@ class HomeFragment : Fragment(), LocationListener, MapListener {
     }
 
     private val myLocation by lazy {
-        activity?.let { MyLocation(it, this) }
+        MyLocation(requireActivity(),this, this)
     }
 
 
@@ -84,7 +86,6 @@ class HomeFragment : Fragment(), LocationListener, MapListener {
         } else {
             init()
         }
-
     }
 
     private fun init() {
@@ -143,6 +144,7 @@ class HomeFragment : Fragment(), LocationListener, MapListener {
                     }
                     is RoomState.SuccessWeather -> {
                         binding.progressbar.visibility = View.GONE
+                        binding.lottieMapRound.visibility = View.GONE
                         binding.homeConstraintLayout.visibility = View.VISIBLE
 
                         weatherRoot = it.weatherRoot
@@ -170,6 +172,7 @@ class HomeFragment : Fragment(), LocationListener, MapListener {
     }
 
     override fun setLocation(locationData: Pair<String, String>) {
+        Log.i(TAG, "setLocation: ggg")
         latitude = locationData.first
         longitude = locationData.second
 
@@ -219,6 +222,7 @@ class HomeFragment : Fragment(), LocationListener, MapListener {
 
         _binding?.homeStateTextView?.text = weatherRoot.daily[0].weather[0].description
         _binding?.homeLocationTextView?.text = weatherRoot.timezone
+        mySharedPref.writeAddress(weatherRoot.timezone)
         _binding?.homeTimeDateTextView?.text = getCurrentDate()
            // getTime("hh:mm a   E, MMM dd, yyyy", weatherRoot.daily[0].dt)
         _binding?.additional?.humidityValueTextview?.text = "${weatherRoot.daily[0].humidity} %"

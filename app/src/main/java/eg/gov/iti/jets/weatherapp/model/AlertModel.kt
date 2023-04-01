@@ -9,9 +9,10 @@ data class AlertModel(
 
     @PrimaryKey(autoGenerate = true)
     val id: Int? = null,
-    var latitude: Double? = null,
-    var longitude: Double? = null,
+    var latitude: String? = null,
+    var longitude: String? = null,
     var startDate: String? = null,
-    var endDate: String? = null
+    var endDate: String? = null,
+    var address: String? = null
 
-    ) {}
+) {}

@@ -216,6 +216,7 @@ class SettingFragment : Fragment() {
             .setPositiveButton(android.R.string.ok,
                 DialogInterface.OnClickListener { _, _ ->
                     openMap()
+                    location = Location.Map
                     mySharedPref.writeLocation(Location.Map)
                 })
             .setNegativeButton(android.R.string.cancel) { _, _ ->

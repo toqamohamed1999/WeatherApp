@@ -71,7 +71,7 @@ class AlertsFragment : Fragment(),DeleteAlertListener {
         }
     }
     private fun setUpFavRecyclerView() {
-        alertAdapter = AlertAdapter(this)
+        alertAdapter = AlertAdapter(requireContext(),this)
 
         _binding?.alertRecyclerView?.apply {
             layoutManager = LinearLayoutManager(requireContext())

@@ -9,9 +9,10 @@ import android.util.Log
 import android.view.*
 import android.widget.TextView
 import eg.gov.iti.jets.weatherapp.R
+import eg.gov.iti.jets.weatherapp.model.AlertModel
 
 
-class AlertWindow(val context: Context) {
+class AlertWindowManager(val context: Context,alertModel: AlertModel) {
 
     private val TAG = "AlertWindow"
 
@@ -41,6 +42,9 @@ class AlertWindow(val context: Context) {
         // inflating the view with the custom layout we created
         mView = layoutInflater.inflate(R.layout.display_alert_dialog, null)
 
+        mView.findViewById<TextView>(R.id.alertItem_title_textView).text = "Weather Alert"
+        mView.findViewById<TextView>(R.id.alertItem_time_textView).text = "No alert in "+alertModel.address
+
         // set onClickListener on the remove button, which removes
         // the view from the window
         mView.findViewById<TextView>(R.id.alertItem_dismiss_textView).setOnClickListener {
@@ -55,7 +59,7 @@ class AlertWindow(val context: Context) {
         // window within the screen
         mParams!!.width = WindowManager.LayoutParams.WRAP_CONTENT
         mParams!!.gravity = Gravity.TOP
-        mParams!!.y = 15
+        mParams!!.y = 10
         mWindowManager = context.getSystemService(WINDOW_SERVICE) as WindowManager
     }
 

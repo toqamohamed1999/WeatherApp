@@ -9,18 +9,27 @@ import eg.gov.iti.jets.weatherapp.utils.RoomState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class AlertDialogViewModel(private val repoInterface: RepoInterface) : ViewModel() {
 
     private val TAG = "AlertDialogViewModel"
 
-    private var alertMutableStateFlow = MutableStateFlow<RoomState>(RoomState.Loading)
+    private var alertMutableStateFlow = MutableStateFlow<Long>(0)
     val alertStateFlow = alertMutableStateFlow.asStateFlow()
 
-    fun insertAlert(alert: AlertModel) {
+     fun insertAlert(alert: AlertModel) {
         viewModelScope.launch(Dispatchers.IO) {
-            repoInterface.insertAlert(alert)
+            //return inserted alert ID
+            alertMutableStateFlow.value = repoInterface.insertAlert(alert)
+        }
+    }
+
+    fun deleteAlert(alert: AlertModel) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repoInterface.deleteAlert(alert)
         }
     }
 

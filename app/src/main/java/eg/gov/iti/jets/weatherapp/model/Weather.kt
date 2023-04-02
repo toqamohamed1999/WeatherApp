@@ -17,7 +17,7 @@ data class WeatherRoot(
     val timezoneOffset: String,
     val hourly: List<Hourly>,
     val daily: List<Daily>,
-    val alerts: List<Alerts>? = null
+    val alerts: List<Alerts>?
 )
 
 data class Hourly(

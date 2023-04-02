@@ -115,8 +115,8 @@ fun getWindSpeed(windSpeed : String,mySharedPref: MySharedPref) : String {
 }
 
 fun getDate(strDate : String) : Date?{
-    //val dtStart = "05-11-2017 05:42"
-    val format = SimpleDateFormat("dd-MM-yyyy hh:mm")
+    //val dtStart = "05-11-2017 05:42 PM"
+    val format = SimpleDateFormat("dd-MM-yyyy hh:mm a")
     try {
         return format.parse(strDate)
     } catch (e: ParseException) {

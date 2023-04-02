@@ -16,21 +16,27 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.work.*
+import com.google.gson.Gson
+import eg.gov.iti.jets.mymvvm.Utilites.ApiState
 import eg.gov.iti.jets.mymvvm.datatbase.LocaleSource
 import eg.gov.iti.jets.mymvvm.model.Repo
 import eg.gov.iti.jets.mymvvm.network.RemoteSource
 import eg.gov.iti.jets.weatherapp.MySharedPref
-import eg.gov.iti.jets.weatherapp.alert.AlertService
+import eg.gov.iti.jets.weatherapp.R
 import eg.gov.iti.jets.weatherapp.alert.AlertWorker
 import eg.gov.iti.jets.weatherapp.alert.viewModel.AlertDialogModelFactory
 import eg.gov.iti.jets.weatherapp.alert.viewModel.AlertDialogViewModel
 import eg.gov.iti.jets.weatherapp.databinding.AlertDialogBinding
+import eg.gov.iti.jets.weatherapp.model.AlertModel
+import eg.gov.iti.jets.weatherapp.utils.RoomState
 import eg.gov.iti.jets.weatherapp.utils.getDate
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import java.lang.String.*
 import java.util.*
 import java.util.concurrent.TimeUnit
-import eg.gov.iti.jets.weatherapp.R
-import eg.gov.iti.jets.weatherapp.model.AlertModel
 
 
 //The order of execution of the above methods will be:
@@ -55,7 +61,8 @@ class AlertDialogFragment : DialogFragment() {
     private var fullStartDate: Date? = null
     private var fullEndDate: Date? = null
 
-    private lateinit var alert : AlertModel
+    private lateinit var alertModel: AlertModel
+    private var alertId = -1
 
 
     private val mySharedPref by lazy {
@@ -77,13 +84,8 @@ class AlertDialogFragment : DialogFragment() {
 
         const val TAG = "AlertDialogFragment"
 
-        private const val KEY_TITLE = "KEY_TITLE"
-        private const val KEY_SUBTITLE = "KEY_SUBTITLE"
-
-        fun newInstance(title: String, subTitle: String): AlertDialogFragment {
+        fun newInstance(): AlertDialogFragment {
             val args = Bundle()
-            args.putString(KEY_TITLE, title)
-            args.putString(KEY_SUBTITLE, subTitle)
             val fragment = AlertDialogFragment()
             fragment.arguments = args
             return fragment
@@ -137,67 +139,64 @@ class AlertDialogFragment : DialogFragment() {
 
     }
 
-    private fun handleAlertClick(){
-        if(Settings.canDrawOverlays(requireContext())) {
+    private fun handleAlertClick() {
+        if (Settings.canDrawOverlays(requireContext())) {
             if (checkAlertTerms()) {
-                alert = AlertModel(
+                alertModel = AlertModel(
                     latitude = mySharedPref.readLat(),
                     longitude = mySharedPref.readLon(),
                     startDate = fullStartDate.toString(),
                     endDate = fullEndDate.toString(),
                     address = mySharedPref.readAddress()
                 )
-                setUpAlertWorker()
-                viewModel.insertAlert(alert)
-                dismiss()
+                insetAlert()
             }
-        }else{
+        } else {
             checkOverlayPermission()
         }
     }
 
+    private fun insetAlert() {
+        viewModel.insertAlert(alertModel)
+
+        lifecycleScope.launch {
+            viewModel.alertStateFlow.collectLatest {
+                alertId = it.toInt()
+                alertModel.id = alertId
+                setUpAlertWorker()
+                finishSave()
+            }
+        }
+    }
+
+    private fun finishSave() {
+        dismiss()
+        Toast.makeText(requireContext(), "Alert Saved", Toast.LENGTH_LONG).show()
+    }
+
+
     private fun setUpAlertWorker() {
-//        val data = Data.Builder()
-//        data.putString("","")
-//        data.build()
+        val data = Data.Builder()
+        data.putString("alertModel", Gson().toJson(alertModel))
+        data.build()
 
         var delay = getDelay(fullStartDate!!)
-        Log.i(TAG, "setUpAlertWorker: alertttt $delay")
 
         var workRequest = PeriodicWorkRequestBuilder<AlertWorker>(
             1, TimeUnit.DAYS
-        ).setInitialDelay(delay,TimeUnit.MILLISECONDS)
-
-            //  .setInputData(data.build())
+        )
+            .setInitialDelay(delay, TimeUnit.MILLISECONDS)
+            .setInputData(data.build())
+            .addTag("$alertId")
+            /// .setConstraints(Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build())
             .build()
 
         WorkManager.getInstance(requireContext()).enqueueUniquePeriodicWork(
-            "$id",
+            "$alertId",
             ExistingPeriodicWorkPolicy.REPLACE,
             workRequest
         )
-
-        val workInfo =
-            WorkManager.getInstance(requireContext()).getWorkInfoById(workRequest.id).get()
-
-
-/*
-        WorkManager.getInstance(requireContext()).getWorkInfoByIdLiveData(request.id).observe(requireActivity()
-        ) {
-            when (it.state) {
-                WorkInfo.State.SUCCEEDED -> {
-                    val myObjectGson = it.outputData.getString("output")
-                    val myObject = Gson().fromJson(myObjectGson, MyObject::class.java)
-                    productsList = myObject.products
-                    productAdapter.submitList(productsList)
-                }
-                else -> {
-
-                }
-            }
-        }
-
- */
+        Log.i(TAG, "getWeather setUpAlertWorker: alertID = $alertId")
 
     }
 
@@ -239,11 +238,12 @@ class AlertDialogFragment : DialogFragment() {
         val timePickerDialog = TimePickerDialog(
             requireActivity(), { _, hourOfDay, minute ->
 
-                timeTextView.text = "$hourOfDay:$minute"
+                val time = get12HourFormat(hourOfDay, minute)
+                timeTextView.text = time
 
                 when (timeTextView.id) {
-                    R.id.from_time_textview -> startTime = "$hourOfDay:$minute"
-                    else -> endTime = "$hourOfDay:$minute"
+                    R.id.from_time_textview -> startTime = time
+                    else -> endTime = time
                 }
 
             }, mHour!!, mMinute!!, false
@@ -251,9 +251,17 @@ class AlertDialogFragment : DialogFragment() {
         timePickerDialog.show()
     }
 
+    private fun get12HourFormat(hourOfDay: Int, minute: Int): String {
+        val isPM = hourOfDay >= 12
+        return format(
+            "%02d:%02d %s",
+            if (hourOfDay === 12 || hourOfDay === 0) 12 else hourOfDay % 12,
+            minute,
+            if (isPM) "PM" else "AM"
+        )
+    }
 
-
-    private fun getDelay(hour : Int, minute:Int) : Long{
+    private fun getDelay(hour: Int, minute: Int): Long {
         val calendar: Calendar = Calendar.getInstance()
         val nowMillis: Long = calendar.timeInMillis
 
@@ -282,7 +290,11 @@ class AlertDialogFragment : DialogFragment() {
     private fun checkOverlayPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!Settings.canDrawOverlays(requireContext())) {
-                Toast.makeText(requireContext(),"Give app permission to display alert over apps",Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    requireContext(),
+                    "Give app permission to display alert over apps",
+                    Toast.LENGTH_LONG
+                ).show()
                 // send user to the device settings
                 val myIntent = Intent(
                     Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
@@ -332,7 +344,7 @@ class AlertDialogFragment : DialogFragment() {
 
     override fun onResume() {
         super.onResume()
-      ///////////  startService()
+        ///////////  startService()
     }
 
 }

@@ -19,7 +19,7 @@ interface LocaleSourceInterface {
 
     fun getStoredAlerts(): Flow<List<AlertModel>>
 
-    suspend fun insertAlert(alert: AlertModel)
+    suspend fun insertAlert(alert: AlertModel) : Long
 
     suspend fun deleteAlert(alert: AlertModel)
 

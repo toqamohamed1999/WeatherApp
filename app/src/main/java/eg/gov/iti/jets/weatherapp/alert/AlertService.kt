@@ -10,12 +10,21 @@ import android.os.IBinder
 import android.support.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import eg.gov.iti.jets.weatherapp.MainActivity
+import eg.gov.iti.jets.weatherapp.MySharedPref
 import eg.gov.iti.jets.weatherapp.R
+import eg.gov.iti.jets.weatherapp.model.AlertModel
 
 
 class AlertService : Service() {
 
     private val TAG = "AlertService"
+
+    private var alertModel : AlertModel? = null
+
+
+    private val mySharedPref by lazy {
+        MySharedPref.getMyPref(this)
+    }
 
     override fun onBind(intent: Intent?): IBinder? {
         return null
@@ -26,21 +35,28 @@ class AlertService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+
+        if(intent!!.hasExtra("alertModel")){
+            alertModel = intent.getSerializableExtra("alertModel") as AlertModel
+        }
+
         // create the custom or default notification
         // based on the android version
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) createNotification()
-        else startForeground(1, Notification())
+        if(mySharedPref.getSetting().notification == eg.gov.iti.jets.weatherapp.model.Notification.Enable) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) createNotification()
+            else startForeground(1, Notification())
+        }
 
         // create an instance of Window class - and display the content on screen
         //display alert dialog
-        val window = AlertWindow(this)
+        val window = AlertWindowManager(this,alertModel!!)
         window.open()
 
         return START_NOT_STICKY
     }
 
 
-    val NOTIFICATION_CHANNEL_ID = "example.permanence"
+    val NOTIFICATION_CHANNEL_ID = "210"
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createNotification() {
@@ -70,7 +86,7 @@ class AlertService : Service() {
 
         val notification: Notification = notificationBuilder.setOngoing(true)
             .setContentTitle("Weather Alert")
-            .setContentText("Displaying over other apps")
+            .setContentText("No alerts in "+alertModel?.address)
             .setSmallIcon(R.drawable.logo)
             .setSound(alarmSound)
             .setVibrate(longArrayOf(1000, 1000, 1000, 1000, 1000))

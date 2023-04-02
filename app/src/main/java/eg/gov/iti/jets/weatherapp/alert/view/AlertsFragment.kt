@@ -65,8 +65,7 @@ class AlertsFragment : Fragment(),DeleteAlertListener {
     private fun handleAlertFabClick(){
         binding.alertFab.setOnClickListener {
 
-            AlertDialogFragment.newInstance(getString(R.string.alert),
-                getString(R.string.action_settings))
+            AlertDialogFragment.newInstance()
                 .show(requireActivity().supportFragmentManager, AlertDialogFragment.TAG)
         }
     }

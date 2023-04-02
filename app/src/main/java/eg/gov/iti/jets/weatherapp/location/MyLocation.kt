@@ -59,17 +59,17 @@ class MyLocation(
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ), LOCATION_PERMISSION_CODE
         )
-//on activity
-/*
-        ActivityCompat.requestPermissions(
-            activity,
-            arrayOf(
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ), LOCATION_PERMISSION_CODE
-        )
+        //on activity
+        /*
+                ActivityCompat.requestPermissions(
+                    activity,
+                    arrayOf(
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                    ), LOCATION_PERMISSION_CODE
+                )
 
- */
+         */
 
     }
 

@@ -66,8 +66,8 @@ class Repo private constructor(
         return localeSource.getStoredAlerts()
     }
 
-    override suspend fun insertAlert(alert: AlertModel) {
-        localeSource.insertAlert(alert)
+    override suspend fun insertAlert(alert: AlertModel) : Long {
+        return localeSource.insertAlert(alert)
     }
 
     override suspend fun deleteAlert(alert: AlertModel) {

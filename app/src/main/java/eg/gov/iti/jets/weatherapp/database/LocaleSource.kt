@@ -44,8 +44,8 @@ class LocaleSource(context: Context) : LocaleSourceInterface {
         return alertDao.getStoredAlerts()
     }
 
-    override suspend fun insertAlert(alert: AlertModel) {
-        alertDao.insertAlert(alert)
+    override suspend fun insertAlert(alert: AlertModel) : Long{
+        return alertDao.insertAlert(alert)
     }
 
     override suspend fun deleteAlert(alert: AlertModel) {

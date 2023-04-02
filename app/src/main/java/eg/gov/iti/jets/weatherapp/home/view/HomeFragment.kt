@@ -43,8 +43,8 @@ class HomeFragment : Fragment(), LocationListener, MapListener {
     private lateinit var hourAdapter: HourAdapter
 
     private var weatherRoot: WeatherRoot? = null
-    private lateinit var latitude: String
-    private lateinit var longitude: String
+    private var latitude: String = "48.4734"
+    private var longitude: String = "7.9498"
     private lateinit var lang: String
     private var unit: String = "metric"
 
@@ -167,20 +167,20 @@ class HomeFragment : Fragment(), LocationListener, MapListener {
             latitude = mySharedPref.readLat()
             longitude = mySharedPref.readLon()
             //////////
-            getWeather()
+          // getWeather()
         }
     }
 
     override fun setLocation(locationData: Pair<String, String>) {
         Log.i(TAG, "setLocation: ggg")
-        latitude = locationData.first
-        longitude = locationData.second
+//        latitude = locationData.first
+//        longitude = locationData.second
 
         mySharedPref.writeLat(latitude)
         mySharedPref.writeLon(longitude)
 
         ////////////
-        getWeather()
+       // getWeather()
     }
 
     private fun getWeather() {
@@ -224,7 +224,7 @@ class HomeFragment : Fragment(), LocationListener, MapListener {
         _binding?.homeLocationTextView?.text = weatherRoot.timezone
         mySharedPref.writeAddress(weatherRoot.timezone)
         _binding?.homeTimeDateTextView?.text = getCurrentDate()
-           // getTime("hh:mm a   E, MMM dd, yyyy", weatherRoot.daily[0].dt)
+          //  getTime("hh:mm a   E, MMM dd, yyyy", weatherRoot.daily[0].dt)
         _binding?.additional?.humidityValueTextview?.text = "${weatherRoot.daily[0].humidity} %"
         _binding?.additional?.pressureValueTextview?.text = "${weatherRoot.daily[0].pressure} hpa"
 
@@ -248,6 +248,8 @@ class HomeFragment : Fragment(), LocationListener, MapListener {
 
         _binding?.additional?.windValueTextView?.text =
             getWindSpeed(weatherRoot.daily[0].windSpeed, mySharedPref) + WindSpeed_Unit
+
+        getWeatherAlerts()
     }
 
     private fun getSharedInfo() {
@@ -264,7 +266,7 @@ class HomeFragment : Fragment(), LocationListener, MapListener {
         longitude = mySharedPref.readLon()
 
         ///////////
-        getWeather()
+        //getWeather()
     }
 
     override fun confirmInitialSetting() {
@@ -285,7 +287,21 @@ class HomeFragment : Fragment(), LocationListener, MapListener {
         }
     }
 
+
+    private fun getWeatherAlerts(){
+        if(weatherRoot?.alerts != null){
+            Log.i(TAG, "getWeatherAlerts: event "+ (weatherRoot!!.alerts!![0].event))
+            Log.i(TAG, "getWeatherAlerts: des "+ (weatherRoot!!.alerts!![0].description))
+            Log.i(TAG, "getWeatherAlerts: start "+ (getTime("hh:mm a   E, MMM dd, yyyy",
+                weatherRoot!!.alerts!![0].start)))
+            Log.i(TAG, "getWeatherAlerts: end "+ (getTime("hh:mm a   E, MMM dd, yyyy",
+                weatherRoot!!.alerts!![0].end)))
+        }
+    }
+
 }
+
+
 
 //onPause() ---onStop()
 //onStart() --- onResume()

@@ -13,14 +13,15 @@ import eg.gov.iti.jets.weatherapp.MainActivity
 import eg.gov.iti.jets.weatherapp.MySharedPref
 import eg.gov.iti.jets.weatherapp.R
 import eg.gov.iti.jets.weatherapp.model.AlertModel
+import eg.gov.iti.jets.weatherapp.model.Alerts
 
 
 class AlertService : Service() {
 
     private val TAG = "AlertService"
 
+    private var alert : Alerts? = null
     private var alertModel : AlertModel? = null
-
 
     private val mySharedPref by lazy {
         MySharedPref.getMyPref(this)
@@ -36,7 +37,8 @@ class AlertService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
-        if(intent!!.hasExtra("alertModel")){
+        if(intent != null) {
+            alert = intent.getSerializableExtra("alertApi") as Alerts
             alertModel = intent.getSerializableExtra("alertModel") as AlertModel
         }
 
@@ -49,8 +51,12 @@ class AlertService : Service() {
 
         // create an instance of Window class - and display the content on screen
         //display alert dialog
-        val window = AlertWindowManager(this,alertModel!!)
-        window.open()
+        if(alertModel!!.alertEnabled) {
+            val window = AlertWindowManager(this, alertModel!!, alert!!)
+            window.open()
+        }
+
+        //stopSelf()
 
         return START_NOT_STICKY
     }
@@ -86,7 +92,7 @@ class AlertService : Service() {
 
         val notification: Notification = notificationBuilder.setOngoing(true)
             .setContentTitle("Weather Alert")
-            .setContentText("No alerts in "+alertModel?.address)
+            .setContentText(alert?.event+ " in "+alertModel?.address)
             .setSmallIcon(R.drawable.logo)
             .setSound(alarmSound)
             .setVibrate(longArrayOf(1000, 1000, 1000, 1000, 1000))

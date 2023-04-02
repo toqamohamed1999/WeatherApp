@@ -19,7 +19,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.work.*
 import com.google.gson.Gson
-import eg.gov.iti.jets.mymvvm.Utilites.ApiState
 import eg.gov.iti.jets.mymvvm.datatbase.LocaleSource
 import eg.gov.iti.jets.mymvvm.model.Repo
 import eg.gov.iti.jets.mymvvm.network.RemoteSource
@@ -30,7 +29,8 @@ import eg.gov.iti.jets.weatherapp.alert.viewModel.AlertDialogModelFactory
 import eg.gov.iti.jets.weatherapp.alert.viewModel.AlertDialogViewModel
 import eg.gov.iti.jets.weatherapp.databinding.AlertDialogBinding
 import eg.gov.iti.jets.weatherapp.model.AlertModel
-import eg.gov.iti.jets.weatherapp.utils.RoomState
+import eg.gov.iti.jets.weatherapp.model.Language
+import eg.gov.iti.jets.weatherapp.utils.getCurrentDate
 import eg.gov.iti.jets.weatherapp.utils.getDate
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -58,11 +58,12 @@ class AlertDialogFragment : DialogFragment() {
     private var startTime: String? = null
     private var endTime: String? = null
 
-    private var fullStartDate: Date? = null
-    private var fullEndDate: Date? = null
+    private var fullStartDate: String? = null
+    private var fullEndDate: String? = null
 
     private lateinit var alertModel: AlertModel
-    private var alertId = -1
+
+    private var alertEnabled: Boolean = true
 
 
     private val mySharedPref by lazy {
@@ -115,6 +116,8 @@ class AlertDialogFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        handleAlertRadioGroup()
+
         binding.fromDateTextview.setOnClickListener {
             showDateDialog(it as TextView)
         }
@@ -143,11 +146,13 @@ class AlertDialogFragment : DialogFragment() {
         if (Settings.canDrawOverlays(requireContext())) {
             if (checkAlertTerms()) {
                 alertModel = AlertModel(
+                    currentTime = getCurrentDate(),
                     latitude = mySharedPref.readLat(),
                     longitude = mySharedPref.readLon(),
-                    startDate = fullStartDate.toString(),
-                    endDate = fullEndDate.toString(),
-                    address = mySharedPref.readAddress()
+                    startDate = fullStartDate,
+                    endDate = fullEndDate,
+                    address = mySharedPref.readAddress(),
+                    alertEnabled = alertEnabled
                 )
                 insetAlert()
             }
@@ -161,8 +166,6 @@ class AlertDialogFragment : DialogFragment() {
 
         lifecycleScope.launch {
             viewModel.alertStateFlow.collectLatest {
-                alertId = it.toInt()
-                alertModel.id = alertId
                 setUpAlertWorker()
                 finishSave()
             }
@@ -187,17 +190,15 @@ class AlertDialogFragment : DialogFragment() {
         )
             .setInitialDelay(delay, TimeUnit.MILLISECONDS)
             .setInputData(data.build())
-            .addTag("$alertId")
+            .addTag(alertModel.currentTime)
             /// .setConstraints(Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build())
             .build()
 
         WorkManager.getInstance(requireContext()).enqueueUniquePeriodicWork(
-            "$alertId",
+            alertModel.currentTime,
             ExistingPeriodicWorkPolicy.REPLACE,
             workRequest
         )
-        Log.i(TAG, "getWeather setUpAlertWorker: alertID = $alertId")
-
     }
 
     private fun showDateDialog(dateTextView: TextView) {
@@ -282,9 +283,9 @@ class AlertDialogFragment : DialogFragment() {
         return diff
     }
 
-    private fun getDelay(date: Date): Long {
+    private fun getDelay(dateStr: String): Long {
         val calendar: Calendar = Calendar.getInstance()
-        return date.time - calendar.timeInMillis
+        return getDate(dateStr)!!.time - calendar.timeInMillis
     }
 
     private fun checkOverlayPermission() {
@@ -318,17 +319,16 @@ class AlertDialogFragment : DialogFragment() {
         } else if (endTime == null) {
             Toast.makeText(requireContext(), "Select end time", Toast.LENGTH_LONG).show()
             return false
-        }
-        checkAlertDurationValidation()
+        } else if (!checkAlertDurationValidation()) return false
         return true
     }
 
     private fun checkAlertDurationValidation(): Boolean {
-        fullStartDate = getDate("$startDate $startTime")
-        fullEndDate = getDate("$endDate $endTime")
+        fullStartDate = "$startDate $startTime"
+        fullEndDate = "$endDate $endTime"
 
         if (fullEndDate != null && fullStartDate != null) {
-            if (fullEndDate!! >= fullStartDate) {
+            if (getDate(fullEndDate!!)!! >= getDate(fullStartDate!!)!!) {
                 return true
             } else {
                 Toast.makeText(
@@ -341,10 +341,18 @@ class AlertDialogFragment : DialogFragment() {
         return false
     }
 
-
-    override fun onResume() {
-        super.onResume()
-        ///////////  startService()
+    private fun handleAlertRadioGroup() {
+        binding.alertRadioGroup.setOnCheckedChangeListener { _, checkedId ->
+            when (checkedId) {
+                R.id.alert_radio_button -> {
+                    alertEnabled = true
+                }
+                R.id.notification_radio_button -> {
+                    alertEnabled = false
+                }
+            }
+        }
     }
+
 
 }

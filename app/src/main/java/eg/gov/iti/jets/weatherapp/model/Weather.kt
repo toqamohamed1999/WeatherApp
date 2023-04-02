@@ -96,13 +96,13 @@ data class FeelsLike(
 
 data class Alerts(
     @SerializedName("sender_name")
-    var senderName: String,
-    var event: String,
-    var start: Long,
-    var end: Long,
-    var description: String,
+    var senderName: String? = null,
+    var event: String? = null,
+    var start: Long? = null,
+    var end: Long? = null,
+    var description: String? = null,
     // var tags: List<String>
-)
+): java.io.Serializable
 
 
 enum class Language { English, Arabic }

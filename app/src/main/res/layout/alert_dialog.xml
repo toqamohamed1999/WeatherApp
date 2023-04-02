@@ -205,7 +205,7 @@
 
 
             <RadioGroup
-                android:id="@+id/languag_radio_group"
+                android:id="@+id/alert_radio_group"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
@@ -262,7 +262,7 @@
                 android:textStyle="bold"
                 android:textColor="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/languag_radio_group" />
+                app:layout_constraintTop_toBottomOf="@id/alert_radio_group" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -6,7 +6,7 @@ import eg.gov.iti.jets.weatherapp.model.AlertModel
 class AlertDiffUtil : DiffUtil.ItemCallback<AlertModel>() {
 
     override fun areItemsTheSame(oldItem: AlertModel, newItem: AlertModel): Boolean {
-        return oldItem.id == newItem.id
+        return oldItem.currentTime == newItem.currentTime
     }
 
     override fun areContentsTheSame(oldItem: AlertModel, newItem: AlertModel): Boolean {

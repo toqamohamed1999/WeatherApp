@@ -10,9 +10,11 @@ import android.view.*
 import android.widget.TextView
 import eg.gov.iti.jets.weatherapp.R
 import eg.gov.iti.jets.weatherapp.model.AlertModel
+import eg.gov.iti.jets.weatherapp.model.Alerts
+import eg.gov.iti.jets.weatherapp.utils.getTime
 
 
-class AlertWindowManager(val context: Context,alertModel: AlertModel) {
+class AlertWindowManager(val context: Context,alertModel: AlertModel,alert: Alerts) {
 
     private val TAG = "AlertWindow"
 
@@ -43,7 +45,16 @@ class AlertWindowManager(val context: Context,alertModel: AlertModel) {
         mView = layoutInflater.inflate(R.layout.display_alert_dialog, null)
 
         mView.findViewById<TextView>(R.id.alertItem_title_textView).text = "Weather Alert"
-        mView.findViewById<TextView>(R.id.alertItem_time_textView).text = "No alert in "+alertModel.address
+        mView.findViewById<TextView>(R.id.alertItem_event_textView).text = alert.event +" in "+alertModel.address
+
+        if(alert.start != null) {
+            mView.findViewById<TextView>(R.id.alertItem_time_textView).visibility = View.VISIBLE
+            mView.findViewById<TextView>(R.id.alertItem_time_textView).text =
+                getTime("hh:mm a   E, MMM dd", alert.start!!) +
+                        "   To   " + getTime(
+                    "hh:mm a   E, MMM dd",
+                    alert.end!!)
+        }
 
         // set onClickListener on the remove button, which removes
         // the view from the window

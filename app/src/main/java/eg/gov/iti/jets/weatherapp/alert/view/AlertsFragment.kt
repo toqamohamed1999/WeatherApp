@@ -122,8 +122,8 @@ class AlertsFragment : Fragment(),DeleteAlertListener {
 
                     lifecycleScope.launch {
                         viewModel.deleteAlert(alertModel)
+                        WorkManager.getInstance().cancelAllWorkByTag("${alertModel!!.currentTime}")
                     }
-                    WorkManager.getInstance()?.cancelUniqueWork(id.toString())
 
                 })
             .setNegativeButton(android.R.string.cancel ,null)

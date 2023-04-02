@@ -43,8 +43,8 @@ class HomeFragment : Fragment(), LocationListener, MapListener {
     private lateinit var hourAdapter: HourAdapter
 
     private var weatherRoot: WeatherRoot? = null
-    private var latitude: String = "48.4734"
-    private var longitude: String = "7.9498"
+    private lateinit var latitude: String
+    private lateinit var longitude: String
     private lateinit var lang: String
     private var unit: String = "metric"
 
@@ -167,20 +167,20 @@ class HomeFragment : Fragment(), LocationListener, MapListener {
             latitude = mySharedPref.readLat()
             longitude = mySharedPref.readLon()
             //////////
-          // getWeather()
+           //getWeather()
         }
     }
 
     override fun setLocation(locationData: Pair<String, String>) {
         Log.i(TAG, "setLocation: ggg")
-//        latitude = locationData.first
-//        longitude = locationData.second
+        latitude = locationData.first
+        longitude = locationData.second
 
         mySharedPref.writeLat(latitude)
         mySharedPref.writeLon(longitude)
 
         ////////////
-       // getWeather()
+        //getWeather()
     }
 
     private fun getWeather() {
@@ -289,13 +289,14 @@ class HomeFragment : Fragment(), LocationListener, MapListener {
 
 
     private fun getWeatherAlerts(){
+        Log.i(TAG, "getWeatherAlerts: weather = $weatherRoot")
         if(weatherRoot?.alerts != null){
             Log.i(TAG, "getWeatherAlerts: event "+ (weatherRoot!!.alerts!![0].event))
             Log.i(TAG, "getWeatherAlerts: des "+ (weatherRoot!!.alerts!![0].description))
             Log.i(TAG, "getWeatherAlerts: start "+ (getTime("hh:mm a   E, MMM dd, yyyy",
-                weatherRoot!!.alerts!![0].start)))
+                weatherRoot!!.alerts!![0].start!!)))
             Log.i(TAG, "getWeatherAlerts: end "+ (getTime("hh:mm a   E, MMM dd, yyyy",
-                weatherRoot!!.alerts!![0].end)))
+                weatherRoot!!.alerts!![0].end!!)))
         }
     }
 

@@ -16,50 +16,64 @@ import eg.gov.iti.jets.mymvvm.network.RemoteSource
 import eg.gov.iti.jets.weatherapp.alert.viewModel.AlertDialogModelFactory
 import eg.gov.iti.jets.weatherapp.alert.viewModel.AlertDialogViewModel
 import eg.gov.iti.jets.weatherapp.model.AlertModel
+import eg.gov.iti.jets.weatherapp.model.Alerts
 import eg.gov.iti.jets.weatherapp.model.WeatherRoot
+import eg.gov.iti.jets.weatherapp.utils.getCurrentDate
+import eg.gov.iti.jets.weatherapp.utils.getCurrentDateAsDate
+import eg.gov.iti.jets.weatherapp.utils.getDate
 import eg.gov.iti.jets.weatherapp.utils.getTime
 import kotlinx.coroutines.flow.catch
 import java.util.*
 
 
-class AlertWorker (val context: Context, workerParams: WorkerParameters) :
+class AlertWorker(val context: Context, workerParams: WorkerParameters) :
     CoroutineWorker(context, workerParams) {
 
     private val TAG = "AlertWorker"
 
-    private var alertModel: AlertModel? = null
+    private var alertModel: AlertModel? = null  //from my database
+    private var alert: Alerts? =
+        Alerts(event = "No Alerts", description = "No Alerts")  //from Api call
 
     private var weatherRoot: WeatherRoot? = null
 
-    private val repo : RepoInterface = Repo.getInstance(RemoteSource(), LocaleSource(context))!!
+    private val repo: RepoInterface = Repo.getInstance(RemoteSource(), LocaleSource(context))!!
 
     override suspend fun doWork(): Result {
         return try {
-            Log.i(TAG, "doWork: alertttt inside")
 
-            val strAlertGson = inputData.getString("alertModel")
-            alertModel = Gson().fromJson(strAlertGson, AlertModel::class.java)
+            startAlertWork()
 
-            showAlert()
-            getWeatherData()
-            deleteAlert()
-
-            Result.success(workDataOf("output" to "myOutput"))
-        }catch (ex : Exception){
-            Log.i(TAG, "doWork: "+ex.message)
-            Result.failure(workDataOf("output" to ex.message))
+            Result.success()
+        } catch (ex: Exception) {
+            Log.i(TAG, "doWork: " + ex.message)
+            Result.failure()
         }
     }
 
-    private fun showAlert(){
+    private suspend fun startAlertWork(){
+        val strAlertGson = inputData.getString("alertModel")
+        alertModel = Gson().fromJson(strAlertGson, AlertModel::class.java)
+
+        if(getCurrentDateAsDate() <= getDate(alertModel?.endDate!!)) {
+
+            getWeatherData()
+            deleteAlert()
+        }else{
+            deleteAlert()
+        }
+    }
+
+    private fun showAlert() {
         startService()
     }
 
 
     private fun startService() {
 
-        val alertServiceIntent =  Intent(applicationContext, AlertService::class.java)
-        alertServiceIntent.putExtra("alertModel",alertModel)
+        val alertServiceIntent = Intent(applicationContext, AlertService::class.java)
+        alertServiceIntent.putExtra("alertModel", alertModel)
+        alertServiceIntent.putExtra("alertApi", alert)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
@@ -77,28 +91,42 @@ class AlertWorker (val context: Context, workerParams: WorkerParameters) :
     }
 
 
-    private suspend fun getWeatherData(){
+    private suspend fun getWeatherData() {
 
-        repo.getCurrentWeather(alertModel?.latitude ?: "",alertModel?.longitude ?:"","metric","eng")
+        repo.getCurrentWeather(
+            alertModel?.latitude ?: "",
+            alertModel?.longitude ?: "",
+            "metric",
+            "eng"
+        )
             .catch {
-                Log.i(TAG, "getWeatherData: "+it.message)
-            }.collect{
-                Log.i(TAG, "getWeatherData: $it")
+                Log.i(TAG, "getWeatherData: " + it.message)
+                showAlert()
+            }.collect {
                 weatherRoot = it
-                getWeatherAlerts()
+                getWeatherAlerts(it)
+                showAlert()
             }
     }
 
-    private fun getWeatherAlerts(){
-        Log.i(TAG, "getWeatherAlerts: alerts  "+weatherRoot!!.alerts)
-        if(weatherRoot?.alerts != null){
-
+    private fun getWeatherAlerts(weatherRoot: WeatherRoot) {
+        Log.i(TAG, "getWeatherAlerts: alerts  " + weatherRoot!!.alerts)
+        if (weatherRoot?.alerts != null) {
+            alert = weatherRoot?.alerts!![0]
         }
     }
 
-    private suspend fun deleteAlert(){
-        repo.deleteAlert(alertModel!!)
-        WorkManager.getInstance().cancelAllWorkByTag("${alertModel!!.id}")
+    private suspend fun deleteAlert() {
+        if(getCurrentDateAsDate().day >= getDate(alertModel?.endDate!!)!!.day) {
+            repo.deleteAlert(alertModel!!)
+            WorkManager.getInstance().cancelAllWorkByTag("${alertModel!!.currentTime}")
+        }
     }
 
+    private fun stopService(){
+        val alertServiceIntent = Intent(applicationContext, AlertService::class.java)
+        if(isStopped){
+            applicationContext.stopService(alertServiceIntent)
+        }
+    }
 }

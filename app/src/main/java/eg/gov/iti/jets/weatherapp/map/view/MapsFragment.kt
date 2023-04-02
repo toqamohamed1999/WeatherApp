@@ -20,6 +20,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.snackbar.Snackbar
+import eg.gov.iti.jets.foodplanner.NetworkChecker
 import eg.gov.iti.jets.mymvvm.datatbase.LocaleSource
 import eg.gov.iti.jets.mymvvm.model.Repo
 import eg.gov.iti.jets.mymvvm.network.RemoteSource
@@ -30,6 +31,7 @@ import eg.gov.iti.jets.weatherapp.home.view.MapListener
 import eg.gov.iti.jets.weatherapp.map.viewModel.MapFragmentViewModel
 import eg.gov.iti.jets.weatherapp.map.viewModel.MapViewModelFactory
 import eg.gov.iti.jets.weatherapp.model.Favourite
+import eg.gov.iti.jets.weatherapp.utils.showSnackBar
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -70,7 +72,7 @@ class MapsFragment : DialogFragment() {
 
         private var callerFragment = "fav"
 
-        private var mapListener : MapListener? = null
+        private var mapListener: MapListener? = null
 
         fun newInstance(callerFragment1: String, mapListener1: MapListener?): MapsFragment {
             val args = Bundle()
@@ -108,7 +110,8 @@ class MapsFragment : DialogFragment() {
                 checkCallerFragmentEvent()
                 dismiss()
             } else {
-                Toast.makeText(requireContext(), "Select city or pin from map", Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), "Select city or pin from map", Toast.LENGTH_LONG)
+                    .show()
             }
         }
     }
@@ -118,7 +121,7 @@ class MapsFragment : DialogFragment() {
             "fav" -> {
                 insertFav(favourite!!)
             }
-            "initialSetting" ,"setting"->{
+            "initialSetting", "setting" -> {
                 mySharedPref.writeLat(lat.toString())
                 mySharedPref.writeLon(lon.toString())
                 mapListener?.mapLocationSelected()
@@ -138,31 +141,32 @@ class MapsFragment : DialogFragment() {
         googleMap.setOnMapClickListener {
 
             val marker = MarkerOptions().apply {
-                position(it)
+                    position(it)
 
-                lat = it.latitude
-                lon = it.longitude
-                getAddress()
-                title(myAddress)
+                    lat = it.latitude
+                    lon = it.longitude
+                    getAddress()
+                    title(myAddress)
 
-                googleMap.clear()
-                googleMap.animateCamera(
-                    CameraUpdateFactory.newLatLngZoom(
-                        it, 10f
+
+                    googleMap.clear()
+                    googleMap.animateCamera(
+                        CameraUpdateFactory.newLatLngZoom(
+                            it, 10f
+                        )
                     )
-                )
-            }
-            googleMap.addMarker(marker)
+                }
+                googleMap.addMarker(marker)
 
-            Log.i(TAG, "handleOnMapClickListener: $countryCode")
-            favourite = Favourite(
-                latitude = lat,
-                longitude = lon,
-                address = myAddress,
-                countryCode = countryCode
-            )
-            showMySnackBar()
-        }
+                Log.i(TAG, "handleOnMapClickListener: $countryCode")
+                favourite = Favourite(
+                    latitude = lat,
+                    longitude = lon,
+                    address = myAddress,
+                    countryCode = countryCode
+                )
+                showMySnackBar()
+            }
     }
 
     private fun handleSearchView(googleMap: GoogleMap) {
@@ -222,7 +226,7 @@ class MapsFragment : DialogFragment() {
         Toast.makeText(requireContext(), "Inserted to favourites", Toast.LENGTH_LONG).show()
     }
 
-    private fun showMySnackBar(){
+    private fun showMySnackBar() {
         val snackbar = Snackbar
             .make(binding.root, myAddress, 4000)
             .setAction("Save") {
@@ -233,7 +237,6 @@ class MapsFragment : DialogFragment() {
             }
         snackbar.show()
     }
-
 
 
 }

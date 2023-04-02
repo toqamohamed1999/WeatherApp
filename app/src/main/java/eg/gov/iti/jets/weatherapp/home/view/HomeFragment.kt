@@ -1,13 +1,11 @@
 package eg.gov.iti.jets.weatherapp.home.view
 
-import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -94,6 +92,7 @@ class HomeFragment : Fragment(), LocationListener, MapListener {
         getSharedInfo()
         handleLocationActions()
         observeWeatherData()
+        setEnableLocationClick()
     }
 
     private fun setUpDayRecyclerView() {
@@ -172,6 +171,8 @@ class HomeFragment : Fragment(), LocationListener, MapListener {
     }
 
     override fun setLocation(locationData: Pair<String, String>) {
+        binding.enableLocationLayout.enableLocation.visibility = View.GONE
+
         Log.i(TAG, "setLocation: ggg")
         latitude = locationData.first
         longitude = locationData.second
@@ -180,7 +181,7 @@ class HomeFragment : Fragment(), LocationListener, MapListener {
         mySharedPref.writeLon(longitude)
 
         ////////////
-        //getWeather()
+        getWeather()
     }
 
     private fun getWeather() {
@@ -194,7 +195,7 @@ class HomeFragment : Fragment(), LocationListener, MapListener {
 
 
     private fun showSnackBar() {
-        showSnackBar(requireActivity(), "No network Connection!", R.drawable.baseline_wifi_off_24)
+        showSnackBar(requireActivity(), "No internet Connection!", R.drawable.baseline_wifi_off_24)
     }
 
 
@@ -207,6 +208,7 @@ class HomeFragment : Fragment(), LocationListener, MapListener {
         if (requestCode == LOCATION_PERMISSION_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 myLocation?.getLastLocation()
+                binding.enableLocationLayout.enableLocation.visibility = View.GONE
             }
         }
     }
@@ -297,6 +299,16 @@ class HomeFragment : Fragment(), LocationListener, MapListener {
                 weatherRoot!!.alerts!![0].start!!)))
             Log.i(TAG, "getWeatherAlerts: end "+ (getTime("hh:mm a   E, MMM dd, yyyy",
                 weatherRoot!!.alerts!![0].end!!)))
+        }
+    }
+
+    override fun locationNotEnabled() {
+        binding.enableLocationLayout.enableLocation.visibility = View.VISIBLE
+    }
+
+    private fun setEnableLocationClick(){
+        binding.enableLocationLayout.locationEnableTextView.setOnClickListener {
+            myLocation.getLastLocation()
         }
     }
 

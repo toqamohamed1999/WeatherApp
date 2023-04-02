@@ -119,6 +119,7 @@ class MyLocation(
             }
         } else {
             requestPermission()
+            locationListener.locationNotEnabled()
         }
 
     }

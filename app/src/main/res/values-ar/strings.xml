@@ -67,5 +67,8 @@
     <string name="no_favourite_locations">لا يوجد مواقع مفضلة</string>
     <string name="duration">المدة : </string>
 
+    <string name="location_is_not_enabled">الوصول الي الموقع غير مفعل</string>
+
+
 
 </resources>

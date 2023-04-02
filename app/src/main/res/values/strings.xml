@@ -62,7 +62,7 @@
     <string name="no_favourite_locations">No Favourite Locations</string>
 
     <string name="duration">Duration : </string>
-
+    <string name="location_is_not_enabled">Location is not enabled</string>
 
 
 </resources>

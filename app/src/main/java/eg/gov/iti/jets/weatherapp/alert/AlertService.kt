@@ -11,6 +11,7 @@ import android.support.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import eg.gov.iti.jets.weatherapp.MainActivity
 import eg.gov.iti.jets.weatherapp.MySharedPref
+import eg.gov.iti.jets.weatherapp.NOTIFICATION_CHANNEL_ID
 import eg.gov.iti.jets.weatherapp.R
 import eg.gov.iti.jets.weatherapp.model.AlertModel
 import eg.gov.iti.jets.weatherapp.model.Alerts
@@ -42,27 +43,21 @@ class AlertService : Service() {
             alertModel = intent.getSerializableExtra("alertModel") as AlertModel
         }
 
-        // create the custom or default notification
-        // based on the android version
         if(mySharedPref.getSetting().notification == eg.gov.iti.jets.weatherapp.model.Notification.Enable) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) createNotification()
             else startForeground(1, Notification())
         }
 
-        // create an instance of Window class - and display the content on screen
         //display alert dialog
         if(alertModel!!.alertEnabled) {
             val window = AlertWindowManager(this, alertModel!!, alert!!)
             window.open()
         }
 
-        //stopSelf()
-
         return START_NOT_STICKY
     }
 
 
-    val NOTIFICATION_CHANNEL_ID = "210"
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createNotification() {
@@ -104,7 +99,11 @@ class AlertService : Service() {
         startForeground(2, notification)
     }
 
+
+
     override fun onDestroy() {
         super.onDestroy()
     }
+
+
 }

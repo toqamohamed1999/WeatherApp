@@ -1,29 +1,28 @@
 package eg.gov.iti.jets.weatherapp.alert
 
+
 import android.content.Context
 import android.content.Intent
+
 import android.os.Build
 import android.provider.Settings
 import android.util.Log
-import androidx.lifecycle.ViewModelProvider
+
 import androidx.work.*
 import com.google.gson.Gson
-import eg.gov.iti.jets.mymvvm.Utilites.ApiState
 import eg.gov.iti.jets.mymvvm.datatbase.LocaleSource
 import eg.gov.iti.jets.mymvvm.model.Repo
 import eg.gov.iti.jets.mymvvm.model.RepoInterface
 import eg.gov.iti.jets.mymvvm.network.RemoteSource
-import eg.gov.iti.jets.weatherapp.alert.viewModel.AlertDialogModelFactory
-import eg.gov.iti.jets.weatherapp.alert.viewModel.AlertDialogViewModel
+import eg.gov.iti.jets.weatherapp.MySharedPref
 import eg.gov.iti.jets.weatherapp.model.AlertModel
 import eg.gov.iti.jets.weatherapp.model.Alerts
 import eg.gov.iti.jets.weatherapp.model.WeatherRoot
-import eg.gov.iti.jets.weatherapp.utils.getCurrentDate
 import eg.gov.iti.jets.weatherapp.utils.getCurrentDateAsDate
 import eg.gov.iti.jets.weatherapp.utils.getDate
-import eg.gov.iti.jets.weatherapp.utils.getTime
 import kotlinx.coroutines.flow.catch
 import java.util.*
+
 
 
 class AlertWorker(val context: Context, workerParams: WorkerParameters) :
@@ -39,6 +38,7 @@ class AlertWorker(val context: Context, workerParams: WorkerParameters) :
 
     private val repo: RepoInterface = Repo.getInstance(RemoteSource(), LocaleSource(context))!!
 
+    @androidx.annotation.RequiresApi(Build.VERSION_CODES.O)
     override suspend fun doWork(): Result {
         return try {
 
@@ -51,19 +51,21 @@ class AlertWorker(val context: Context, workerParams: WorkerParameters) :
         }
     }
 
-    private suspend fun startAlertWork(){
+    @androidx.annotation.RequiresApi(Build.VERSION_CODES.O)
+    private suspend fun startAlertWork() {
         val strAlertGson = inputData.getString("alertModel")
         alertModel = Gson().fromJson(strAlertGson, AlertModel::class.java)
 
-        if(getCurrentDateAsDate() <= getDate(alertModel?.endDate!!)) {
+        if (getCurrentDateAsDate() <= getDate(alertModel?.endDate!!)) {
 
             getWeatherData()
             deleteAlert()
-        }else{
+        } else {
             deleteAlert()
         }
     }
 
+    @androidx.annotation.RequiresApi(Build.VERSION_CODES.O)
     private fun showAlert() {
         startService()
     }
@@ -91,6 +93,7 @@ class AlertWorker(val context: Context, workerParams: WorkerParameters) :
     }
 
 
+    @androidx.annotation.RequiresApi(Build.VERSION_CODES.O)
     private suspend fun getWeatherData() {
 
         repo.getCurrentWeather(
@@ -117,16 +120,10 @@ class AlertWorker(val context: Context, workerParams: WorkerParameters) :
     }
 
     private suspend fun deleteAlert() {
-        if(getCurrentDateAsDate().day >= getDate(alertModel?.endDate!!)!!.day) {
+        if (getCurrentDateAsDate().day >= getDate(alertModel?.endDate!!)!!.day) {
             repo.deleteAlert(alertModel!!)
             WorkManager.getInstance().cancelAllWorkByTag("${alertModel!!.currentTime}")
         }
     }
-
-    private fun stopService(){
-        val alertServiceIntent = Intent(applicationContext, AlertService::class.java)
-        if(isStopped){
-            applicationContext.stopService(alertServiceIntent)
-        }
-    }
+    
 }

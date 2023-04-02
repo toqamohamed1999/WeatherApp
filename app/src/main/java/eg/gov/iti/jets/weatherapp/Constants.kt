@@ -11,6 +11,8 @@ const val LOCATION_PERMISSION_CODE = 155
 
 const val OVERLAY_PERMISSION_CODE = 101
 
+const val NOTIFICATION_CHANNEL_ID = "304"
+
 
 const val C_UNIT = "º C"
 const val K_UNIT = "K"

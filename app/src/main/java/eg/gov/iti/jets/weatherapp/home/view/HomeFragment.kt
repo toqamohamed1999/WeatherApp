@@ -181,7 +181,7 @@ class HomeFragment : Fragment(), LocationListener, MapListener {
         mySharedPref.writeLon(longitude)
 
         ////////////
-        getWeather()
+        //getWeather()
     }
 
     private fun getWeather() {

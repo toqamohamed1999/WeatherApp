@@ -47,7 +47,7 @@
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
             android:layout_gravity="center"
-            app:lottie_rawRes="@raw/no_fav1" />
+            app:lottie_rawRes="@raw/no_fav" />
 
         <TextView
             android:id="@+id/noFav_title_textview"

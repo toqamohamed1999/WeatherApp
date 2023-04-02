@@ -83,14 +83,14 @@ class AlertService : Service() {
         val notificationBuilder: NotificationCompat.Builder =
             NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
 
-        val alarmSound: Uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
 
         val notification: Notification = notificationBuilder.setOngoing(true)
             .setContentTitle("Weather Alert")
             .setContentText(alert?.event+ " in "+alertModel?.address)
             .setSmallIcon(R.drawable.logo)
-            .setSound(alarmSound)
-            .setVibrate(longArrayOf(1000, 1000, 1000, 1000, 1000))
+            .setSound(Uri.parse("android.resource://"
+                    + applicationContext.packageName + "/" + R.raw.weather_alert_noti))
+            .setVibrate(longArrayOf(0, 100, 200, 300))
             .setPriority(NotificationManager.IMPORTANCE_MIN)
             .setCategory(Notification.CATEGORY_SERVICE)
             .setContentIntent(pendingIntent)

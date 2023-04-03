@@ -28,4 +28,6 @@ interface LocaleSourceInterface {
     suspend fun insertFavourite(favorite: Favourite)
 
     suspend fun deleteFavourite(favorite: Favourite)
+
+    suspend fun deleteAllWeather()
 }

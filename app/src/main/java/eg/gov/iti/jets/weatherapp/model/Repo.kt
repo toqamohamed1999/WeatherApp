@@ -55,6 +55,10 @@ class Repo private constructor(
         localeSource.deleteWeather(weatherRoot)
     }
 
+    override suspend fun deleteAllWeather() {
+        localeSource.deleteAllWeather()
+    }
+
     override fun getStoredAlerts(): Flow<List<AlertModel>> {
         return localeSource.getStoredAlerts()
     }

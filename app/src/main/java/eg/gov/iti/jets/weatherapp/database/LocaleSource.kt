@@ -39,6 +39,9 @@ class LocaleSource(context: Context) : LocaleSourceInterface {
         weatherDao.deleteWeather(weatherRoot)
     }
 
+    override suspend fun deleteAllWeather() {
+        weatherDao.deleteAllWeather()
+    }
 
     override fun getStoredAlerts(): Flow<List<AlertModel>> {
         return alertDao.getStoredAlerts()

@@ -30,7 +30,6 @@ class FavAdapter(var favListener: FavListener) :
         holder.favItemBinding.favItemLocationTextView.text = favItem.address
 
         Picasso.get().load(getFlagIcon(favItem.countryCode!!))
-            .placeholder(R.drawable.ic_launcher_foreground)
             .resize(200, 200)
             .into(holder.favItemBinding.favItemFlagImageView)
 

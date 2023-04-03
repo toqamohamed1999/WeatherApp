@@ -15,4 +15,7 @@ interface WeatherDao {
 
     @Delete
     suspend fun deleteWeather(weatherRoot: WeatherRoot): Int
+
+    @Query("DELETE FROM weatherRoot")
+    suspend fun deleteAllWeather()
 }

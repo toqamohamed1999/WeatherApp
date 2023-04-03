@@ -36,6 +36,7 @@ class HomeViewModel(private val repoInterface: RepoInterface) : ViewModel() {
                     weatherMutableStateFlow.value = ApiState.Failure(it)
                 }.collect{
                     weatherMutableStateFlow.value = ApiState.Success(it)
+                    deleteAllWeather()
                     insertWeather(it)
                 }
         }
@@ -56,6 +57,12 @@ class HomeViewModel(private val repoInterface: RepoInterface) : ViewModel() {
      fun insertWeather(weatherRoot: WeatherRoot){
         viewModelScope.launch(Dispatchers.IO) {
             repoInterface.insertWeather(weatherRoot)
+        }
+    }
+
+    fun deleteAllWeather(){
+        viewModelScope.launch(Dispatchers.IO) {
+            repoInterface.deleteAllWeather()
         }
     }
 }

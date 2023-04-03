@@ -65,14 +65,16 @@ class LocaleSourceTest {
     @Test
     fun insertAlert_ReturnAlertInserted() = runBlockingTest {
         //When
+        localDataSource.insertAlert(alertList[0])
         localDataSource.insertAlert(alertList[1])
         localDataSource.insertAlert(alertList[2])
-        localDataSource.insertAlert(alertList[3])
 
         val resultAlertList = localDataSource.getStoredAlerts().first()
 
         //Then
         MatcherAssert.assertThat(resultAlertList.size, CoreMatchers.`is`(3))
+        MatcherAssert.assertThat(resultAlertList[0].alertEnabled, CoreMatchers.`is`(false))
+        MatcherAssert.assertThat(resultAlertList[2].currentTime, CoreMatchers.`is`("02:00"))
     }
 
     @Test
@@ -100,7 +102,7 @@ class LocaleSourceTest {
         println("resultFavList = $resultFavList")
 
         //Then
-        MatcherAssert.assertThat(resultFavList.size, CoreMatchers.`is`(1))
+        MatcherAssert.assertThat(resultFavList[0].id, CoreMatchers.`is`(1))
     }
 
     @Test

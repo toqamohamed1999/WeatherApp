@@ -180,7 +180,7 @@ class HomeFragment : Fragment(), LocationListener, MapListener {
         mySharedPref.writeLon(longitude)
 
         ////////////
-        getWeather()
+       // getWeather()
     }
 
     private fun getWeather() {
@@ -313,7 +313,6 @@ class HomeFragment : Fragment(), LocationListener, MapListener {
     override fun locationNotEnabled() {
         binding.enableLocationLayout.enableLocation.visibility = View.VISIBLE
     }
-
 
     private fun setEnableLocationClick() {
         binding.enableLocationLayout.locationEnableTextView.setOnClickListener {

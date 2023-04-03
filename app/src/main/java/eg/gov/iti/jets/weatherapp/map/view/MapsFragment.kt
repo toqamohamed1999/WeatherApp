@@ -20,6 +20,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.snackbar.Snackbar
+import eg.gov.iti.jets.foodplanner.NetworkChecker
 import eg.gov.iti.jets.mymvvm.datatbase.LocaleSource
 import eg.gov.iti.jets.mymvvm.model.Repo
 import eg.gov.iti.jets.mymvvm.network.RemoteSource
@@ -138,7 +139,9 @@ class MapsFragment : DialogFragment() {
     private fun handleOnMapClickListener(googleMap: GoogleMap) {
         googleMap.setOnMapClickListener {
 
-            val marker = MarkerOptions().apply {
+            if (NetworkChecker.isNetworkAvailable(requireContext())) {
+
+                val marker = MarkerOptions().apply {
                     position(it)
 
                     lat = it.latitude
@@ -156,7 +159,6 @@ class MapsFragment : DialogFragment() {
                 }
                 googleMap.addMarker(marker)
 
-                Log.i(TAG, "handleOnMapClickListener: $countryCode")
                 favourite = Favourite(
                     latitude = lat,
                     longitude = lon,
@@ -164,7 +166,12 @@ class MapsFragment : DialogFragment() {
                     countryCode = countryCode
                 )
                 showMySnackBar()
+            }else{
+                Snackbar
+                    .make(binding.root, "No internet connection!", 4000)
+                    .show()
             }
+        }
     }
 
     private fun handleSearchView(googleMap: GoogleMap) {
@@ -212,6 +219,7 @@ class MapsFragment : DialogFragment() {
     }
 
     private fun getAddress() {
+        Log.i(TAG, "getAddress: $lat  $lon")
         val addressList = geocoder.getFromLocation(lat, lon, 1)!!
         myAddress = addressList[0].getAddressLine(0)
         countryCode = addressList[0].countryCode
@@ -225,7 +233,7 @@ class MapsFragment : DialogFragment() {
     }
 
     private fun showMySnackBar() {
-        val snackbar = Snackbar
+        val snackBar = Snackbar
             .make(binding.root, myAddress, 4000)
             .setAction("Save") {
                 if (favourite != null) {
@@ -233,7 +241,7 @@ class MapsFragment : DialogFragment() {
                     dismiss()
                 }
             }
-        snackbar.show()
+        snackBar.show()
     }
 
 

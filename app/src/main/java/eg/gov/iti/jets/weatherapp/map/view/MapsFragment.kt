@@ -124,6 +124,7 @@ class MapsFragment : DialogFragment() {
                 mySharedPref.writeLat(lat.toString())
                 mySharedPref.writeLon(lon.toString())
                 mapListener?.mapLocationSelected()
+                Toast.makeText(requireContext(), "Apply map location", Toast.LENGTH_LONG).show()
             }
         }
     }
@@ -194,6 +195,7 @@ class MapsFragment : DialogFragment() {
                         address = myAddress,
                         countryCode = countryCode
                     )
+                    showMySnackBar()
                 }else{
                     Snackbar
                         .make(binding.root, "No internet connection!", 4000)
@@ -237,12 +239,12 @@ class MapsFragment : DialogFragment() {
         lifecycleScope.launch {
             viewModel.insertFavourite(favourite)
         }
-        Toast.makeText(requireContext(), "Inserted to favourites", Toast.LENGTH_LONG).show()
+        Toast.makeText(requireContext(), "saved to favourites", Toast.LENGTH_LONG).show()
     }
 
     private fun showMySnackBar() {
         val snackBar = Snackbar
-            .make(binding.root, myAddress, 4000)
+            .make(binding.root, myAddress, 5000)
             .setAction("Save") {
                 if (favourite != null) {
                     checkCallerFragmentEvent()

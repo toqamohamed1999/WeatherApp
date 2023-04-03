@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import eg.gov.iti.jets.weatherapp.utils.MySharedPref
 import eg.gov.iti.jets.weatherapp.R
@@ -75,6 +76,7 @@ class SettingFragment : Fragment() {
                 when (optionId) {
                     R.id.gps_radio_button -> {
                         location = Location.GPS
+                        Toast.makeText(requireContext(), "Apply your location", Toast.LENGTH_LONG).show()
                     }
                     R.id.map_radio_button -> {
                         showAlertDialog(requireContext())
@@ -143,9 +145,11 @@ class SettingFragment : Fragment() {
                 when (optionId) {
                     R.id.english_radio_button -> {
                         language = Language.English
+                        Toast.makeText(requireContext(), "Apply English language", Toast.LENGTH_LONG).show()
                     }
                     R.id.arabic_radio_button -> {
                         language = Language.Arabic
+                        Toast.makeText(requireContext(), "تنفيذ اللغة العربية", Toast.LENGTH_LONG).show()
                     }
                 }
                 mySharedPref.writeLanguage(language)

@@ -1,7 +1,9 @@
 package eg.gov.iti.jets.mymvvm.model
 
 import eg.gov.iti.jets.mymvvm.datatbase.LocaleSource
+import eg.gov.iti.jets.mymvvm.datatbase.LocaleSourceInterface
 import eg.gov.iti.jets.mymvvm.network.RemoteSource
+import eg.gov.iti.jets.mymvvm.network.RemoteSourceInterface
 import eg.gov.iti.jets.weatherapp.model.AlertModel
 import eg.gov.iti.jets.weatherapp.model.Favourite
 import eg.gov.iti.jets.weatherapp.model.WeatherRoot
@@ -9,8 +11,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
 class Repo private constructor(
-    private var remoteSource: RemoteSource,
-    private var localeSource: LocaleSource
+    private var remoteSource: RemoteSourceInterface,
+    private var localeSource: LocaleSourceInterface
 ) : RepoInterface {
 
     private val TAG = "Repo"
@@ -19,8 +21,8 @@ class Repo private constructor(
         private var instance: Repo? = null
 
         fun getInstance(
-            remoteSource: RemoteSource,
-            localeSource: LocaleSource
+            remoteSource: RemoteSourceInterface,
+            localeSource: LocaleSourceInterface
         ): Repo? {
             return instance ?: synchronized(this) {
                 instance = Repo(remoteSource, localeSource)

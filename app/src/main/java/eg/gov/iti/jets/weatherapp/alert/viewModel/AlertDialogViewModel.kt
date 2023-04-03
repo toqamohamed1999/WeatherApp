@@ -20,6 +20,13 @@ class AlertDialogViewModel(private val repoInterface: RepoInterface) : ViewModel
     private var alertMutableStateFlow = MutableStateFlow<Long>(0)
     val alertStateFlow = alertMutableStateFlow.asStateFlow()
 
+    private var mutableStateFlow = MutableStateFlow<RoomState>(RoomState.Loading)
+    val stateFlow = mutableStateFlow.asStateFlow()
+
+    init {
+        getStoredAlerts()
+    }
+
      fun insertAlert(alert: AlertModel) {
         viewModelScope.launch(Dispatchers.IO) {
             //return inserted alert ID
@@ -30,6 +37,18 @@ class AlertDialogViewModel(private val repoInterface: RepoInterface) : ViewModel
     fun deleteAlert(alert: AlertModel) {
         viewModelScope.launch(Dispatchers.IO) {
             repoInterface.deleteAlert(alert)
+        }
+    }
+
+    fun getStoredAlerts(){
+
+        viewModelScope.launch(Dispatchers.IO) {
+            repoInterface.getStoredAlerts()
+                .catch {
+                    mutableStateFlow.value = RoomState.Failure(it)
+                }.collect{
+                    mutableStateFlow.value = RoomState.SuccessAlert(it)
+                }
         }
     }
 

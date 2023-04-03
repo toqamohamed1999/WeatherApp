@@ -25,7 +25,7 @@ class FavouriteFragmentViewModel (private val repoInterface: RepoInterface) : Vi
         getStoredFavourites()
     }
 
-    private fun getStoredFavourites(){
+     fun getStoredFavourites(){
 
         viewModelScope.launch(Dispatchers.IO) {
             repoInterface.getStoredFavourites()

@@ -9,16 +9,8 @@ const val MAP_KEY ="AIzaSyAI33cAhSYPAd_Z-DHoRtO8a4x4lIFMPeU"
 
 const val LOCATION_PERMISSION_CODE = 155
 
-const val OVERLAY_PERMISSION_CODE = 101
-
 const val NOTIFICATION_CHANNEL_ID = "304"
 
-
-const val C_UNIT = "º C"
-const val K_UNIT = "K"
-const val F_UNIT = "F"
-const val MILE_UNIT = "mph"
-const val METER_UNIT = "m/s"
 
 
 

@@ -7,8 +7,18 @@ import kotlinx.coroutines.flow.flowOf
 
 class FakeRepo : RepoInterface {
 
-    private var weatherData: MutableList<WeatherRoot> = mutableListOf()
+     var favData: MutableList<Favourite> = mutableListOf()
+     var alertData: MutableList<AlertModel> = mutableListOf()
 
+    var weatherRoot = WeatherRoot(
+         lat = 0.0,
+         lon = 0.0,
+         timezone = "",
+         hourly = emptyList(),
+         daily = emptyList(),
+         alerts = emptyList(),
+         timezoneOffset = ""
+     )
 
     override suspend fun getCurrentWeather(
         lat: String,
@@ -16,35 +26,36 @@ class FakeRepo : RepoInterface {
         unit: String,
         lang: String
     ): Flow<WeatherRoot> {
-        return flowOf(weatherData[0])
+        return flowOf(weatherRoot)
     }
 
     override fun getStoredWeather(): Flow<WeatherRoot> {
-        return flowOf(weatherData[0])
+        return flowOf(weatherRoot)
     }
 
     override suspend fun insertWeather(weatherRoot: WeatherRoot) {
-        weatherData.add(weatherRoot)
+        this.weatherRoot = weatherRoot
     }
 
     override suspend fun deleteWeather(weatherRoot: WeatherRoot) {
-        weatherData.remove(weatherRoot)
+        TODO("Not yet implemented")
     }
 
     override fun getStoredAlerts(): Flow<List<AlertModel>> {
-        TODO("Not yet implemented")
+        return flowOf(alertData)
     }
 
     override suspend fun insertAlert(alert: AlertModel) : Long {
-        TODO("Not yet implemented")
+        alertData.add(alert)
+        return 0
     }
 
     override suspend fun deleteAlert(alert: AlertModel) {
-        TODO("Not yet implemented")
+        alertData.remove(alert)
     }
 
     override fun getStoredFavourites(): Flow<List<Favourite>> {
-        TODO("Not yet implemented")
+        return flowOf(favData)
     }
 
     override suspend fun insertFavourite(favorite: Favourite) {
@@ -52,6 +63,6 @@ class FakeRepo : RepoInterface {
     }
 
     override suspend fun deleteFavourite(favorite: Favourite) {
-        TODO("Not yet implemented")
+        favData.remove(favorite)
     }
 }

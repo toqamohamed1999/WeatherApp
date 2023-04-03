@@ -17,5 +17,4 @@ sealed class RoomState : WeatherState {
 
     class SuccessFavourite(val favouriteList : List<Favourite>) : RoomState()
 
-
 }

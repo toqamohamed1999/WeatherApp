@@ -17,7 +17,6 @@ var Temp_Unit = " º C"
 var WindSpeed_Unit = " m/s"
 
 
-
 //"hh:mm a   E, MMM dd, yyyy"
 fun getTime(pattern:String,date:Long): String =
     SimpleDateFormat(pattern, Locale.getDefault()).format(Date(date*1000))
@@ -30,16 +29,6 @@ fun getSplitString(str : String): String =
     if(!str.contains(".")) str
     else str.substring(0,str.indexOf("."))
 
-
-//fun convertFromKelvinToCelsius(tempKelvin: Double): Double {
-//    return (tempKelvin - 273.15f).roundToInt().toDouble()
-//}
-//
-//fun convertFromKelvinToFahrenheit(tempKelvin: Double): Double {
-//    return (1.8 * (tempKelvin - 273) + 32).roundToInt().toDouble()
-//
-//}
-
 fun convertFromCelsiusToKelvin(tempCelsius: Double): Double {
     return (tempCelsius + 273.15f).roundToInt().toDouble()
 }
@@ -51,18 +40,6 @@ fun convertFromCelsiusToFahrenheit(tempCelsius: Double): Double {
 fun convertMeterToMile(metersPerSec: Double): Double {
     return (metersPerSec *  2.237).roundToInt().toDouble()
 }
-
-//fun convertFromFahrenheitToCelsius(tempF: Double): Double {
-//    return ((tempF - 32) * (5/9)).roundToInt().toDouble()
-//}
-//
-//fun convertFromFahrenheitToKelvin(tempF: Double): Double {
-//    return (((tempF - 32) * (5/9)) + 273.15f).roundToInt().toDouble()
-//}
-//
-//fun convertMileToMeter(milesPerSec: Double): Double {
-//    return (milesPerSec /  2.237).roundToInt().toDouble()
-//}
 
 fun getTemp(temp: String,mySharedPref: MySharedPref) : String {
 

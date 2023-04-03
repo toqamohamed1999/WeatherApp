@@ -23,6 +23,10 @@ class HomeViewModel(private val repoInterface: RepoInterface) : ViewModel() {
     private var weatherMutableStateFlow = MutableStateFlow<WeatherState>(ApiState.Loading)
     val weatherStateFlow = weatherMutableStateFlow.asStateFlow()
 
+    init {
+        getCurrentWeather("","","","")
+    }
+
 
     fun getCurrentWeather(lat : String,lon:String,unit : String ,lang:String){
 
@@ -49,7 +53,7 @@ class HomeViewModel(private val repoInterface: RepoInterface) : ViewModel() {
         }
     }
 
-    private fun insertWeather(weatherRoot: WeatherRoot){
+     fun insertWeather(weatherRoot: WeatherRoot){
         viewModelScope.launch(Dispatchers.IO) {
             repoInterface.insertWeather(weatherRoot)
         }

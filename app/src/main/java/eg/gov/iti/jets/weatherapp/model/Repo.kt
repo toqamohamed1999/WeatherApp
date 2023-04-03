@@ -1,16 +1,7 @@
 package eg.gov.iti.jets.mymvvm.model
 
-import android.app.Activity
-import android.content.Context
-import android.util.Log
-import androidx.lifecycle.LiveData
-import eg.gov.iti.jets.foodplanner.NetworkChecker
 import eg.gov.iti.jets.mymvvm.datatbase.LocaleSource
 import eg.gov.iti.jets.mymvvm.network.RemoteSource
-import eg.gov.iti.jets.mymvvm.network.RemoteSourceInterface
-import eg.gov.iti.jets.weatherapp.MainActivity
-import eg.gov.iti.jets.weatherapp.MySharedPref
-import eg.gov.iti.jets.weatherapp.location.MyLocation
 import eg.gov.iti.jets.weatherapp.model.AlertModel
 import eg.gov.iti.jets.weatherapp.model.Favourite
 import eg.gov.iti.jets.weatherapp.model.WeatherRoot

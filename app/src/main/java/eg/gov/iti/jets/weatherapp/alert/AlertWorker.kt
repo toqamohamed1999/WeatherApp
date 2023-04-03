@@ -10,17 +10,19 @@ import android.util.Log
 
 import androidx.work.*
 import com.google.gson.Gson
+import eg.gov.iti.jets.foodplanner.NetworkChecker
 import eg.gov.iti.jets.mymvvm.datatbase.LocaleSource
 import eg.gov.iti.jets.mymvvm.model.Repo
 import eg.gov.iti.jets.mymvvm.model.RepoInterface
 import eg.gov.iti.jets.mymvvm.network.RemoteSource
-import eg.gov.iti.jets.weatherapp.MySharedPref
 import eg.gov.iti.jets.weatherapp.model.AlertModel
 import eg.gov.iti.jets.weatherapp.model.Alerts
 import eg.gov.iti.jets.weatherapp.model.WeatherRoot
 import eg.gov.iti.jets.weatherapp.utils.getCurrentDateAsDate
 import eg.gov.iti.jets.weatherapp.utils.getDate
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onEmpty
 import java.util.*
 
 
@@ -96,20 +98,24 @@ class AlertWorker(val context: Context, workerParams: WorkerParameters) :
     @androidx.annotation.RequiresApi(Build.VERSION_CODES.O)
     private suspend fun getWeatherData() {
 
-        repo.getCurrentWeather(
-            alertModel?.latitude ?: "",
-            alertModel?.longitude ?: "",
-            "metric",
-            "eng"
-        )
-            .catch {
-                Log.i(TAG, "getWeatherData: " + it.message)
-                showAlert()
-            }.collect {
-                weatherRoot = it
-                getWeatherAlerts(it)
-                showAlert()
-            }
+        if(NetworkChecker.isNetworkAvailable(applicationContext)) {
+            repo.getCurrentWeather(
+                alertModel?.latitude ?: "",
+                alertModel?.longitude ?: "",
+                "metric",
+                "eng"
+            )
+                .catch {
+                    Log.i(TAG, "getWeatherData: " + it.message)
+                    showAlert()
+                }.collect {
+                    weatherRoot = it
+                    getWeatherAlerts(it)
+                    showAlert()
+                }
+        }else{
+            showAlert()
+        }
     }
 
     private fun getWeatherAlerts(weatherRoot: WeatherRoot) {

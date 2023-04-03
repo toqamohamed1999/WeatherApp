@@ -3,14 +3,13 @@ package eg.gov.iti.jets.weatherapp.alert
 import android.app.*
 import android.content.Context
 import android.content.Intent
-import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
 import android.os.IBinder
 import android.support.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import eg.gov.iti.jets.weatherapp.MainActivity
-import eg.gov.iti.jets.weatherapp.MySharedPref
+import eg.gov.iti.jets.weatherapp.utils.MySharedPref
 import eg.gov.iti.jets.weatherapp.NOTIFICATION_CHANNEL_ID
 import eg.gov.iti.jets.weatherapp.R
 import eg.gov.iti.jets.weatherapp.model.AlertModel

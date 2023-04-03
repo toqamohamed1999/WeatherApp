@@ -5,17 +5,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.squareup.picasso.Picasso
-import eg.gov.iti.jets.mymvvm.DayDiffUtil
-import eg.gov.iti.jets.weatherapp.MySharedPref
 import eg.gov.iti.jets.weatherapp.R
 import eg.gov.iti.jets.weatherapp.databinding.AlertItemBinding
-import eg.gov.iti.jets.weatherapp.databinding.DayItemBinding
-import eg.gov.iti.jets.weatherapp.databinding.FavItemBinding
-import eg.gov.iti.jets.weatherapp.home.view.DayAdapter
 import eg.gov.iti.jets.weatherapp.model.AlertModel
-import eg.gov.iti.jets.weatherapp.model.Daily
-import eg.gov.iti.jets.weatherapp.model.Favourite
 import eg.gov.iti.jets.weatherapp.utils.*
 
 class AlertAdapter(val context: Context,var deleteAlertListener: DeleteAlertListener) :

@@ -5,4 +5,5 @@ interface LocationListener {
     fun setLocation(locationData : Pair<String,String>)
 
     fun locationNotEnabled()
+
 }

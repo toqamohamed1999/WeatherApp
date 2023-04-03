@@ -11,7 +11,7 @@ import android.view.WindowManager
 import android.widget.CompoundButton
 import androidx.fragment.app.DialogFragment
 import eg.gov.iti.jets.weatherapp.MainActivity
-import eg.gov.iti.jets.weatherapp.MySharedPref
+import eg.gov.iti.jets.weatherapp.utils.MySharedPref
 import eg.gov.iti.jets.weatherapp.R
 import eg.gov.iti.jets.weatherapp.databinding.InitialSettingDialogBinding
 import eg.gov.iti.jets.weatherapp.home.view.MapListener

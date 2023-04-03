@@ -22,14 +22,13 @@ import com.google.gson.Gson
 import eg.gov.iti.jets.mymvvm.datatbase.LocaleSource
 import eg.gov.iti.jets.mymvvm.model.Repo
 import eg.gov.iti.jets.mymvvm.network.RemoteSource
-import eg.gov.iti.jets.weatherapp.MySharedPref
+import eg.gov.iti.jets.weatherapp.utils.MySharedPref
 import eg.gov.iti.jets.weatherapp.R
 import eg.gov.iti.jets.weatherapp.alert.AlertWorker
 import eg.gov.iti.jets.weatherapp.alert.viewModel.AlertDialogModelFactory
 import eg.gov.iti.jets.weatherapp.alert.viewModel.AlertDialogViewModel
 import eg.gov.iti.jets.weatherapp.databinding.AlertDialogBinding
 import eg.gov.iti.jets.weatherapp.model.AlertModel
-import eg.gov.iti.jets.weatherapp.model.Language
 import eg.gov.iti.jets.weatherapp.utils.getCurrentDate
 import eg.gov.iti.jets.weatherapp.utils.getDate
 import kotlinx.coroutines.flow.collectLatest

@@ -1,8 +1,7 @@
-package eg.gov.iti.jets.weatherapp
+package eg.gov.iti.jets.weatherapp.utils
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.location.Address
 import eg.gov.iti.jets.weatherapp.model.*
 
 class MySharedPref private constructor(var context : Context) {

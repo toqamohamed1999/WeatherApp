@@ -16,9 +16,12 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.google.android.gms.location.*
+import com.google.android.gms.tasks.OnSuccessListener
+import com.google.android.gms.tasks.Task
 import eg.gov.iti.jets.weatherapp.LOCATION_PERMISSION_CODE
-import java.util.*
 import eg.gov.iti.jets.weatherapp.home.view.LocationListener
+import java.util.*
+
 
 class MyLocation(
     private val activity: Activity, private val fragment: Fragment,
@@ -78,8 +81,9 @@ class MyLocation(
     private fun requestLocationData() {
         val locationRequest = LocationRequest()
         locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        locationRequest.interval = 0
+        locationRequest.interval = 5000
         locationRequest.numUpdates = 1
+
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(activity)
 
@@ -101,7 +105,7 @@ class MyLocation(
             ///address
             getAddress()
 
-            Log.i(TAG, "onLocationResult: ttt$latitude  $longitude")
+            Log.i(TAG, "onLocationResult: ggg$latitude  $longitude")
             locationListener.setLocation(Pair(latitude, longitude))
         }
     }
@@ -114,8 +118,10 @@ class MyLocation(
                 requestLocationData()
 
             } else {
+                requestLocationData()
                 Toast.makeText(activity, "Please, enable your location", Toast.LENGTH_LONG).show()
                 activity.startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+                locationListener.locationNotEnabled()
             }
         } else {
             requestPermission()
@@ -141,4 +147,5 @@ class MyLocation(
 //        val knownName: String = addresses!![0].featureName
 
     }
+
 }

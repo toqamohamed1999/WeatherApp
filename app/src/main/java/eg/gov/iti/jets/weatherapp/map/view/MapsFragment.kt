@@ -20,18 +20,16 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.snackbar.Snackbar
-import eg.gov.iti.jets.foodplanner.NetworkChecker
 import eg.gov.iti.jets.mymvvm.datatbase.LocaleSource
 import eg.gov.iti.jets.mymvvm.model.Repo
 import eg.gov.iti.jets.mymvvm.network.RemoteSource
-import eg.gov.iti.jets.weatherapp.MySharedPref
+import eg.gov.iti.jets.weatherapp.utils.MySharedPref
 import eg.gov.iti.jets.weatherapp.R
 import eg.gov.iti.jets.weatherapp.databinding.FragmentMapsBinding
 import eg.gov.iti.jets.weatherapp.home.view.MapListener
 import eg.gov.iti.jets.weatherapp.map.viewModel.MapFragmentViewModel
 import eg.gov.iti.jets.weatherapp.map.viewModel.MapViewModelFactory
 import eg.gov.iti.jets.weatherapp.model.Favourite
-import eg.gov.iti.jets.weatherapp.utils.showSnackBar
 import kotlinx.coroutines.launch
 import java.util.*
 

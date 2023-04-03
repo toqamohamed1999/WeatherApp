@@ -1,17 +1,13 @@
 package eg.gov.iti.jets.weatherapp.favorite.view
 
-import android.opengl.Visibility
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.squareup.picasso.Picasso
 import eg.gov.iti.jets.foodplanner.NetworkChecker
@@ -19,17 +15,13 @@ import eg.gov.iti.jets.mymvvm.Utilites.ApiState
 import eg.gov.iti.jets.mymvvm.datatbase.LocaleSource
 import eg.gov.iti.jets.mymvvm.model.Repo
 import eg.gov.iti.jets.mymvvm.network.RemoteSource
-import eg.gov.iti.jets.weatherapp.MySharedPref
+import eg.gov.iti.jets.weatherapp.utils.MySharedPref
 import eg.gov.iti.jets.weatherapp.R
 import eg.gov.iti.jets.weatherapp.databinding.FragmentFavDetailsBinding
-import eg.gov.iti.jets.weatherapp.databinding.FragmentHomeBinding
 import eg.gov.iti.jets.weatherapp.favorite.viewModel.FavDetailsModelFactory
 import eg.gov.iti.jets.weatherapp.favorite.viewModel.FavDetailsViewModel
 import eg.gov.iti.jets.weatherapp.home.view.DayAdapter
 import eg.gov.iti.jets.weatherapp.home.view.HourAdapter
-import eg.gov.iti.jets.weatherapp.home.viewModel.HomeViewModel
-import eg.gov.iti.jets.weatherapp.home.viewModel.HomeViewModelFactory
-import eg.gov.iti.jets.weatherapp.location.MyLocation
 import eg.gov.iti.jets.weatherapp.model.Favourite
 import eg.gov.iti.jets.weatherapp.model.Language
 import eg.gov.iti.jets.weatherapp.model.WeatherRoot

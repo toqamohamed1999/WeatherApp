@@ -17,7 +17,7 @@ import eg.gov.iti.jets.mymvvm.datatbase.LocaleSource
 import eg.gov.iti.jets.mymvvm.model.Repo
 import eg.gov.iti.jets.mymvvm.network.RemoteSource
 import eg.gov.iti.jets.weatherapp.LOCATION_PERMISSION_CODE
-import eg.gov.iti.jets.weatherapp.MySharedPref
+import eg.gov.iti.jets.weatherapp.utils.MySharedPref
 import eg.gov.iti.jets.weatherapp.R
 import eg.gov.iti.jets.weatherapp.databinding.FragmentHomeBinding
 import eg.gov.iti.jets.weatherapp.home.viewModel.HomeViewModel
@@ -52,7 +52,7 @@ class HomeFragment : Fragment(), LocationListener, MapListener {
     }
 
     private val myLocation by lazy {
-        MyLocation(requireActivity(),this, this)
+        MyLocation(requireActivity(), this, this)
     }
 
 
@@ -166,14 +166,13 @@ class HomeFragment : Fragment(), LocationListener, MapListener {
             latitude = mySharedPref.readLat()
             longitude = mySharedPref.readLon()
             //////////
-           //getWeather()
+            //getWeather()
         }
     }
 
     override fun setLocation(locationData: Pair<String, String>) {
         binding.enableLocationLayout.enableLocation.visibility = View.GONE
 
-        Log.i(TAG, "setLocation: ggg")
         latitude = locationData.first
         longitude = locationData.second
 
@@ -181,7 +180,7 @@ class HomeFragment : Fragment(), LocationListener, MapListener {
         mySharedPref.writeLon(longitude)
 
         ////////////
-        //getWeather()
+        getWeather()
     }
 
     private fun getWeather() {
@@ -226,7 +225,7 @@ class HomeFragment : Fragment(), LocationListener, MapListener {
         _binding?.homeLocationTextView?.text = weatherRoot.timezone
         mySharedPref.writeAddress(weatherRoot.timezone)
         _binding?.homeTimeDateTextView?.text = getCurrentDate()
-          //  getTime("hh:mm a   E, MMM dd, yyyy", weatherRoot.daily[0].dt)
+        //  getTime("hh:mm a   E, MMM dd, yyyy", weatherRoot.daily[0].dt)
         _binding?.additional?.humidityValueTextview?.text = "${weatherRoot.daily[0].humidity} %"
         _binding?.additional?.pressureValueTextview?.text = "${weatherRoot.daily[0].pressure} hpa"
 
@@ -287,18 +286,27 @@ class HomeFragment : Fragment(), LocationListener, MapListener {
         if (weatherRoot != null) {
             updateUI(weatherRoot!!)
         }
+
     }
 
 
-    private fun getWeatherAlerts(){
+    private fun getWeatherAlerts() {
         Log.i(TAG, "getWeatherAlerts: weather = $weatherRoot")
-        if(weatherRoot?.alerts != null){
-            Log.i(TAG, "getWeatherAlerts: event "+ (weatherRoot!!.alerts!![0].event))
-            Log.i(TAG, "getWeatherAlerts: des "+ (weatherRoot!!.alerts!![0].description))
-            Log.i(TAG, "getWeatherAlerts: start "+ (getTime("hh:mm a   E, MMM dd, yyyy",
-                weatherRoot!!.alerts!![0].start!!)))
-            Log.i(TAG, "getWeatherAlerts: end "+ (getTime("hh:mm a   E, MMM dd, yyyy",
-                weatherRoot!!.alerts!![0].end!!)))
+        if (weatherRoot?.alerts != null) {
+            Log.i(TAG, "getWeatherAlerts: event " + (weatherRoot!!.alerts!![0].event))
+            Log.i(TAG, "getWeatherAlerts: des " + (weatherRoot!!.alerts!![0].description))
+            Log.i(
+                TAG, "getWeatherAlerts: start " + (getTime(
+                    "hh:mm a   E, MMM dd, yyyy",
+                    weatherRoot!!.alerts!![0].start!!
+                ))
+            )
+            Log.i(
+                TAG, "getWeatherAlerts: end " + (getTime(
+                    "hh:mm a   E, MMM dd, yyyy",
+                    weatherRoot!!.alerts!![0].end!!
+                ))
+            )
         }
     }
 
@@ -306,14 +314,14 @@ class HomeFragment : Fragment(), LocationListener, MapListener {
         binding.enableLocationLayout.enableLocation.visibility = View.VISIBLE
     }
 
-    private fun setEnableLocationClick(){
+
+    private fun setEnableLocationClick() {
         binding.enableLocationLayout.locationEnableTextView.setOnClickListener {
             myLocation.getLastLocation()
         }
     }
 
 }
-
 
 
 //onPause() ---onStop()

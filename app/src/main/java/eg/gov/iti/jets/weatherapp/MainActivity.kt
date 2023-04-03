@@ -1,9 +1,6 @@
 package eg.gov.iti.jets.weatherapp
 
-import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
-import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
@@ -15,6 +12,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import eg.gov.iti.jets.weatherapp.databinding.ActivityMainBinding
 import eg.gov.iti.jets.weatherapp.model.Language
+import eg.gov.iti.jets.weatherapp.utils.MySharedPref
 import java.util.*
 
 class MainActivity : AppCompatActivity() {

@@ -4,7 +4,6 @@ import android.app.Activity
 import android.view.View
 import android.widget.TextView
 import com.google.android.material.snackbar.Snackbar
-import eg.gov.iti.jets.weatherapp.MySharedPref
 import eg.gov.iti.jets.weatherapp.R
 import eg.gov.iti.jets.weatherapp.model.Temperature
 import eg.gov.iti.jets.weatherapp.model.WindSpeed

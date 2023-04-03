@@ -178,20 +178,27 @@ class MapsFragment : DialogFragment() {
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
 
-                val location: String = binding.searchView.query.toString()
+                if(NetworkChecker.isNetworkAvailable(requireContext())) {
 
-                var latLng: LatLng? = getAddress(location)
+                    val location: String = binding.searchView.query.toString()
 
-                if (latLng != null) {
-                    googleMap.addMarker(MarkerOptions().position(latLng).title(location))
-                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10F))
+                    var latLng: LatLng? = getAddress(location)
+
+                    if (latLng != null) {
+                        googleMap.addMarker(MarkerOptions().position(latLng).title(location))
+                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10F))
+                    }
+                    favourite = Favourite(
+                        latitude = lat,
+                        longitude = lon,
+                        address = myAddress,
+                        countryCode = countryCode
+                    )
+                }else{
+                    Snackbar
+                        .make(binding.root, "No internet connection!", 4000)
+                        .show()
                 }
-                favourite = Favourite(
-                    latitude = lat,
-                    longitude = lon,
-                    address = myAddress,
-                    countryCode = countryCode
-                )
                 return false
             }
 
@@ -199,6 +206,7 @@ class MapsFragment : DialogFragment() {
                 return false
             }
         })
+
     }
 
     private fun getAddress(location: String): LatLng? {

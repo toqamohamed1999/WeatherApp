@@ -24,7 +24,7 @@ class HomeViewModel(private val repoInterface: RepoInterface) : ViewModel() {
     val weatherStateFlow = weatherMutableStateFlow.asStateFlow()
 
     init {
-        getCurrentWeather("","","","")
+      //  getCurrentWeather("","","","")
     }
 
 

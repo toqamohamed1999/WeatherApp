@@ -142,12 +142,12 @@ class HomeFragment : Fragment(), LocationListener, MapListener {
 
                     }
                     is RoomState.SuccessWeather -> {
-                        binding.progressbar.visibility = View.GONE
-                        binding.lottieMapRound.visibility = View.GONE
-                        binding.homeConstraintLayout.visibility = View.VISIBLE
+                            binding.progressbar.visibility = View.GONE
+                            binding.lottieMapRound.visibility = View.GONE
+                            binding.homeConstraintLayout.visibility = View.VISIBLE
 
-                        weatherRoot = it.weatherRoot
-                        updateUI(it.weatherRoot)
+                            weatherRoot = it.weatherRoot
+                            updateUI(it.weatherRoot)
                     }
                     else -> {
                         binding.progressbar.visibility = View.GONE
@@ -162,6 +162,7 @@ class HomeFragment : Fragment(), LocationListener, MapListener {
     private fun handleLocationActions() {
         if (mySharedPref.getSetting().location == Location.GPS) {
             myLocation?.getLastLocation()
+            getStoredLocation()
         } else if (mySharedPref.readLat() != "N/F" && mySharedPref.readLon() != "N/F") {
             latitude = mySharedPref.readLat()
             longitude = mySharedPref.readLon()
@@ -171,6 +172,7 @@ class HomeFragment : Fragment(), LocationListener, MapListener {
     }
 
     override fun setLocation(locationData: Pair<String, String>) {
+        Log.i(TAG, "setLocation: gggg ")
         binding.enableLocationLayout.enableLocation.visibility = View.GONE
 
         latitude = locationData.first
@@ -317,6 +319,13 @@ class HomeFragment : Fragment(), LocationListener, MapListener {
     private fun setEnableLocationClick() {
         binding.enableLocationLayout.locationEnableTextView.setOnClickListener {
             myLocation.getLastLocation()
+        }
+    }
+
+    private fun getStoredLocation() {
+        if (!NetworkChecker.isNetworkAvailable(requireContext())) {
+            viewModel.getStoredWeather()
+            showSnackBar()
         }
     }
 

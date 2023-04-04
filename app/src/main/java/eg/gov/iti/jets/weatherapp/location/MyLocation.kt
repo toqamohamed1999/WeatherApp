@@ -81,7 +81,7 @@ class MyLocation(
     private fun requestLocationData() {
         val locationRequest = LocationRequest()
         locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        locationRequest.interval = 5000
+        locationRequest.interval = 2000
         locationRequest.numUpdates = 1
 
 
@@ -102,10 +102,7 @@ class MyLocation(
             latitude = lastLocation?.latitude.toString()
             longitude = lastLocation?.longitude.toString()
 
-            ///address
-            getAddress()
-
-            Log.i(TAG, "onLocationResult: ggg$latitude  $longitude")
+            Log.i(TAG, "onLocationResult: gggg $latitude  $longitude")
             locationListener.setLocation(Pair(latitude, longitude))
         }
     }
@@ -118,10 +115,11 @@ class MyLocation(
                 requestLocationData()
 
             } else {
+                Log.i(TAG, "getLastLocation: gggg")
                 requestLocationData()
                 Toast.makeText(activity, "Please, enable your location", Toast.LENGTH_LONG).show()
                 activity.startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
-                locationListener.locationNotEnabled()
+              //  locationListener.locationNotEnabled()
             }
         } else {
             requestPermission()

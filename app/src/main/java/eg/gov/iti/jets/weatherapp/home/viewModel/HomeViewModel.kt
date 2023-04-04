@@ -24,58 +24,57 @@ class HomeViewModel(private val repoInterface: RepoInterface) : ViewModel() {
     val weatherStateFlow = weatherMutableStateFlow.asStateFlow()
 
     init {
-      //  getCurrentWeather("","","","")
+        //  getCurrentWeather("","","","")
     }
 
 
-    fun getCurrentWeather(lat : String,lon:String,unit : String ,lang:String){
+    fun getCurrentWeather(lat: String, lon: String, unit: String, lang: String) {
 
         viewModelScope.launch(Dispatchers.IO) {
-            repoInterface.getCurrentWeather(lat,lon,unit,lang)
+            repoInterface.getCurrentWeather(lat, lon, unit, lang)
                 .catch {
                     weatherMutableStateFlow.value = ApiState.Failure(it)
-                }.collect{
+                }.collect {
                     weatherMutableStateFlow.value = ApiState.Success(it)
-                    deleteAllWeather()
                     insertWeather(it)
                 }
         }
     }
 
-     fun getStoredWeather(){
+    fun getStoredWeather() {
 
         viewModelScope.launch(Dispatchers.IO) {
             repoInterface.getStoredWeather()
                 .catch {
                     weatherMutableStateFlow.value = RoomState.Failure(it)
-                }.collect{
-                    weatherMutableStateFlow.value = RoomState.SuccessWeather(it)
+                }.collect {
+                  if(it != null)  weatherMutableStateFlow.value = RoomState.SuccessWeather(it)
                 }
         }
     }
 
-     fun insertWeather(weatherRoot: WeatherRoot){
+    suspend fun insertWeather(weatherRoot: WeatherRoot) {
+
+        val job = viewModelScope.launch(Dispatchers.IO) {
+            repoInterface.deleteAllWeather()
+        }
+        job.join()
+
         viewModelScope.launch(Dispatchers.IO) {
             repoInterface.insertWeather(weatherRoot)
         }
     }
 
-    fun deleteAllWeather(){
-        viewModelScope.launch(Dispatchers.IO) {
-            repoInterface.deleteAllWeather()
-        }
-    }
 }
 
 
-class HomeViewModelFactory(private val repoInterface: RepoInterface)
-    : ViewModelProvider.Factory{
+class HomeViewModelFactory(private val repoInterface: RepoInterface) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
-        return if (modelClass.isAssignableFrom(HomeViewModel::class.java)){
+        return if (modelClass.isAssignableFrom(HomeViewModel::class.java)) {
             HomeViewModel(repoInterface) as T
-        }else{
+        } else {
             throw java.lang.IllegalArgumentException("HomeViewModel class not found")
         }
     }

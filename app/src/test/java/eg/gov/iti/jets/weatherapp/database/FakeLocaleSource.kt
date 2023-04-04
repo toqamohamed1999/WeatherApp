@@ -23,6 +23,10 @@ class FakeLocaleSource(private val favList: MutableList<Favourite> = mutableList
         favList.remove(favorite)
     }
 
+    override suspend fun deleteAllWeather() {
+        TODO("Not yet implemented")
+    }
+
     override fun getStoredWeather(): Flow<WeatherRoot> {
         TODO("Not yet implemented")
     }

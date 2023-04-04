@@ -65,4 +65,8 @@ class FakeRepo : RepoInterface {
     override suspend fun deleteFavourite(favorite: Favourite) {
         favData.remove(favorite)
     }
+
+    override suspend fun deleteAllWeather() {
+        TODO("Not yet implemented")
+    }
 }

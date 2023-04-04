@@ -91,6 +91,8 @@ class AlertDialogViewModelTest {
         }
         //Then
         MatcherAssert.assertThat(alertListData.size, CoreMatchers.`is`(2))
+        MatcherAssert.assertThat(alertListData[1].alertEnabled, CoreMatchers.`is`(false))
+        MatcherAssert.assertThat(alertListData[0].currentTime, CoreMatchers.`is`("12:00"))
     }
 
     @ExperimentalCoroutinesApi
@@ -115,5 +117,7 @@ class AlertDialogViewModelTest {
         }
         //Then
         MatcherAssert.assertThat(alertListData.size, CoreMatchers.`is`(3))
+        MatcherAssert.assertThat(alertListData[2].latitude, CoreMatchers.`is`("3.0"))
+        MatcherAssert.assertThat(alertListData[1].longitude, CoreMatchers.`is`("2.1"))
     }
 }

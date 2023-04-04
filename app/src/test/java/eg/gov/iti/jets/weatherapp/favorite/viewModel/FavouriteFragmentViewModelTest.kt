@@ -62,9 +62,8 @@ class FavouriteFragmentViewModelTest {
         //When
         favouriteViewModel.getStoredFavourites()
         var favListData:List<Favourite> = emptyList()
-        val result = favouriteViewModel.favStateFlow.first()
 
-        when (result) {
+        when (val result = favouriteViewModel.favStateFlow.first()) {
             is RoomState.SuccessFavourite -> {
 
                 favListData = result.favouriteList

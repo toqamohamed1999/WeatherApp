@@ -1,15 +1,17 @@
 package eg.gov.iti.jets.weatherapp.favorite.view
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
-import eg.gov.iti.jets.weatherapp.R
+import com.squareup.picasso.Picasso.LoadedFrom
 import eg.gov.iti.jets.weatherapp.databinding.FavItemBinding
 import eg.gov.iti.jets.weatherapp.model.Favourite
 import eg.gov.iti.jets.weatherapp.utils.*
+
 
 class FavAdapter(var favListener: FavListener) :
     ListAdapter<Favourite, FavAdapter.FavViewHolder>(FavDiffUtil()) {
@@ -44,6 +46,7 @@ class FavAdapter(var favListener: FavListener) :
         holder.favItemBinding.favItemLocationTextView.setOnClickListener {
             favListener.navigateToDetails(favItem)
         }
+
     }
 
     inner class FavViewHolder(var favItemBinding: FavItemBinding) :

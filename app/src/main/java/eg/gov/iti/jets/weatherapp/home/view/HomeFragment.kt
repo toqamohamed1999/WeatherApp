@@ -142,12 +142,12 @@ class HomeFragment : Fragment(), LocationListener, MapListener {
 
                     }
                     is RoomState.SuccessWeather -> {
-                            binding.progressbar.visibility = View.GONE
-                            binding.lottieMapRound.visibility = View.GONE
-                            binding.homeConstraintLayout.visibility = View.VISIBLE
+                        binding.progressbar.visibility = View.GONE
+                        binding.lottieMapRound.visibility = View.GONE
+                        binding.homeConstraintLayout.visibility = View.VISIBLE
 
-                            weatherRoot = it.weatherRoot
-                            updateUI(it.weatherRoot)
+                        weatherRoot = it.weatherRoot
+                        updateUI(it.weatherRoot)
                     }
                     else -> {
                         binding.progressbar.visibility = View.GONE
@@ -162,7 +162,7 @@ class HomeFragment : Fragment(), LocationListener, MapListener {
     private fun handleLocationActions() {
         if (mySharedPref.getSetting().location == Location.GPS) {
             myLocation?.getLastLocation()
-            getStoredLocation()
+            //  getStoredLocation()
         } else if (mySharedPref.readLat() != "N/F" && mySharedPref.readLon() != "N/F") {
             latitude = mySharedPref.readLat()
             longitude = mySharedPref.readLon()
@@ -194,9 +194,16 @@ class HomeFragment : Fragment(), LocationListener, MapListener {
         }
     }
 
-
+    var flag = true
     private fun showSnackBar() {
-        showSnackBar(requireActivity(), "No internet Connection!", R.drawable.baseline_wifi_off_24)
+        if (flag) {
+            showSnackBar(
+                requireActivity(),
+                "No internet Connection!",
+                R.drawable.baseline_wifi_off_24
+            )
+            flag = !flag
+        }
     }
 
 
@@ -279,7 +286,7 @@ class HomeFragment : Fragment(), LocationListener, MapListener {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        // _binding = null
     }
 
     override fun onResume() {

@@ -81,8 +81,8 @@ class MyLocation(
     private fun requestLocationData() {
         val locationRequest = LocationRequest()
         locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        locationRequest.interval = 2000
-        //locationRequest.numUpdates = 1
+        locationRequest.interval = 0
+       // locationRequest.numUpdates = 1
 
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(activity)
